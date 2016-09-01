@@ -5,8 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ldcc.board.vo.Comment;
+import ldcc.board.vo.Team;
 
-public class CommentDAO {
 
+public class TeamDAO {
+	
 }
