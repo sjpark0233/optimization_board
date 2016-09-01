@@ -46,4 +46,7 @@ public class Comment {
 	public void setComment_content(String comment_content) {
 		this.comment_content = comment_content;
 	}
+
+	
+	
 }
