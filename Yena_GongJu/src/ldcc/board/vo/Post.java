@@ -1,14 +1,16 @@
 package ldcc.board.vo;
 
+import java.sql.Timestamp;
+
 public class Post {
 	private int post_code;
 	private int board_code;
 	private String user_id;
-	private String post_date;
+	private Timestamp post_date; // must be modified its type !!!
 	private String post_title;
 	private String post_content;
 	private String post_filepath;
-	private String post_type;
+	private int post_type;
 	private int post_num;
 
 	public int getPost_code() {
@@ -35,11 +37,11 @@ public class Post {
 		this.user_id = user_id;
 	}
 
-	public String getPost_date() {
+	public Timestamp getPost_date() {
 		return post_date;
 	}
 
-	public void setPost_date(String post_date) {
+	public void setPost_date(Timestamp post_date) {
 		this.post_date = post_date;
 	}
 
@@ -67,11 +69,11 @@ public class Post {
 		this.post_filepath = post_filepath;
 	}
 
-	public String getPost_type() {
+	public int getPost_type() {
 		return post_type;
 	}
 
-	public void setPost_type(String post_type) {
+	public void setPost_type(int post_type) {
 		this.post_type = post_type;
 	}
 
