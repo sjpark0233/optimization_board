@@ -8,7 +8,7 @@ public class User {
 	private String user_name;
 	private String user_phone;
 	private String user_email;
-	
+
 	public String getUser_id() {
 		return user_id;
 	}
