@@ -149,19 +149,34 @@ public class UserServlet extends HttpServlet {
 	}
 
 	
-	private void doUser_list(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+	private void doUser_info(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String result = "fail";
+		UserDAO dao = new UserDAO();
+		User user = new User();
+		
+		user.setUser_id(request.getParameter("user_id"));
+		
+		dao.doCheck(user);
+		if(user.getUser_name()!=null){
+			request.setAttribute("result", user);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
+			dispatcher.forward(request, response);
+		}
+		else
+		{
+			System.out.println("회원 정보 조회에 실패했습니다.");
+		}
 		
 	}
-
-
+	
+	
 	private void doUser_info_modify(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
 	}
 
-
-	private void doUser_info(HttpServletRequest request, HttpServletResponse response) {
+	
+	private void doUser_list(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		
 	}
