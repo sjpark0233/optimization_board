@@ -13,10 +13,11 @@ import ldcc.board.vo.Post;
 public class PostDAO {
 	private final int pageLimit = 10;
 	private final String getSQL = "select * from POST where POST_CODE = ?";
-	private final String getListSQL = "select * from (select rownum as rnum, POST_CODE, BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM  from (select * from POST where BOARD_CODE=? order by POST_NUM desc)) where rnum>=? and rnum<=?";
+	private final String getListSQL = "select * from (select rownum rnum, POST_CODE, BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM  from (select * from POST order by POST_NUM desc)) where rnum>=? and rnum<=?";
+	private final String getListSQL2 = "select * from (select rownum rnum, POST_CODE, BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM  from (select * from POST where BOARD_CODE=? order by POST_NUM desc)) where rnum>=? and rnum<=?";
 	private final String getMaxPostNumSQL = "select max(POST_NUM) as POST_NUM from POST where BOARD_CODE=?";
 	private final String insertSQL = "insert into POST(BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM) values(?, ?, ?, ?, ?, ?, ?, ?)";
-	private final String updateSQL = "update POST set POST_TITLE=?, POST_CONTENT=?, POST_FILEPATH=?, POST_TYPE=? where POST_CODE=?";
+	private final String updateSQL = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_FILEPATH=?, POST_TYPE=? where POST_CODE=?";
 	private final String deleteSQL = "delete from POST where POST_CODE=?";
 
 	/**
@@ -51,7 +52,7 @@ public class PostDAO {
 				post.setPost_num(rst.getInt(9));
 			}
 		} catch (SQLException e) {
-			System.out.println("PostDAO.doGet() error : " + e.getMessage());
+			System.out.println("PostDAO.doGetList() error : " + e.getMessage());
 		} finally {
 			JDBCUtil.close(rst, stmt, con);
 		}
@@ -59,13 +60,7 @@ public class PostDAO {
 		return post;
 	}
 
-	/**
-	 * 
-	 * @param page
-	 * @return
-	 */
-	public List<Post> doGetList(int board_code, int page) {
-
+	public List<Post> doGetList(int page) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
@@ -76,6 +71,51 @@ public class PostDAO {
 		try {
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(this.getListSQL);
+			stmt.setInt(1, startRow);
+			stmt.setInt(2, endRow);
+			rst = stmt.executeQuery();
+
+			while (rst.next()) {
+				Post post = new Post();
+				post.setPost_code(rst.getInt(2));
+				post.setBoard_code(rst.getInt(3));
+				post.setUser_id(rst.getString(4));
+				post.setPost_date(rst.getTimestamp(5));
+				post.setPost_title(rst.getString(6));
+				post.setPost_content(rst.getString(7));
+				post.setPost_filepath(rst.getString(8));
+				post.setPost_type(rst.getInt(9));
+				post.setPost_num(rst.getInt(10));
+				postList.add(post);
+			}
+		} catch (SQLException e) {
+			System.out.println("PostDAO.doGetList() error : " + e.getMessage());
+		} finally {
+			JDBCUtil.close(rst, stmt, con);
+		}
+
+		return postList;
+
+	}
+
+	/**
+	 * select문을 통해 List<Post> 객체를 반환. 게시판 화면에서 페이지에 따른 게시물만을 불러옴.
+	 * 
+	 * @param page
+	 *            화면 페이지
+	 * @return this.pageLimit 수 만큼 Page객체 리스트를 반환
+	 */
+	public List<Post> doGetList(int board_code, int page) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		List<Post> postList = new ArrayList<Post>();
+		int startRow = (page - 1) * this.pageLimit + 1;
+		int endRow = startRow + this.pageLimit - 1;
+
+		try {
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(this.getListSQL2);
 			stmt.setInt(1, board_code);
 			stmt.setInt(2, startRow);
 			stmt.setInt(3, endRow);
@@ -152,11 +192,12 @@ public class PostDAO {
 		try {
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(this.updateSQL);
-			stmt.setString(1, post.getPost_title());
-			stmt.setString(2, post.getPost_content());
-			stmt.setString(3, post.getPost_filepath());
-			stmt.setInt(4, post.getPost_type());
-			stmt.setInt(5, post.getPost_code()); // where 조건
+			stmt.setInt(1, post.getBoard_code());
+			stmt.setString(2, post.getPost_title());
+			stmt.setString(3, post.getPost_content());
+			stmt.setString(4, post.getPost_filepath());
+			stmt.setInt(5, post.getPost_type());
+			stmt.setInt(6, post.getPost_code()); // where 조건
 			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("PostDAO.doUpdate() error : " + e);
