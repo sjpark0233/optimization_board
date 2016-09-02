@@ -13,7 +13,8 @@ public class UserDAO {
 	private String insertSQL = "insert into User(user_id,user_pw,user_accept,team_code,user_name,user_phone,user_email)";
 	private String dropSQL = "delete from User where user_id = ? and user_pw = ?";
 	
-	public void doLogin(User user){
+	public void doLogin(User user)
+	{
 		Connection con =null;
 		PreparedStatement stmt = null;
 		ResultSet rst =null;
@@ -102,6 +103,29 @@ public class UserDAO {
 		}
 	}
 
+	public void doCheck(User user)
+	{
+		Connection con =null;
+		PreparedStatement stmt = null;
+		ResultSet rst =null;
+		try{
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(checkSQL);
+			stmt.setString(1,user.getUser_id());
+			rst = stmt.executeQuery();
+
+			if(rst.next()){
+				user.setTeam_code(Integer.parseInt(rst.getString(4)));
+				user.setUser_name(rst.getString(5));
+				user.setUser_phone(rst.getString(6));
+				user.setUser_email(rst.getString(7));
+			}
+		}catch(SQLException e){
+			System.out.println("check error : "+e);
+		}finally{
+			JDBCUtil.close(rst, stmt,con);
+		}
+	}
 
 
 
