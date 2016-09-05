@@ -12,6 +12,7 @@ public class Post {
 	private String post_filepath;
 	private int post_type;
 	private int post_num;
+	private int post_view;
 
 	public int getPost_code() {
 		return post_code;
@@ -83,5 +84,13 @@ public class Post {
 
 	public void setPost_num(int post_num) {
 		this.post_num = post_num;
+	}
+
+	public int getPost_view() {
+		return post_view;
+	}
+
+	public void setPost_view(int post_view) {
+		this.post_view = post_view;
 	}
 }
