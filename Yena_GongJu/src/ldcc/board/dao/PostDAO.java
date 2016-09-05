@@ -13,10 +13,10 @@ import ldcc.board.vo.Post;
 public class PostDAO {
 	private final int pageLimit = 10;
 	private final String getSQL = "select * from POST where POST_CODE = ?";
-	private final String getListSQL = "select * from (select rownum rnum, POST_CODE, BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM  from (select * from POST order by POST_NUM desc)) where rnum>=? and rnum<=?";
-	private final String getListSQL2 = "select * from (select rownum rnum, POST_CODE, BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM  from (select * from POST where BOARD_CODE=? order by POST_NUM desc)) where rnum>=? and rnum<=?";
+	private final String getListSQL = "select * from (select rownum rnum, POST_CODE, BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM, POST_VIEW  from (select * from POST order by POST_NUM desc)) where rnum>=? and rnum<=?";
+	private final String getListSQL2 = "select * from (select rownum rnum, POST_CODE, BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM, POST_VIEW  from (select * from POST where BOARD_CODE=? order by POST_NUM desc)) where rnum>=? and rnum<=?";
 	private final String getMaxPostNumSQL = "select max(POST_NUM) as POST_NUM from POST where BOARD_CODE=?";
-	private final String insertSQL = "insert into POST(BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM) values(?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String insertSQL = "insert into POST(BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM, POST_VIEW) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String updateSQL = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_FILEPATH=?, POST_TYPE=? where POST_CODE=?";
 	private final String deleteSQL = "delete from POST where POST_CODE=?";
 
@@ -50,6 +50,7 @@ public class PostDAO {
 				post.setPost_filepath(rst.getString(7));
 				post.setPost_type(rst.getInt(8));
 				post.setPost_num(rst.getInt(9));
+				post.setPost_view(rst.getInt(10));
 			}
 		} catch (SQLException e) {
 			System.out.println("PostDAO.doGetList() error : " + e.getMessage());
@@ -77,7 +78,7 @@ public class PostDAO {
 
 			while (rst.next()) {
 				Post post = new Post();
-				post.setPost_code(rst.getInt(2));
+				post.setPost_code(rst.getInt(2)); // index 1은 rownum임
 				post.setBoard_code(rst.getInt(3));
 				post.setUser_id(rst.getString(4));
 				post.setPost_date(rst.getTimestamp(5));
@@ -86,6 +87,7 @@ public class PostDAO {
 				post.setPost_filepath(rst.getString(8));
 				post.setPost_type(rst.getInt(9));
 				post.setPost_num(rst.getInt(10));
+				post.setPost_view(rst.getInt(11));
 				postList.add(post);
 			}
 		} catch (SQLException e) {
@@ -123,7 +125,7 @@ public class PostDAO {
 
 			while (rst.next()) {
 				Post post = new Post();
-				post.setPost_code(rst.getInt(2));
+				post.setPost_code(rst.getInt(2)); // index 1 은 rownum임
 				post.setBoard_code(board_code);
 				post.setUser_id(rst.getString(4));
 				post.setPost_date(rst.getTimestamp(5));
@@ -132,6 +134,7 @@ public class PostDAO {
 				post.setPost_filepath(rst.getString(8));
 				post.setPost_type(rst.getInt(9));
 				post.setPost_num(rst.getInt(10));
+				post.setPost_view(rst.getInt(11));
 				postList.add(post);
 			}
 		} catch (SQLException e) {
@@ -167,6 +170,7 @@ public class PostDAO {
 			stmt.setInt(7, post.getPost_type()); // 0 - 공지, 1 - 일반
 			int newPostNum = this.doGetMaxPostNumByBoardNum(post.getBoard_code()) + 1;
 			stmt.setInt(8, newPostNum); // 알고리즘 필요
+			stmt.setInt(9, 0);
 			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("PostDAO.doInsert() error : " + e);
