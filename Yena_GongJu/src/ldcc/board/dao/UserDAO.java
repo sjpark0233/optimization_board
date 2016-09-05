@@ -4,23 +4,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import ldcc.board.vo.User;
 
 public class UserDAO {
-	private String loginSQL = "select * from User where user_id = ? and user_pw = ?";
-	private String checkSQL = "select * from User where user_id = ?";
-	private String insertSQL = "insert into User(user_id,user_pw,user_accept,team_code,user_name,user_phone,user_email) values(?,?,?,?,?,?,?)";
+	private String selectSQL = "select * from User where user_id = ? and user_pw = ?";
+	private String insertSQL = "insert into User(user_id,user_pw,user_accept,team_name,user_name,user_phone,user_email) values(?,?,?,?,?,?,?)";
 	private String dropSQL = "delete from User where user_id = ? and user_pw = ?";
+	private String updateSQL = "update User set team_name = ? ,user_name = ?,user_phone = ?,user_email = ? where user_id = ? and user_pw = ?";
+	private String select_allSQL = "select user_id, team_name, user_name, user_phone, user_email, user_accept from User";
+	private String find_updateSQL = "update User set user_accept = 1 where user_id = ? and user_accept = 0";
 	
-	public void doLogin(User user)
+ 	public void doLogin(User user)
 	{
 		Connection con =null;
 		PreparedStatement stmt = null;
 		ResultSet rst =null;
 		try{
 			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(loginSQL);
+			stmt = con.prepareStatement(selectSQL);
 			stmt.setString(1,user.getUser_id());
 			stmt.setString(2, user.getUser_pw());
 			rst = stmt.executeQuery();
@@ -44,10 +47,10 @@ public class UserDAO {
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(insertSQL);
-			stmt.setString(1, user.getUser_name());
-			stmt.setString(2, user.getUser_id());
+			stmt.setString(1, user.getUser_id());
+			stmt.setString(2, user.getUser_pw());
 			stmt.setString(3, Integer.toString(user.getUser_accept()));
-			stmt.setString(4, Integer.toString(user.getTeam_code()));
+			stmt.setString(4, user.getTeam_name());
 			stmt.setString(5, user.getUser_name());
 			stmt.setString(6, user.getUser_phone());
 			stmt.setString(7, user.getUser_email());
@@ -110,12 +113,13 @@ public class UserDAO {
 		ResultSet rst =null;
 		try{
 			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(checkSQL);
+			stmt = con.prepareStatement(selectSQL);
 			stmt.setString(1,user.getUser_id());
+			stmt.setString(2, user.getUser_pw());
 			rst = stmt.executeQuery();
 
 			if(rst.next()){
-				user.setTeam_code(Integer.parseInt(rst.getString(4)));
+				user.setTeam_name(rst.getString(4));
 				user.setUser_name(rst.getString(5));
 				user.setUser_phone(rst.getString(6));
 				user.setUser_email(rst.getString(7));
@@ -127,6 +131,100 @@ public class UserDAO {
 		}
 	}
 
+	public boolean doUpdate(User user)
+	{
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		try{
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(updateSQL);
+			stmt.setString(1, user.getTeam_name());
+			stmt.setString(2, user.getUser_name());
+			stmt.setString(3, user.getUser_phone());
+			stmt.setString(4, user.getUser_email());
+			stmt.setString(5, user.getUser_id());
+			stmt.setString(6, user.getUser_pw());
 
+			int cnt = stmt.executeUpdate();
+			
+			System.out.println(cnt ==1 ? "insert success" : "fail");
+			if(cnt ==1)
+			{
+				JDBCUtil.close(stmt,con);
+				return true;
+			}
+			else
+			{
+				JDBCUtil.close(stmt, con);
+				return false;
+			}
+			
+		}catch(SQLException e){
+			System.out.println("user insert error : " + e);
+			JDBCUtil.close(stmt, con);
+			return false;
+		}
+	}
 
+	public ArrayList<User> doList()
+	{
+		ArrayList<User> list = new ArrayList<User>();
+		Connection con =null;
+		PreparedStatement stmt = null;
+		ResultSet rst =null;
+		try{
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(select_allSQL);
+			rst = stmt.executeQuery();
+			
+			while(rst.next()==true){
+				User user = new User();
+				user.setUser_id(rst.getString(1));
+				user.setTeam_name(rst.getString(2));
+				user.setUser_name(rst.getString(3));
+				user.setUser_phone(rst.getString(4));
+				user.setUser_email(rst.getString(5));
+				
+				list.add(user);
+			}
+			return list;
+			
+		}catch(SQLException e){
+			System.out.println("check error : "+e);
+			return null;
+		}finally{
+			JDBCUtil.close(rst, stmt,con);
+		}
+	}
+
+	public boolean doAccept(String user_id)
+	{
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		try{
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(find_updateSQL);
+			stmt.setString(1, user_id);
+			int cnt = stmt.executeUpdate();
+			
+			System.out.println(cnt ==1 ? "insert success" : "fail");
+			if(cnt ==1)
+			{
+				JDBCUtil.close(stmt,con);
+				return true;
+			}
+			else
+			{
+				JDBCUtil.close(stmt, con);
+				return false;
+			}
+			
+		}catch(SQLException e){
+			System.out.println("user insert error : " + e);
+			JDBCUtil.close(stmt, con);
+			return false;
+		}
+	}
 }
