@@ -59,6 +59,7 @@ public class UserServlet extends HttpServlet {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		
+		
 		if(request.getParameter("user_id")!=null&request.getParameter("user_pw")!=null&request.getParameter("user_name")!=null&request.getParameter("user_phone")!=null&request.getParameter("user_email")!=null&request.getParameter("team_code")!=null)
 		{
 			user.setUser_id(request.getParameter("user_id"));
