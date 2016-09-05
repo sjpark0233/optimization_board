@@ -10,7 +10,7 @@ import ldcc.board.vo.User;
 public class UserDAO {
 	private String loginSQL = "select * from User where user_id = ? and user_pw = ?";
 	private String checkSQL = "select * from User where user_id = ?";
-	private String insertSQL = "insert into User(user_id,user_pw,user_accept,team_code,user_name,user_phone,user_email)";
+	private String insertSQL = "insert into User(user_id,user_pw,user_accept,team_code,user_name,user_phone,user_email) values(?,?,?,?,?,?,?)";
 	private String dropSQL = "delete from User where user_id = ? and user_pw = ?";
 	
 	public void doLogin(User user)
@@ -51,7 +51,7 @@ public class UserDAO {
 			stmt.setString(5, user.getUser_name());
 			stmt.setString(6, user.getUser_phone());
 			stmt.setString(7, user.getUser_email());
-			
+
 			int cnt = stmt.executeUpdate();
 			
 			System.out.println(cnt ==1 ? "insert success" : "fail");
