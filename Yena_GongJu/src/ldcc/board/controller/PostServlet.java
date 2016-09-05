@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
 import ldcc.board.dao.PostDAO;
 import ldcc.board.vo.Post;
-import ldcc.board.vo.User;
 
 /**
  * Servlet implementation class PostServlet
@@ -43,7 +45,11 @@ public class PostServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		switch (request.getParameter("action")) {
+
+		MultipartRequest multi = new MultipartRequest(request, request.getRealPath("upload"), 5 * 1024 * 1024, "euc-kr",
+				new DefaultFileRenamePolicy());
+
+		switch (multi.getParameter("action")) {
 		case "list_all":
 			doShowListAll(request, response);
 			break;
@@ -54,7 +60,7 @@ public class PostServlet extends HttpServlet {
 			doReadPost(request, response);
 			break;
 		case "write":
-			doWritePost(request, response);
+			doWritePost(request, response, multi);
 			break;
 		case "modify":
 			doModifyPost(request, response);
@@ -94,19 +100,29 @@ public class PostServlet extends HttpServlet {
 	}
 
 	// incomplete !!!
-	private void doWritePost(HttpServletRequest request, HttpServletResponse response)
+	private void doWritePost(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
 			throws ServletException, IOException {
+
 		// 새 게시글 올리기
 		// incomplete. 파일첨부처리 필요
 		Post post = new Post();
-		post.setBoard_code(Integer.parseInt(request.getParameter("board_code")));
-		post.setUser_id(((User) request.getSession().getAttribute("user")).getUser_id());
-		post.setPost_title(request.getParameter("post_title"));
-		post.setPost_content(request.getParameter("post_content"));
-		post.setPost_filepath(null); // incomplete
-		post.setPost_type(Integer.parseInt(request.getParameter("post_type")));
+		post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
+		post.setUser_id(
+				"test"/*
+						 * ((User) request.getSession().getAttribute("user")).
+						 * getUser_id()
+						 */);
+		post.setPost_title(multi.getParameter("post_title"));
+		post.setPost_content(multi.getParameter("post_content"));
+		post.setPost_type(Integer.parseInt(multi.getParameter("post_type")));
+		post.setPost_filepath(multi.getFilesystemName((String) multi.getFileNames().nextElement()));
 		new PostDAO().doInsert(post);
 
+		boolean a = true;
+		if (a) {// test
+			request.getRequestDispatcher("test.jsp").forward(request, response);
+			return;
+		}
 		// 게시글 올린 것 보기
 		// incomplete. 새로 부여된 post_code를 넘겨줘야함.
 		this.doReadPost(request, response);
