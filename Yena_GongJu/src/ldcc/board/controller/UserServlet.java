@@ -56,6 +56,9 @@ public class UserServlet extends HttpServlet {
 		else if("user_accept".equals(action)){
 			doUser_accept(request,response);
 		}
+		else if("team_accept".equals(action)){
+			doTeam_accept(request,response);
+		}
 			
 	}
 
@@ -253,7 +256,7 @@ public class UserServlet extends HttpServlet {
 		
 		if(((User)session.getAttribute("user")).getUser_id().equals("admin"))
 		{
-			boolean flag = dao.doAccept(request.getParameter("accept_id"));
+			boolean flag = dao.doAccept(request.getParameter("accept_id"),1);
 
 			if(flag == true)
 			{
@@ -270,4 +273,27 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
+	
+	private void doTeam_accept(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		UserDAO dao = new UserDAO();
+		
+		if(((User)session.getAttribute("user")).getUser_id().equals("admin"))
+		{
+			boolean flag = dao.doAccept(request.getParameter("team_id"),2);
+
+			if(flag == true)
+			{
+				System.out.println("승인 완료");
+			}
+			else
+			{
+				System.out.println("승인 실패(아이디가 없거나 이미 승인된 회원입니다.)");
+			}
+		}
+		else
+		{
+			System.out.println("권한이 없습니다.");	
+		}
+	}
 }
