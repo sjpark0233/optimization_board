@@ -4,7 +4,7 @@ public class User {
 	private String user_id;
 	private String user_pw;
 	private int user_accept;
-	private int team_code;
+	private String team_name;
 	private String user_name;
 	private String user_phone;
 	private String user_email;
@@ -27,11 +27,11 @@ public class User {
 	public void setUser_accept(int user_accept) {
 		this.user_accept = user_accept;
 	}
-	public int getTeam_code() {
-		return team_code;
+	public String getTeam_name() {
+		return team_name;
 	}
-	public void setTeam_code(int team_code) {
-		this.team_code = team_code;
+	public void setTeam_name(String team_name) {
+		this.team_name = team_name;
 	}
 	public String getUser_name() {
 		return user_name;
