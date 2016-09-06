@@ -7,7 +7,7 @@ public class Comment {
 	private String comment_date;
 	private String comment_content;
 	private String comment_user_name;
-	private int comment_auth; //0:권한 없음 1:권한 있음
+//	private int comment_auth; //0:권한 없음 1:권한 있음
 
 	public int getComment_code() {
 		return comment_code;
@@ -56,13 +56,13 @@ public class Comment {
 	public void setComment_user_name(String comment_user_name) {
 		this.comment_user_name = comment_user_name;
 	}
-	
-	public int getComment_auth() {
-		return comment_auth;
-	}
-
-	public void setComment_auth(int comment_auth) {
-		this.comment_auth = comment_auth;
-	}
-	
+//	
+//	public int getComment_auth() {
+//		return comment_auth;
+//	}
+//
+//	public void setComment_auth(int comment_auth) {
+//		this.comment_auth = comment_auth;
+//	}
+//	
 }

@@ -97,7 +97,7 @@
 <!-- 상단 -->
 <div align=right>
 <br>
-<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="">회원가입</a> </font>
+<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="./user?action=join">회원가입</a> </font>
 </div>
 
 <div>

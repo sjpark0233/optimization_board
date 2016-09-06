@@ -130,9 +130,10 @@
 <div class="font3" align ="center">
 
 
-<form action="loginCheck.jsp" method="post">
-	<label>아이디 : </label> <input type="text" name="id"> <br><br>
-	<label>비밀번호 : </label> <input type="password" name="pw"> <br><br>
+<form action="user" method="post">
+	<input type=hidden name="action" value="login">
+	<label>아이디 : </label> <input type="text" name="user_id"> <br><br>
+	<label>비밀번호 : </label> <input type="password" name="user_pw"> <br><br>
 	<input type="submit" value="로그인">&nbsp;
 	<input type="reset" value="다시입력">&nbsp;
 	<input type="button" value="회원가입" onClick="location.href='join.jsp'">

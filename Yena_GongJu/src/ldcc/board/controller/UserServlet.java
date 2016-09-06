@@ -97,13 +97,10 @@ public class UserServlet extends HttpServlet {
 
 	
 	private void doLogout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		String result = "로그아웃 완료";
 		HttpSession session = request.getSession();
 		session.invalidate();
-		
-		request.setAttribute("result", result);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-		dispatcher.forward(request, response);
+
+		response.sendRedirect("list_main.jsp");
 		
 	}
 
@@ -117,14 +114,15 @@ public class UserServlet extends HttpServlet {
 		user.setUser_pw(request.getParameter("user_pw"));
 		
 		dao.doLogin(user);
-		String result = "fail";
 		if(user.getUser_name()!=null){
 			session.setAttribute("user",user);
-			result = user.getUser_name();
+			System.out.println("user connect : "+user.getUser_id());
+			response.sendRedirect("list_in.jsp");
 		}
-		request.setAttribute("result", result);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-		dispatcher.forward(request, response);
+		else
+		{
+			response.sendRedirect("login.jsp");
+		}
 	}
 	
 	

@@ -21,15 +21,15 @@ import ldcc.board.vo.User;
 public class CommentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public CommentServlet() {
-        super();
-    }
+	public CommentServlet() {
+		super();
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request,response);
 	}
-	
-	
+
+
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
@@ -47,15 +47,13 @@ public class CommentServlet extends HttpServlet {
 			doComment_write(request,response);
 		}
 	}
-	
-	
+
+
 	private void doComment_list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
 		CommentDAO dao = new CommentDAO();
-		String user_id = ((User)session.getAttribute("user")).getUser_id();
-		
-		ArrayList<Comment> list = dao.doList(Integer.parseInt(request.getParameter("post_code")),user_id);
-		
+
+		ArrayList<Comment> list = dao.doList(Integer.parseInt(request.getParameter("post_code")));
+
 		if(list.size()!=0){
 			System.out.println(list);
 			request.setAttribute("result", list);
@@ -66,7 +64,7 @@ public class CommentServlet extends HttpServlet {
 		{
 			System.out.println("아직 댓글이 없습니다.");
 		}
-		
+
 	}
 
 
@@ -74,12 +72,12 @@ public class CommentServlet extends HttpServlet {
 		CommentDAO dao = new CommentDAO();
 		Comment comment = new Comment();
 		String result = "fail";
-		
+
 		if(request.getParameter("comment_content")!=null&&request.getParameter("comment_code")!=null)
 		{
 			comment.setComment_code(Integer.parseInt(request.getParameter("comment_code")));
 			comment.setComment_content(request.getParameter("comment_content"));
-			
+
 			boolean flag = dao.doUpdate(comment);
 			if(flag){
 				result = "수정 완료";
@@ -89,17 +87,17 @@ public class CommentServlet extends HttpServlet {
 		{
 			System.out.println("형식을 모두 채워주세요");
 		}
-		
+
 		request.setAttribute("result", result);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
 		dispatcher.forward(request, response);
 	}
 
-	
+
 	private void doComment_delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CommentDAO dao = new CommentDAO();
 		String result = "fail";
-		
+
 		boolean flag = dao.doDelete(Integer.parseInt(request.getParameter("comment_code")));
 		if(flag){
 			result = "삭제 완료";
@@ -108,22 +106,22 @@ public class CommentServlet extends HttpServlet {
 		request.setAttribute("result", result);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
 		dispatcher.forward(request, response);
-		
+
 	}
-	
-	
+
+
 	private void doComment_write(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NumberFormatException {
 		HttpSession session = request.getSession();
 		String result = "fail";
 		CommentDAO dao = new CommentDAO();
 		Comment comment = new Comment();
-		
+
 		if(request.getParameter("comment_content")!=null)
 		{
 			comment.setUser_id(((User)session.getAttribute("user")).getUser_id());
 			comment.setPost_code(Integer.parseInt(request.getParameter("post_code")));
 			comment.setComment_content(request.getParameter("comment_content"));
-			
+
 			boolean flag = dao.doInsert(comment);
 			if(flag){
 				result = comment.getUser_id();
@@ -133,7 +131,7 @@ public class CommentServlet extends HttpServlet {
 		{
 			System.out.println("형식을 모두 채워주세요");
 		}
-		
+
 		request.setAttribute("result", result);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
 		dispatcher.forward(request, response);

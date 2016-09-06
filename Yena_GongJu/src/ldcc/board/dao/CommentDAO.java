@@ -14,8 +14,8 @@ public class CommentDAO {
 	private String updateSQL = "update Comment set comment_content = ? where comment_code = ? ";
 	private String deleteSQL = "delete from Comment where comment_code = ?";
 	private String insertSQL = "insert into Comment(post_code, user_id, comment_date, comment_content) values(?,?,now(),?)";
-	
-	public ArrayList<Comment> doList(int post_code,String user_id)
+
+	public ArrayList<Comment> doList(int post_code)
 	{
 		ArrayList<Comment> list = new ArrayList<Comment>();
 		Connection con =null;
@@ -26,7 +26,7 @@ public class CommentDAO {
 			stmt = con.prepareStatement(select_allSQL);
 			stmt.setString(1, Integer.toString(post_code));
 			rst = stmt.executeQuery();
-			
+
 			while(rst.next()==true){
 				Comment comment = new Comment();
 				comment.setComment_code(Integer.parseInt(rst.getString(1)));
@@ -34,20 +34,11 @@ public class CommentDAO {
 				comment.setUser_id(rst.getString(3));
 				comment.setComment_content(rst.getString(4));
 				comment.setComment_date(rst.getString(5));
-				
-				if(rst.getString(3) == user_id)
-				{
-					comment.setComment_auth(1);
-				}
-				else
-				{
-					comment.setComment_auth(0);
-				}
-				
+
 				list.add(comment);
 			}
 			return list;
-			
+
 		}catch(SQLException e){
 			System.out.println("check error : "+e);
 			return null;
@@ -60,7 +51,7 @@ public class CommentDAO {
 	{
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
+
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(updateSQL);
@@ -68,7 +59,7 @@ public class CommentDAO {
 			stmt.setString(2, Integer.toString(comment.getComment_code()));
 
 			int cnt = stmt.executeUpdate();
-			
+
 			System.out.println(cnt ==1 ? "insert success" : "fail");
 			if(cnt ==1)
 			{
@@ -80,7 +71,7 @@ public class CommentDAO {
 				JDBCUtil.close(stmt, con);
 				return false;
 			}
-			
+
 		}catch(SQLException e){
 			System.out.println("user insert error : " + e);
 			JDBCUtil.close(stmt, con);
@@ -92,13 +83,13 @@ public class CommentDAO {
 	{
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
+
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setString(1, Integer.toString(comment_code));
 			int cnt = stmt.executeUpdate();
-			
+
 			System.out.println(cnt ==1 ? "insert success" : "fail");
 			if(cnt ==1)
 			{
@@ -110,7 +101,7 @@ public class CommentDAO {
 				JDBCUtil.close(stmt, con);
 				return false;
 			}
-			
+
 		}catch(SQLException e){
 			System.out.println("user insert error : " + e);
 			JDBCUtil.close(stmt, con);
@@ -122,7 +113,7 @@ public class CommentDAO {
 	{
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
+
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(insertSQL);
@@ -130,7 +121,7 @@ public class CommentDAO {
 			stmt.setString(2, comment.getUser_id());
 			stmt.setString(3, comment.getComment_content());
 			int cnt = stmt.executeUpdate();
-			
+
 			System.out.println(cnt ==1 ? "insert success" : "fail");
 			if(cnt ==1)
 			{
@@ -142,7 +133,7 @@ public class CommentDAO {
 				JDBCUtil.close(stmt, con);
 				return false;
 			}
-			
+
 		}catch(SQLException e){
 			System.out.println("user insert error : " + e);
 			JDBCUtil.close(stmt, con);

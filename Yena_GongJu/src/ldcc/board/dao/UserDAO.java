@@ -30,7 +30,6 @@ public class UserDAO {
 
 			if(rst.next()){
 				user.setUser_name(rst.getString(5));
-				System.out.println(user.getUser_name());
 			}
 		}catch(SQLException e){
 			System.out.println("login error : "+e);
@@ -119,6 +118,7 @@ public class UserDAO {
 			rst = stmt.executeQuery();
 
 			if(rst.next()){
+				user.setUser_id(rst.getString(1));
 				user.setTeam_name(rst.getString(4));
 				user.setUser_name(rst.getString(5));
 				user.setUser_phone(rst.getString(6));
