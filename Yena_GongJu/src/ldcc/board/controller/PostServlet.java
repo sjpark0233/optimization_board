@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import ldcc.board.dao.BoardDAO;
 import ldcc.board.dao.PostDAO;
+import ldcc.board.vo.Board;
 import ldcc.board.vo.Post;
+import ldcc.board.vo.User;
 
 /**
  * Servlet implementation class PostServlet
@@ -42,14 +45,19 @@ public class PostServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 
-		MultipartRequest multi = new MultipartRequest(request, request.getRealPath("upload"), 5 * 1024 * 1024, "euc-kr",
-				new DefaultFileRenamePolicy());
+		MultipartRequest multi = null;
+		try {
+			multi = new MultipartRequest(request, request.getRealPath("upload"), 5 * 1024 * 1024, "euc-kr",
+					new DefaultFileRenamePolicy());
+		} catch (IOException e) {
+		}
 
-		switch (multi.getParameter("action")) {
+		switch (multi != null ? multi.getParameter("action") : request.getParameter("action")) {
 		case "list_all":
 			doShowListAll(request, response);
 			break;
@@ -73,18 +81,58 @@ public class PostServlet extends HttpServlet {
 
 	private void doShowListAll(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		List<Post> postList = new PostDAO().doGetList(Integer.parseInt(request.getParameter("page")));
-		request.setAttribute("post_list", postList);
-		request.getRequestDispatcher("list.jsp").forward(request, response);
+		int page = 1;
+		if (request.getParameter("page") != null) {
+			page = Integer.parseInt(request.getParameter("page"));
+		}
 
+		PostDAO postDAO = new PostDAO();
+		List<Post> postList = postDAO.doGetList(page);
+		request.setAttribute("post_list", postList);
+
+		int listAllCount = postDAO.doGetListAllCount();
+		int maxPage = (int) ((double) listAllCount / 10 + 0.95);
+		int startPage = (((int) ((double) page / 10 + 0.9)) - 1) * 10 + 1;
+		int endPage = startPage + 10 - 1;
+		if (endPage > maxPage) {
+			endPage = maxPage;
+		}
+
+		request.setAttribute("page", page);
+		request.setAttribute("max_page", maxPage);
+		request.setAttribute("start_page", startPage);
+		request.setAttribute("end_page", endPage);
+		request.setAttribute("list_all_count", listAllCount);
+
+		request.getRequestDispatcher("list_main.jsp").forward(request, response);
 	}
 
 	private void doShowListPart(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		List<Post> postList = new PostDAO().doGetList(Integer.parseInt(request.getParameter("board_code")),
-				Integer.parseInt(request.getParameter("page")));
+		int page = 1;
+		if (request.getParameter("page") != null) {
+			page = Integer.parseInt(request.getParameter("page"));
+		}
+
+		PostDAO postDAO = new PostDAO();
+		List<Post> postList = postDAO.doGetList(Integer.parseInt(request.getParameter("board_code")), page);
 		request.setAttribute("post_list", postList);
-		request.getRequestDispatcher("list.jsp").forward(request, response);
+
+		int listAllCount = postDAO.doGetListAllCount();
+		int maxPage = (int) ((double) listAllCount / 10 + 0.95);
+		int startPage = (((int) ((double) page / 10 + 0.9)) - 1) * 10 + 1;
+		int endPage = startPage + 10 - 1;
+		if (endPage > maxPage) {
+			endPage = maxPage;
+		}
+
+		request.setAttribute("page", page);
+		request.setAttribute("max_page", maxPage);
+		request.setAttribute("start_page", startPage);
+		request.setAttribute("end_page", endPage);
+		request.setAttribute("list_all_count", listAllCount);
+
+		request.getRequestDispatcher("list_main.jsp").forward(request, response);
 	}
 
 	private void doReadPost(HttpServletRequest request, HttpServletResponse response)
@@ -95,37 +143,30 @@ public class PostServlet extends HttpServlet {
 		} else {
 			Post post = new PostDAO().doGet(Integer.parseInt(request.getParameter("post_code")));
 			request.setAttribute("post", post);
-			request.getRequestDispatcher("view.jsp").forward(request, response);
+			request.setAttribute("board_name", new BoardDAO().doGet(post.getBoard_code()).getBoard_name());
+			request.getRequestDispatcher("test_view.jsp").forward(request, response);
 		}
 	}
 
-	// incomplete !!!
 	private void doWritePost(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
 			throws ServletException, IOException {
+		// 로그인 세션 확인
+		if (request.getSession().getAttribute("user") == null) {
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		} else {
+			// 새 게시글 올리기
+			Post post = new Post();
+			post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
+			post.setUser_id(((User) request.getSession().getAttribute("user")).getUser_id());
+			post.setPost_title(multi.getParameter("post_title"));
+			post.setPost_content(multi.getParameter("post_content"));
+			post.setPost_type(Integer.parseInt(multi.getParameter("post_type")));
+			post.setPost_filepath(multi.getFilesystemName((String) multi.getFileNames().nextElement()));
+			new PostDAO().doInsert(post);
 
-		// 새 게시글 올리기
-		// incomplete. 파일첨부처리 필요
-		Post post = new Post();
-		post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
-		post.setUser_id(
-				"test"/*
-						 * ((User) request.getSession().getAttribute("user")).
-						 * getUser_id()
-						 */);
-		post.setPost_title(multi.getParameter("post_title"));
-		post.setPost_content(multi.getParameter("post_content"));
-		post.setPost_type(Integer.parseInt(multi.getParameter("post_type")));
-		post.setPost_filepath(multi.getFilesystemName((String) multi.getFileNames().nextElement()));
-		new PostDAO().doInsert(post);
-
-		boolean a = true;
-		if (a) {// test
-			request.getRequestDispatcher("test.jsp").forward(request, response);
-			return;
+			// 게시글 목록으로
+			request.getRequestDispatcher("list_main.jsp").forward(request, response);
 		}
-		// 게시글 올린 것 보기
-		// incomplete. 새로 부여된 post_code를 넘겨줘야함.
-		this.doReadPost(request, response);
 	}
 
 	// incomplete !!!
