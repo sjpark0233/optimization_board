@@ -97,7 +97,11 @@
 <!-- 상단 -->
 <div align=right>
 <br>
+<<<<<<< HEAD
 <font class="font2"> <a href="./user?action=logout">LogOut</a> | <a href="./user?action=user_info">회원정보확인</a> </font>
+=======
+<font class="font2"> <a href="logout.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
+>>>>>>> refs/remotes/origin/moonjung
 </div>
 
 <div>

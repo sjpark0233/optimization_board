@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>로그인</title>
+<title>회원탈퇴</title>
 
 <style type="text/css">
 <!--
@@ -28,8 +28,13 @@
 	.font3 {
 		font: 20px Verdana, sans-serif;
 		color: #000;
-
 		}
+	.font4 {
+		font: bold 30px Verdana,sans-serif;
+		color: #000;
+		margin: 0px;
+        padding: 5px 20px 5px 20px;
+		}	
 	h2 {
         font: bold 14px Verdana, Arial, Helvetica, sans-serif;
         color: #000;
@@ -92,17 +97,34 @@
       }
 -->
 
-	
 </style>
+
+<script language="javascript"> 
+ 
+	function begin() {
+		document.myform.passwd.focus();
+	}
+
+	function checkIt() {
+		if (!document.myform.passwd.value) {
+			alert("비밀번호를 입력하지 않으셨습니다.");
+			document.myform.passwd.focus();
+			
+			return false;
+
+		}
+
+	}
+	
+</script> 
+
 </head>
-
-<body>
-
-<!-- 상단 -->
+<body onload="begin()">
 <div align=right>
 <br>
-<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> </font>
+<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
 </div>
+
 
 <div>
 	<font class="font1"> 최적화팀 게시판 </font>
@@ -123,44 +145,28 @@
 	</ul>
 </div>
 
-<div class="font1">
+<div class="font4">
     <center><br>
-    <H4>로그인</H4>
+    <H4>회원탈퇴</H4>
 	</center>
 </div>
+<div class="font3">
+	<form name="myform" action="userWithdrawPro.jsp" method="post" onSubmit="return checkIt()">
+		
+		<table cellSpacing=1 cellPadding=1 width="300" align="center">
+			<tr height="30">
+				<td width="500" align="center">비밀번호</td>
+				<td width="200" align="center"><INPUT type="password" name="pw" size="15" maxlength="12"></td>
+			</tr>
+			<tr height="10"></tr>
+			<tr height="30">
+				<td colspan="2" align="center">
+				<input type="submit" value="회원탈퇴">&nbsp;&nbsp;
+				<input type="button" value="취 소"  OnClick="jsp:history.back(-1)"></td>
+			</tr>
 
-<div class="font3" align="center">
-
-
-<<<<<<< HEAD
-<form action="user" method="post">
-	<input type=hidden name="action" value="login">
-	<label>아이디 : </label> <input type="text" name="user_id"> <br><br>
-	<label>비밀번호 : </label> <input type="password" name="user_pw"> <br><br>
-	<input type="submit" value="로그인">&nbsp;
-	<input type="reset" value="다시입력">&nbsp;
-	<input type="button" value="회원가입" onClick="location.href='join.jsp'">
-=======
-<form action="loginCheck.jsp" method="post">
-<table align="center" border="3" width="400" height="150" border= "solid" bordercolor = "#333333">
-<tr>
-	<td>
-	&nbsp;<label>아이디 : </label> <input type="text" name="id" size="15" maxlength="12"> <br><br>
-	&nbsp;<label>비밀번호 : </label> <input type="password" name="pw" size="15" maxlength="12">
-	</td>
-</tr>
-
-</table>
-<br>
-	&nbsp;<input type="submit" value="로그인">&nbsp;&nbsp;
-	<input type="reset" value="다시입력">&nbsp;&nbsp;
-	<input type="button" value="회원가입" onClick="location.href='join.jsp'">&nbsp;
->>>>>>> refs/remotes/origin/moonjung
-</form>
-
-
-</div>
-
-
+		</table>
+	</form>
+</div>	
 </body>
 </html>

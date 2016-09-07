@@ -4,8 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>로그인</title>
-
+<title>회원정보확인</title>
 <style type="text/css">
 <!--
     body {
@@ -28,8 +27,15 @@
 	.font3 {
 		font: 20px Verdana, sans-serif;
 		color: #000;
-
-		}
+		margin: 0;
+        padding: 5% 20% 15% 20%;
+		}		
+	.font4 {
+		font: bold 30px Verdana,sans-serif;
+		color: #000;
+		margin: 0px;
+        padding: 5px 20px 5px 20px;
+		}	
 	h2 {
         font: bold 14px Verdana, Arial, Helvetica, sans-serif;
         color: #000;
@@ -94,14 +100,13 @@
 
 	
 </style>
-</head>
 
+</head>
 <body>
 
-<!-- 상단 -->
 <div align=right>
 <br>
-<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> </font>
+<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
 </div>
 
 <div>
@@ -109,11 +114,10 @@
 	<br><br>
 </div>
 
-<!-- 탭 -->
 <div id="tabsF">
     <ul>
 		<b>
-		<li id="current"><a href="list_main.jsp"><span>Home</span></a></li>
+		<li><a href="list_in.jsp"><span>Home</span></a></li>
 		<li><a href=""><span>Windows</span></a></li>
 		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
 		<li><a href=""><span>Oracle</span></a></li>
@@ -123,44 +127,72 @@
 	</ul>
 </div>
 
-<div class="font1">
+<div class="font4">
     <center><br>
-    <H4>로그인</H4>
+    <H4>회원정보확인</H4>
 	</center>
 </div>
 
-<div class="font3" align="center">
+<div class="font3">
+<table align="center">
+  <tr>
+   <td>
+   <table align="center">
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">아이디</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+     
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">이름</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+    
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">소속</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+    
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">전화번호</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+    <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+    
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">이메일</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+    <tr height="1" bgcolor="#dddddd"><td colspan="4" width="407"></td></tr>
 
-
-<<<<<<< HEAD
-<form action="user" method="post">
-	<input type=hidden name="action" value="login">
-	<label>아이디 : </label> <input type="text" name="user_id"> <br><br>
-	<label>비밀번호 : </label> <input type="password" name="user_pw"> <br><br>
-	<input type="submit" value="로그인">&nbsp;
-	<input type="reset" value="다시입력">&nbsp;
-	<input type="button" value="회원가입" onClick="location.href='join.jsp'">
-=======
-<form action="loginCheck.jsp" method="post">
-<table align="center" border="3" width="400" height="150" border= "solid" bordercolor = "#333333">
-<tr>
-	<td>
-	&nbsp;<label>아이디 : </label> <input type="text" name="id" size="15" maxlength="12"> <br><br>
-	&nbsp;<label>비밀번호 : </label> <input type="password" name="pw" size="15" maxlength="12">
-	</td>
-</tr>
-
-</table>
-<br>
-	&nbsp;<input type="submit" value="로그인">&nbsp;&nbsp;
-	<input type="reset" value="다시입력">&nbsp;&nbsp;
-	<input type="button" value="회원가입" onClick="location.href='join.jsp'">&nbsp;
->>>>>>> refs/remotes/origin/moonjung
-</form>
-
-
-</div>
-
-
-</body>
+    <tr height="1" bgcolor="#82B5DF"><td colspan="4" width="407"></td></tr>
+    
+    <tr align="center">
+  
+      <td width="0">&nbsp;</td>
+      <td colspan="2" width="399"><input type=button value="회원정보수정" OnClick="location.href='userInfoModify.jsp'">
+	<input type=button value="회원탈퇴" OnClick="location.href='userWithdraw.jsp'">
+      <td width="0">&nbsp;</td>
+     </tr>
+   </table>
+    
+   </td>
+  </tr>
+ </table>
+ </div>
+ 
+ </body>
 </html>

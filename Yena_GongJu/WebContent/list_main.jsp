@@ -97,7 +97,11 @@
 <!-- 상단 -->
 <div align=right>
 <br>
+<<<<<<< HEAD
 <font class="font2"> <a href="login.jsp">LogIn</a> | <a href="./user?action=join">회원가입</a> </font>
+=======
+<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> </font>
+>>>>>>> refs/remotes/origin/moonjung
 </div>
 
 <div>
