@@ -97,7 +97,7 @@
 <!-- 상단 -->
 <div align=right>
 <br>
-<font class="font2"> <a href="">LogOut</a> | <a href="">회원정보확인</a> </font>
+<font class="font2"> <a href="logout.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
 </div>
 
 <div>

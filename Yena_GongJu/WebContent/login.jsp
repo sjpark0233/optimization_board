@@ -28,11 +28,7 @@
 	.font3 {
 		font: 20px Verdana, sans-serif;
 		color: #000;
-		margin: 10%;
-        padding: 10% 20% 10% 20%;
-        border: solid;
-        border-width: thick;
-        border-color: #333333;
+
 		}
 	h2 {
         font: bold 14px Verdana, Arial, Helvetica, sans-serif;
@@ -105,7 +101,7 @@
 <!-- 상단 -->
 <div align=right>
 <br>
-<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="">회원가입</a> </font>
+<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> </font>
 </div>
 
 <div>
@@ -127,15 +123,29 @@
 	</ul>
 </div>
 
-<div class="font3" align ="center">
+<div class="font1">
+    <center><br>
+    <H4>로그인</H4>
+	</center>
+</div>
+
+<div class="font3" align="center">
 
 
 <form action="loginCheck.jsp" method="post">
-	<label>아이디 : </label> <input type="text" name="id"> <br><br>
-	<label>비밀번호 : </label> <input type="password" name="pw"> <br><br>
-	<input type="submit" value="로그인">&nbsp;
-	<input type="reset" value="다시입력">&nbsp;
-	<input type="button" value="회원가입" onClick="location.href='join.jsp'">
+<table align="center" border="3" width="400" height="150" border= "solid" bordercolor = "#333333">
+<tr>
+	<td>
+	&nbsp;<label>아이디 : </label> <input type="text" name="id" size="15" maxlength="12"> <br><br>
+	&nbsp;<label>비밀번호 : </label> <input type="password" name="pw" size="15" maxlength="12">
+	</td>
+</tr>
+
+</table>
+<br>
+	&nbsp;<input type="submit" value="로그인">&nbsp;&nbsp;
+	<input type="reset" value="다시입력">&nbsp;&nbsp;
+	<input type="button" value="회원가입" onClick="location.href='join.jsp'">&nbsp;
 </form>
 
 

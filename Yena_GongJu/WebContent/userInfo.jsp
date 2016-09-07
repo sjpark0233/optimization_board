@@ -2,11 +2,9 @@
     pageEncoding="EUC-KR"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>게시판 Main</title>
-
+<title>회원정보확인</title>
 <style type="text/css">
 <!--
     body {
@@ -26,6 +24,18 @@
 		margin: 0px;
         padding: 0px 20px 0px 0px;
 		}
+	.font3 {
+		font: 20px Verdana, sans-serif;
+		color: #000;
+		margin: 0;
+        padding: 5% 20% 15% 20%;
+		}		
+	.font4 {
+		font: bold 30px Verdana,sans-serif;
+		color: #000;
+		margin: 0px;
+        padding: 5px 20px 5px 20px;
+		}	
 	h2 {
         font: bold 14px Verdana, Arial, Helvetica, sans-serif;
         color: #000;
@@ -90,14 +100,13 @@
 
 	
 </style>
-</head>
 
+</head>
 <body>
 
-<!-- 상단 -->
 <div align=right>
 <br>
-<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> </font>
+<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
 </div>
 
 <div>
@@ -105,11 +114,10 @@
 	<br><br>
 </div>
 
-<!-- 탭 -->
 <div id="tabsF">
     <ul>
 		<b>
-		<li id="current"><a href="list_main.jsp"><span>Home</span></a></li>
+		<li><a href="list_in.jsp"><span>Home</span></a></li>
 		<li><a href=""><span>Windows</span></a></li>
 		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
 		<li><a href=""><span>Oracle</span></a></li>
@@ -119,38 +127,72 @@
 	</ul>
 </div>
 
-<!-- 목록 -->
-<div class="font2">
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-	<tr height="5"><td width="5"></td></tr>
-	<tr style="background:url('img/table_mid.gif') repeat-x; text-align:center;">
- 		<td width="5"><img src="img/table_left.gif" width="5" height="30" /></td>
-   		<td width="73">번호</td>
-   		<td width="379">제목</td>
-   		<td width="73">작성자</td>
-   		<td width="164">작성일</td>
-   		<td width="58">조회수</td>
-   		<td width="7"><img src="img/table_right.gif" width="5" height="30" /></td>
-    </tr>
-
-<!-- 내용부분 -->    
-   
-	<tr height="25" align="center">
-		
-	</tr>
-    
-	<tr height="25" align="center"></tr>
-  	<tr height="1" bgcolor="#D2D2D2"><td colspan="6"></td></tr>
- 	<tr height="1" bgcolor="#82B5DF"><td colspan="6" width="752"></td></tr>
-</table>
- 
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
-	<tr><td colspan="4" height="5"></td></tr>
-  	<tr align="right">
-   		<td><input type=button value="글쓰기" onClick="location.href='write.jsp'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-  	</tr>
-</table>
+<div class="font4">
+    <center><br>
+    <H4>회원정보확인</H4>
+	</center>
 </div>
 
-</body>
+<div class="font3">
+<table align="center">
+  <tr>
+   <td>
+   <table align="center">
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">아이디</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+     
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">이름</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+    
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">소속</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+    
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">전화번호</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+    <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
+    
+    <tr>
+      <td width="0">&nbsp;</td>
+      <td align="center" width="140">이메일</td>
+      <td width="1000"></td>
+      <td width="0">&nbsp;</td>
+    </tr>
+    <tr height="1" bgcolor="#dddddd"><td colspan="4" width="407"></td></tr>
+
+    <tr height="1" bgcolor="#82B5DF"><td colspan="4" width="407"></td></tr>
+    
+    <tr align="center">
+  
+      <td width="0">&nbsp;</td>
+      <td colspan="2" width="399"><input type=button value="회원정보수정" OnClick="location.href='userInfoModify.jsp'">
+	<input type=button value="회원탈퇴" OnClick="location.href='userWithdraw.jsp'">
+      <td width="0">&nbsp;</td>
+     </tr>
+   </table>
+    
+   </td>
+  </tr>
+ </table>
+ </div>
+ 
+ </body>
 </html>
