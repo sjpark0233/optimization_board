@@ -134,7 +134,7 @@
 				{
 					alert("회원탈퇴 되었습니다.");	
 					alert("첫 화면으로 돌아갑니다.");		
-					location.replace("list_main.jsp");				
+					location.replace("post?action=list");				
 				}
 				else
 				{
@@ -171,7 +171,7 @@
 <div id="tabsF">
     <ul>
 		<b>
-		<li id="current"><a href="list_main.jsp"><span>Home</span></a></li>
+		<li id="current"><a href="post?action=list"><span>Home</span></a></li>
 		<li><a href=""><span>Windows</span></a></li>
 		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
 		<li><a href=""><span>Oracle</span></a></li>
@@ -187,7 +187,7 @@
 	</center>
 </div>
 <div class="font3">
-<form name="myform" method="post" action="list_main.jsp" id="withdraw">
+<form name="myform" method="post" action="post?action=list" id="withdraw">
 		<table cellSpacing=1 cellPadding=1 width="300" align="center">
 			<tr height="30">
 				<td width="500" align="center">비밀번호</td>

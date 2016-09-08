@@ -30,6 +30,7 @@ public class UserDAO {
 			rst = stmt.executeQuery();
 
 			if(rst.next()){
+				user.setUser_accept(Integer.parseInt(rst.getString(3)));
 				user.setUser_name(rst.getString(5));
 			}
 		}catch(SQLException e){
