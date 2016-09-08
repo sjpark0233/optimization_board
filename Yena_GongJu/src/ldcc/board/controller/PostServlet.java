@@ -121,11 +121,15 @@ public class PostServlet extends HttpServlet {
 		// if (request.getSession().getAttribute("user") == null) {
 		// request.getRequestDispatcher("login.jsp").forward(request, response);
 		// } else {
+
 		PostDAO postDAO = new PostDAO();
 		postDAO.doIncreaseView(Integer.parseInt(request.getParameter("post_code")));
 		Post post = postDAO.doGet(Integer.parseInt(request.getParameter("post_code")));
 		request.setAttribute("post", post);
 		request.setAttribute("board_name", new BoardDAO().doGet(post.getBoard_code()).getBoard_name());
+		if (request.getParameter("board_code") != null) {
+			request.setAttribute("board_code", Integer.parseInt(request.getParameter("board_code")));
+		}
 		request.getRequestDispatcher("view.jsp").forward(request, response);
 		// }
 	}
@@ -133,7 +137,6 @@ public class PostServlet extends HttpServlet {
 	private void doShowWrite(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (request.getParameter("board_code") != null) {
-			System.out.println(Integer.parseInt(request.getParameter("board_code")));
 			request.setAttribute("board_code", Integer.parseInt(request.getParameter("board_code")));
 		}
 		request.setAttribute("board_list", new BoardDAO().doGetList());
@@ -167,6 +170,9 @@ public class PostServlet extends HttpServlet {
 		// if (request.getSession().getAttribute("user") == null) {
 		// request.getRequestDispatcher("login.jsp").forward(request, response);
 		// } else {
+		if (request.getParameter("board_code") != null) {
+			request.setAttribute("board_code", Integer.parseInt(request.getParameter("board_code")));
+		}
 		int postCode = Integer.parseInt(request.getParameter("post_code"));
 		Post post = new PostDAO().doGet(postCode);
 		// if (!((User)
@@ -197,9 +203,6 @@ public class PostServlet extends HttpServlet {
 		new PostDAO().doUpdate(post, fileEdited);
 
 		request.getRequestDispatcher("post?action=read&post_code=" + post.getPost_code()).forward(request, response);
-
-		// 게시글 올린 것 보기
-		this.doReadPost(request, response);
 	}
 
 	private void doDeletePost(HttpServletRequest request, HttpServletResponse response)

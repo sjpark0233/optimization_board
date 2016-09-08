@@ -3,6 +3,10 @@
 <%@ page import="ldcc.board.vo.*"%>
 <%
 	Post post = (Post) request.getAttribute("post");
+	int boardCode = 0;
+	if (request.getAttribute("board_code") != null) {
+		boardCode = (Integer) request.getAttribute("board_code");
+	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -160,12 +164,18 @@ h2 {
 	<div id="tabsF">
 		<ul>
 			<b>
-				<li><a href="list.jsp"><span>Home</span></a></li>
-				<li><a href=""><span>Windows</span></a></li>
-				<li><a href="" target="_blank"><span>Oracle</span></a></li>
-				<li><a href=""><span>MS SQL</span></a></li>
-				<li><a href=""><span>Network</span></a></li>
-				<li><a href=""><span>SAP</span></a></li>
+				<li <%if (boardCode == 0) {%> id="current" <%}%>><a
+					href="post?action=list_all"><span>Home</span></a></li>
+				<li <%if (boardCode == 1) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
+				<li <%if (boardCode == 2) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=2"><span>MS SQL</span></a></li>
+				<li <%if (boardCode == 3) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
+				<li <%if (boardCode == 4) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=4"><span>Network</span></a></li>
+				<li <%if (boardCode == 5) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
 			</b>
 		</ul>
 	</div>

@@ -137,13 +137,18 @@ h2 {
 	<div id="tabsF">
 		<ul>
 			<b>
-				<li id="current"><a href="post?action=list_all"><span>Home</span></a></li>
-				<li><a href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
-				<li><a href="post?action=list_all&board_code=2"><span>MS
-							SQL</span></a></li>
-				<li><a href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
-				<li><a href="post?action=list_all&board_code=4"><span>Network</span></a></li>
-				<li><a href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
+				<li <%if (boardCode == 0) {%> id="current" <%}%>><a
+					href="post?action=list_all"><span>Home</span></a></li>
+				<li <%if (boardCode == 1) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
+				<li <%if (boardCode == 2) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=2"><span>MS SQL</span></a></li>
+				<li <%if (boardCode == 3) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
+				<li <%if (boardCode == 4) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=4"><span>Network</span></a></li>
+				<li <%if (boardCode == 5) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
 			</b>
 		</ul>
 	</div>
@@ -180,7 +185,7 @@ h2 {
 				<td width="5"></td>
 				<td width="103"><%=post.getPost_code()%></td>
 				<td width="349" align="left"><a
-					href="./post?action=read&post_code=<%=post.getPost_code()%>"><%=post.getPost_title()%></a></td>
+					href="post?action=read&post_code=<%=post.getPost_code()%><%=boardCode != 0 ? "&board_code=" + boardCode : ""%>"><%=post.getPost_title()%></a></td>
 				<td width="73"><%=post.getUser_id()%></td>
 				<td width="164"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPost_date())%></td>
 				<td width="58"><%=post.getPost_view()%></td>

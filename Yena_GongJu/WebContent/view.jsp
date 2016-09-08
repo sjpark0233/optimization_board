@@ -3,8 +3,12 @@
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
+	int boardCode = 0; // 현재 파트 목록 코드
+	if (request.getAttribute("board_code") != null) {
+		boardCode = ((Integer) request.getAttribute("board_code")).intValue();
+	}
 	Post post = (Post) request.getAttribute("post");
-	String boardName = (String) request.getAttribute("board_name");
+	String boardName = (String) request.getAttribute("board_name"); // 지금 보고있는 게시물 파트명
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -116,6 +120,12 @@ h2 {
 -->
 </style>
 
+<script language="javascript">
+	function check() {
+		
+	}
+</script>
+
 </head>
 <body>
 
@@ -132,12 +142,18 @@ h2 {
 	<div id="tabsF">
 		<ul>
 			<b>
-				<li><a href="list_in.jsp"><span>Home</span></a></li>
-				<li><a href=""><span>Windows</span></a></li>
-				<li><a href="" target="_blank"><span>MS SQL</span></a></li>
-				<li><a href=""><span>Oracle</span></a></li>
-				<li><a href=""><span>Network</span></a></li>
-				<li><a href=""><span>SAP</span></a></li>
+				<li <%if (boardCode == 0) {%> id="current" <%}%>><a
+					href="post?action=list_all"><span>Home</span></a></li>
+				<li <%if (boardCode == 1) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
+				<li <%if (boardCode == 2) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=2"><span>MS SQL</span></a></li>
+				<li <%if (boardCode == 3) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
+				<li <%if (boardCode == 4) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=4"><span>Network</span></a></li>
+				<li <%if (boardCode == 5) {%> id="current" <%}%>><a
+					href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
 			</b>
 		</ul>
 	</div>
@@ -239,10 +255,10 @@ h2 {
 						<tr align="center">
 							<td width="0">&nbsp;</td>
 							<td colspan="2" width="399"><input type=button value="글쓰기"
-								OnClick="location.href='write.jsp'"> <input type=button
-								value="목록" OnClick="location.href=\'post?action=list_all">
+								OnClick="location.href='post?action=show_write<%=boardCode != 0 ? "&board_code=" + boardCode : ""%>'">
+								<input type=button value="목록" OnClick="jsp:history.back(-1)">
 								<input type=button value="수정"
-								OnClick=<%="location.href=\'post?action=show_modify&post_code=" + post.getPost_code() + "\'"%>>
+								OnClick="location.href='post?action=show_modify&post_code=<%=post.getPost_code()%><%=boardCode != 0 ? "&board_code=" + boardCode : ""%>'">
 								<input type=button value="삭제" OnClick="">
 							<td width="0">&nbsp;</td>
 						</tr>
