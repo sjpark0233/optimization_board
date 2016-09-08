@@ -11,10 +11,10 @@ import ldcc.board.vo.Board;
 
 public class BoardDAO {
 	private final String getSQL = "select * from BOARD where BOARD_CODE=?";
-	private final String getListSQL = "select * from BOARD order by BOARD_CODE desc";
+	private final String getListSQL = "select * from BOARD order by BOARD_CODE asc";
 
 	/**
-	 * select문을 통해 Post VO 1개를 반환
+	 * select문을 통해 Board VO 1개를 반환
 	 * 
 	 * @param board_code
 	 *            기본키
@@ -47,9 +47,9 @@ public class BoardDAO {
 	}
 
 	/**
-	 * select 문을 통해 Post VO의 리스트를 반환
+	 * select 문을 통해 Board VO의 리스트를 반환
 	 * 
-	 * @return 모든 Post 레코드를 VO화 한 것
+	 * @return 모든 Board 레코드를 VO화 한 것
 	 */
 	public List<Board> doGetList() {
 		Connection con = null;

@@ -16,10 +16,13 @@ public class PostDAO {
 	private final String getListSQL = "select * from (select @rownum := @rownum + 1 as rnum, P.*  from (select * from POST order by POST_CODE desc) P, (select @rownum := 0) R) PR where rnum>=? and rnum<=?";
 	private final String getListSQL2 = "select * from (select @rownum := @rownum + 1 as rnum, P.*  from (select * from POST where BOARD_CODE=? order by POST_CODE desc) P, (select @rownum := 0) R) PR where rnum>=? and rnum<=?";
 	private final String getListAllCountSQL = "select count(*) from POST";
+	private final String getListAllCountSQL2 = "select count(*) from POST where BOARD_CODE=?";
 	private final String getMaxPostNumSQL = "select max(POST_NUM) as POST_NUM from POST where BOARD_CODE=?";
 	private final String insertSQL = "insert into POST(BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM, POST_VIEW) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private final String updateSQL = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_FILEPATH=?, POST_TYPE=? where POST_CODE=?";
+	private final String updateSQL = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_TYPE=? where POST_CODE=?";
+	private final String updateSQL2 = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_FILEPATH=?, POST_TYPE=? where POST_CODE=?";
 	private final String deleteSQL = "delete from POST where POST_CODE=?";
+	private final String increaseViewSQL = "update POST set POST_VIEW=POST_VIEW+1 where POST_CODE=?";
 
 	/**
 	 * select문을 통해 Post VO 1개를 반환
@@ -158,7 +161,31 @@ public class PostDAO {
 			stmt = con.prepareStatement(this.getListAllCountSQL);
 			rst = stmt.executeQuery();
 
-			if(rst.next()) {
+			if (rst.next()) {
+				count = rst.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println("PostDAO.doGet() error : " + e.getMessage());
+		} finally {
+			JDBCUtil.close(rst, stmt, con);
+		}
+
+		return count;
+	}
+
+	public int doGetListAllCount(int board_code) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		int count = 0;
+
+		try {
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(this.getListAllCountSQL2);
+			stmt.setInt(1, board_code);
+			rst = stmt.executeQuery();
+
+			if (rst.next()) {
 				count = rst.getInt(1);
 			}
 		} catch (SQLException e) {
@@ -212,20 +239,26 @@ public class PostDAO {
 	 *            VO 객체
 	 * @return 성공 실패 여부
 	 */
-	public boolean doUpdate(Post post) {
+	public boolean doUpdate(Post post, boolean fileEdited) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		int retval = 0;
 
 		try {
 			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(this.updateSQL);
+			if (!fileEdited) {
+				stmt = con.prepareStatement(this.updateSQL);
+				stmt.setInt(4, post.getPost_type());
+				stmt.setInt(5, post.getPost_code()); // where 조건
+			} else {
+				stmt = con.prepareStatement(this.updateSQL2);
+				stmt.setString(4, post.getPost_filepath());
+				stmt.setInt(5, post.getPost_type());
+				stmt.setInt(6, post.getPost_code()); // where 조건
+			}
 			stmt.setInt(1, post.getBoard_code());
 			stmt.setString(2, post.getPost_title());
 			stmt.setString(3, post.getPost_content());
-			stmt.setString(4, post.getPost_filepath());
-			stmt.setInt(5, post.getPost_type());
-			stmt.setInt(6, post.getPost_code()); // where 조건
 			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("PostDAO.doUpdate() error : " + e);
@@ -291,5 +324,25 @@ public class PostDAO {
 		}
 
 		return retval;
+	}
+
+	public boolean doIncreaseView(int post_code) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		int retval = 0;
+
+		try {
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(this.increaseViewSQL);
+			stmt.setInt(1, post_code);
+			retval = stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("PostDAO.doIncreaseView() error : " + e.getMessage());
+		} finally {
+			JDBCUtil.close(rst, stmt, con);
+		}
+
+		return retval == 1;
 	}
 }
