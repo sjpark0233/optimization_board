@@ -152,7 +152,7 @@ public class PostServlet extends HttpServlet {
 		// 새 게시글 올리기
 		Post post = new Post();
 		post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
-		post.setUser_id("test");
+		post.setUser_id(((User) request.getSession().getAttribute("user")).getUser_id());
 		post.setPost_title(multi.getParameter("post_title"));
 		post.setPost_content(multi.getParameter("post_content"));
 		post.setPost_type(Integer.parseInt(multi.getParameter("post_type")));
