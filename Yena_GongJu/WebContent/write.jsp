@@ -144,8 +144,8 @@ h2 {
 <body>
 
 	<div align=right>
-		<br> <font class="font2"> <a href="list_main.jsp">LogOut</a>
-			| <a href="userInfo.jsp">회원정보확인</a>
+		<br> <font class="font2"> <a href="user?action=logout">LogOut</a>
+			| <a href="user?action=user_info">회원정보확인</a>
 		</font>
 	</div>
 
@@ -177,79 +177,72 @@ h2 {
 			<form name=writeform method=post
 				action="post?action=write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>"
 				enctype="multipart/form-data">
-				<input type=hidden name="action" value="write">
-				<%
-					if (tabCode != 0) {
-				%><input type=hidden name="tabCode" value=<%=tabCode%>>
-				<%
-					}
-				%>
 				<br>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">분류</td>
-				<td><select name="board_code" size="1">
-						<%
-							for (int i = 0; i < boardList.size(); i++) {
-						%>
-						<option value=<%=i + 1%> <%if (i + 1 == tabCode) {%>
-							selected="selected" <%}%>><%=boardList.get(i).getBoard_name()%></option>
-						<%
-							}
-						%>
-				</select>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">제목</td>
-				<td><input name="post_title" size="100%" maxlength="100"></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">게시물타입</td>
-				<td><input type="radio" name="post_type" value=0>공지 <input
-					type="radio" name="post_type" value=1 checked="checked">일반</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">파일업로드</td>
-				<td><input type="file" name="post_filepath"></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">내용</td>
-				<td><textarea name="post_content" cols="100%" rows="20%"></textarea></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr height="1" bgcolor="#82B5DF">
-				<td colspan="4"></td>
-			</tr>
-			<tr align="center">
-				<td>&nbsp;</td>
-				<td colspan="2"><input type=button value="등록"
-					OnClick="jsp:writeCheck()"> <input type=button value="취소"
-					OnClick="jsp:history.back(-1)">
-				<td>&nbsp;</td>
-			</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td align="center">분류</td>
+					<td><select name="board_code" size="1">
+							<%
+								for (int i = 0; i < boardList.size(); i++) {
+							%>
+							<option value=<%=i + 1%> <%if (i + 1 == tabCode) {%>
+								selected="selected" <%}%>><%=boardList.get(i).getBoard_name()%></option>
+							<%
+								}
+							%>
+					</select>
+					<td>&nbsp;</td>
+				</tr>
+				<tr height="1" bgcolor="#dddddd">
+					<td colspan="4"></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td align="center">제목</td>
+					<td><input name="post_title" size="100%" maxlength="100"></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr height="1" bgcolor="#dddddd">
+					<td colspan="4"></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td align="center">게시물타입</td>
+					<td><input type="radio" name="post_type" value=0>공지 <input
+						type="radio" name="post_type" value=1 checked="checked">일반</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr height="1" bgcolor="#dddddd">
+					<td colspan="4"></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td align="center">파일업로드</td>
+					<td><input type="file" name="post_filepath"></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr height="1" bgcolor="#dddddd">
+					<td colspan="4"></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td align="center">내용</td>
+					<td><textarea name="post_content" cols="100%" rows="20%"></textarea></td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr height="1" bgcolor="#dddddd">
+					<td colspan="4"></td>
+				</tr>
+				<tr height="1" bgcolor="#82B5DF">
+					<td colspan="4"></td>
+				</tr>
+				<tr align="center">
+					<td>&nbsp;</td>
+					<td colspan="2"><input type=button value="등록"
+						OnClick="jsp:writeCheck()"> <input type=button value="취소"
+						OnClick="jsp:history.back(-1)">
+					<td>&nbsp;</td>
+				</tr>
 			</form>
 		</table>
 
