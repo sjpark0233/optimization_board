@@ -4,9 +4,9 @@
 <%@ page import="ldcc.board.vo.*"%>
 <%
 	List<Board> boardList = (List<Board>) request.getAttribute("board_list");
-	int boardCode = 0;
-	if (request.getAttribute("board_code") != null) {
-		boardCode = (Integer) request.getAttribute("board_code");
+	int tabCode = 0;
+	if (request.getAttribute("tab_code") != null) {
+		tabCode = (Integer) request.getAttribute("tab_code");
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -123,13 +123,13 @@ h2 {
 	function writeCheck() {
 		var form = document.writeform;
 
-		if (!form.title.value) {
+		if (!form.post_title.value) {
 			alert("제목을 적어주세요");
 			form.title.focus();
 			return;
 		}
 
-		if (!form.memo.value) {
+		if (!form.post_content.value) {
 			alert("내용을 적어주세요");
 			form.memo.focus();
 			return;
@@ -156,93 +156,100 @@ h2 {
 	<div id="tabsF">
 		<ul>
 			<b>
-				<li <%if (boardCode == 0) {%> id="current" <%}%>><a
-					href="post?action=list_all"><span>Home</span></a></li>
-				<li <%if (boardCode == 1) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
-				<li <%if (boardCode == 2) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=2"><span>MS SQL</span></a></li>
-				<li <%if (boardCode == 3) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
-				<li <%if (boardCode == 4) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=4"><span>Network</span></a></li>
-				<li <%if (boardCode == 5) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
+				<li <%if (tabCode == 0) {%> id="current" <%}%>><a
+					href="post?action=list"><span>Home</span></a></li>
+				<li <%if (tabCode == 1) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=1"><span>Windows</span></a></li>
+				<li <%if (tabCode == 2) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=2"><span>MS SQL</span></a></li>
+				<li <%if (tabCode == 3) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
+				<li <%if (tabCode == 4) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=4"><span>Network</span></a></li>
+				<li <%if (tabCode == 5) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=5"><span>SAP</span></a></li>
 			</b>
 		</ul>
 	</div>
 
 	<div class="font3">
 		<table align="center">
-			<form name=writeform method=post action="post"
+			<form name=writeform method=post
+				action="post?action=write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>"
 				enctype="multipart/form-data">
-				<input type=hidden name="action" value="write"> <br>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="center">분류</td>
-					<td><select name="board_code" size="1">
-							<%
-								for (int i = 0; i < boardList.size(); i++) {
-							%>
-							<option value=<%=i + 1%> <% if (i + 1 == boardCode) { %> selected="selected"
-								<% } %>><%=boardList.get(i).getBoard_name()%></option>
-							<%
-								}
-							%>
-					</select>
-					<td>&nbsp;</td>
-				</tr>
-				<tr height="1" bgcolor="#dddddd">
-					<td colspan="4"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="center">제목</td>
-					<td><input name="post_title" size="100%" maxlength="100"></td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr height="1" bgcolor="#dddddd">
-					<td colspan="4"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="center">게시물타입</td>
-					<td><input type="radio" name="post_type" value=0>공지 <input
-						type="radio" name="post_type" value=1 checked="checked">일반</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr height="1" bgcolor="#dddddd">
-					<td colspan="4"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="center">파일업로드</td>
-					<td><input type="file" name="post_filepath"></td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr height="1" bgcolor="#dddddd">
-					<td colspan="4"></td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td align="center">내용</td>
-					<br>
-					<td><textarea name="post_content" cols="100%" rows="20%"></textarea></td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr height="1" bgcolor="#dddddd">
-					<td colspan="4"></td>
-				</tr>
-				<tr height="1" bgcolor="#82B5DF">
-					<td colspan="4"></td>
-				</tr>
-				<tr align="center">
-					<td>&nbsp;</td>
-					<td colspan="2"><input type=button value="등록"
-						OnClick="jsp:writeCheck()"> <input type=button value="취소"
-						OnClick="jsp:history.back(-1)">
-					<td>&nbsp;</td>
-				</tr>
+				<input type=hidden name="action" value="write">
+				<%
+					if (tabCode != 0) {
+				%><input type=hidden name="tabCode" value=<%=tabCode%>>
+				<%
+					}
+				%>
+				<br>
+			<tr>
+				<td>&nbsp;</td>
+				<td align="center">분류</td>
+				<td><select name="board_code" size="1">
+						<%
+							for (int i = 0; i < boardList.size(); i++) {
+						%>
+						<option value=<%=i + 1%> <%if (i + 1 == tabCode) {%>
+							selected="selected" <%}%>><%=boardList.get(i).getBoard_name()%></option>
+						<%
+							}
+						%>
+				</select>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="1" bgcolor="#dddddd">
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td align="center">제목</td>
+				<td><input name="post_title" size="100%" maxlength="100"></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="1" bgcolor="#dddddd">
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td align="center">게시물타입</td>
+				<td><input type="radio" name="post_type" value=0>공지 <input
+					type="radio" name="post_type" value=1 checked="checked">일반</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="1" bgcolor="#dddddd">
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td align="center">파일업로드</td>
+				<td><input type="file" name="post_filepath"></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="1" bgcolor="#dddddd">
+				<td colspan="4"></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td align="center">내용</td>
+				<td><textarea name="post_content" cols="100%" rows="20%"></textarea></td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr height="1" bgcolor="#dddddd">
+				<td colspan="4"></td>
+			</tr>
+			<tr height="1" bgcolor="#82B5DF">
+				<td colspan="4"></td>
+			</tr>
+			<tr align="center">
+				<td>&nbsp;</td>
+				<td colspan="2"><input type=button value="등록"
+					OnClick="jsp:writeCheck()"> <input type=button value="취소"
+					OnClick="jsp:history.back(-1)">
+				<td>&nbsp;</td>
+			</tr>
 			</form>
 		</table>
 

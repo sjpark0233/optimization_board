@@ -16,6 +16,7 @@ public class PostDAO {
 	private final String getListSQL = "select * from (select @rownum := @rownum + 1 as rnum, P.*  from (select * from POST order by POST_CODE desc) P, (select @rownum := 0) R) PR where rnum>=? and rnum<=?";
 	private final String getListSQL2 = "select * from (select @rownum := @rownum + 1 as rnum, P.*  from (select * from POST where BOARD_CODE=? order by POST_CODE desc) P, (select @rownum := 0) R) PR where rnum>=? and rnum<=?";
 	private final String getListAllCountSQL = "select count(*) from POST";
+	private final String getListAllCountSQL2 = "select count(*) from POST where BOARD_CODE=?";
 	private final String getMaxPostNumSQL = "select max(POST_NUM) as POST_NUM from POST where BOARD_CODE=?";
 	private final String insertSQL = "insert into POST(BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM, POST_VIEW) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String updateSQL = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_TYPE=? where POST_CODE=?";
@@ -158,6 +159,30 @@ public class PostDAO {
 		try {
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(this.getListAllCountSQL);
+			rst = stmt.executeQuery();
+
+			if (rst.next()) {
+				count = rst.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println("PostDAO.doGet() error : " + e.getMessage());
+		} finally {
+			JDBCUtil.close(rst, stmt, con);
+		}
+
+		return count;
+	}
+
+	public int doGetListAllCount(int board_code) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		int count = 0;
+
+		try {
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(this.getListAllCountSQL2);
+			stmt.setInt(1, board_code);
 			rst = stmt.executeQuery();
 
 			if (rst.next()) {

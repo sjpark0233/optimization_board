@@ -57,7 +57,7 @@ public class PostServlet extends HttpServlet {
 		}
 
 		switch (multi != null ? multi.getParameter("action") : request.getParameter("action")) {
-		case "list_all":
+		case "list":
 			this.doShowList(request, response);
 			break;
 		case "read":
@@ -88,16 +88,17 @@ public class PostServlet extends HttpServlet {
 			page = Integer.parseInt(request.getParameter("page"));
 		}
 
-		int boardCode = 0;
-		if (request.getParameter("board_code") != null) {
-			boardCode = Integer.parseInt(request.getParameter("board_code"));
+		int tabCode = 0;
+		if (request.getParameter("tab_code") != null) {
+			tabCode = Integer.parseInt(request.getParameter("tab_code"));
+			request.setAttribute("tab_code", tabCode);
 		}
 
 		PostDAO postDAO = new PostDAO();
-		List<Post> postList = boardCode == 0 ? postDAO.doGetList(page) : postDAO.doGetList(boardCode, page);
+		List<Post> postList = tabCode == 0 ? postDAO.doGetList(page) : postDAO.doGetList(tabCode, page);
 		request.setAttribute("post_list", postList);
 
-		int listAllCount = postDAO.doGetListAllCount();
+		int listAllCount = tabCode == 0 ? postDAO.doGetListAllCount() : postDAO.doGetListAllCount(tabCode);
 		int maxPage = (int) ((double) listAllCount / 10 + 0.95);
 		int startPage = (((int) ((double) page / 10 + 0.9)) - 1) * 10 + 1;
 		int endPage = startPage + 10 - 1;
@@ -105,7 +106,6 @@ public class PostServlet extends HttpServlet {
 			endPage = maxPage;
 		}
 
-		request.setAttribute("board_code", boardCode);
 		request.setAttribute("page", page);
 		request.setAttribute("max_page", maxPage);
 		request.setAttribute("start_page", startPage);
@@ -127,8 +127,8 @@ public class PostServlet extends HttpServlet {
 		Post post = postDAO.doGet(Integer.parseInt(request.getParameter("post_code")));
 		request.setAttribute("post", post);
 		request.setAttribute("board_name", new BoardDAO().doGet(post.getBoard_code()).getBoard_name());
-		if (request.getParameter("board_code") != null) {
-			request.setAttribute("board_code", Integer.parseInt(request.getParameter("board_code")));
+		if (request.getParameter("tab_code") != null) {
+			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
 		}
 		request.getRequestDispatcher("view.jsp").forward(request, response);
 		// }
@@ -136,8 +136,8 @@ public class PostServlet extends HttpServlet {
 
 	private void doShowWrite(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getParameter("board_code") != null) {
-			request.setAttribute("board_code", Integer.parseInt(request.getParameter("board_code")));
+		if (request.getParameter("tab_code") != null) {
+			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
 		}
 		request.setAttribute("board_list", new BoardDAO().doGetList());
 		request.getRequestDispatcher("write.jsp").forward(request, response);
@@ -152,7 +152,7 @@ public class PostServlet extends HttpServlet {
 		// 새 게시글 올리기
 		Post post = new Post();
 		post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
-		post.setUser_id(((User) request.getSession().getAttribute("user")).getUser_id());
+		post.setUser_id("test");
 		post.setPost_title(multi.getParameter("post_title"));
 		post.setPost_content(multi.getParameter("post_content"));
 		post.setPost_type(Integer.parseInt(multi.getParameter("post_type")));
@@ -160,8 +160,12 @@ public class PostServlet extends HttpServlet {
 		new PostDAO().doInsert(post);
 
 		// 게시글 목록으로
-		request.getRequestDispatcher("list_main.jsp").forward(request, response);
-		// }
+		int tabCode = 0;
+		if (request.getParameter("tab_code") != null) {
+			tabCode = Integer.parseInt(request.getParameter("tab_code"));
+		}
+		request.getRequestDispatcher("post?action=list" + (tabCode != 0 ? "&tabCode=" + tabCode : "")).forward(request,
+				response);
 	}
 
 	private void doShowModify(HttpServletRequest request, HttpServletResponse response)
@@ -170,8 +174,8 @@ public class PostServlet extends HttpServlet {
 		// if (request.getSession().getAttribute("user") == null) {
 		// request.getRequestDispatcher("login.jsp").forward(request, response);
 		// } else {
-		if (request.getParameter("board_code") != null) {
-			request.setAttribute("board_code", Integer.parseInt(request.getParameter("board_code")));
+		if (request.getParameter("tab_code") != null) {
+			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
 		}
 		int postCode = Integer.parseInt(request.getParameter("post_code"));
 		Post post = new PostDAO().doGet(postCode);
@@ -202,17 +206,26 @@ public class PostServlet extends HttpServlet {
 		post.setPost_code(Integer.parseInt(multi.getParameter("post_code")));
 		new PostDAO().doUpdate(post, fileEdited);
 
-		request.getRequestDispatcher("post?action=read&post_code=" + post.getPost_code()).forward(request, response);
+		// 수정 된 글 보기
+		int tabCode = 0;
+		if (request.getParameter("tab_code") != null) {
+			tabCode = Integer.parseInt(request.getParameter("tab_code"));
+		}
+		request.getRequestDispatcher(
+				"post?action=read" + (tabCode != 0 ? "&tabCode=" + tabCode : "") + "&post_code=" + post.getPost_code())
+				.forward(request, response);
 	}
 
 	private void doDeletePost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		new PostDAO().doDelete(Integer.parseInt(request.getParameter("post_code")));
-		// if (request.getParameter("board_code") == null ||
-		// request.getParameter("board_code").equals("0")) {
-		// this.doShowListAll(request, response);
-		// } else {
-		// this.doShowListPart(request, response);
-		// }
+
+		int tabCode = 0;
+		if (request.getParameter("tab_code") != null) {
+			tabCode = Integer.parseInt(request.getParameter("tab_code"));
+		}
+		request.getRequestDispatcher("post?action=list" + (tabCode != 0 ? "&tab_code=" + tabCode : "")).forward(request,
+				response);
+		;
 	}
 }

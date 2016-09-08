@@ -4,9 +4,9 @@
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
-	int boardCode = 0;
-	if (request.getAttribute("board_code") != null) {
-		boardCode = ((Integer) request.getAttribute("board_code")).intValue();
+	int tabCode = 0;
+	if (request.getAttribute("tab_code") != null) {
+		tabCode = ((Integer) request.getAttribute("tab_code")).intValue();
 	}
 	List<Post> postList = (List<Post>) request.getAttribute("post_list");
 	int listAllCount = ((Integer) request.getAttribute("list_all_count")).intValue();
@@ -137,18 +137,18 @@ h2 {
 	<div id="tabsF">
 		<ul>
 			<b>
-				<li <%if (boardCode == 0) {%> id="current" <%}%>><a
-					href="post?action=list_all"><span>Home</span></a></li>
-				<li <%if (boardCode == 1) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
-				<li <%if (boardCode == 2) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=2"><span>MS SQL</span></a></li>
-				<li <%if (boardCode == 3) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
-				<li <%if (boardCode == 4) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=4"><span>Network</span></a></li>
-				<li <%if (boardCode == 5) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
+				<li <%if (tabCode == 0) {%> id="current" <%}%>><a
+					href="post?action=list"><span>Home</span></a></li>
+				<li <%if (tabCode == 1) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=1"><span>Windows</span></a></li>
+				<li <%if (tabCode == 2) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=2"><span>MS SQL</span></a></li>
+				<li <%if (tabCode == 3) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
+				<li <%if (tabCode == 4) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=4"><span>Network</span></a></li>
+				<li <%if (tabCode == 5) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=5"><span>SAP</span></a></li>
 			</b>
 		</ul>
 	</div>
@@ -185,7 +185,7 @@ h2 {
 				<td width="5"></td>
 				<td width="103"><%=post.getPost_code()%></td>
 				<td width="349" align="left"><a
-					href="post?action=read&post_code=<%=post.getPost_code()%><%=boardCode != 0 ? "&board_code=" + boardCode : ""%>"><%=post.getPost_title()%></a></td>
+					href="post?action=read<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"><%=post.getPost_title()%></a></td>
 				<td width="73"><%=post.getUser_id()%></td>
 				<td width="164"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPost_date())%></td>
 				<td width="58"><%=post.getPost_view()%></td>
@@ -215,7 +215,7 @@ h2 {
 						if (nowPage <= 1) {
 					%> [이전]&nbsp; <%
  	} else {
- %> <a href="./post?action=list_all&page=<%=nowPage - 1%>">[이전]</a>&nbsp;
+ %> <a href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage - 1%>">[이전]</a>&nbsp;
 					<%
 						}
 					%> <%
@@ -223,7 +223,7 @@ h2 {
  		if (i == nowPage) {
  %> [<%=i%>] <%
  	} else {
- %> <a href="./post?action=list_all&page=<%=i%>">[<%=i%>]
+ %> <a href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%>">[<%=i%>]
 				</a>&nbsp; <%
  	}
  %> <%
@@ -232,13 +232,13 @@ h2 {
  	if (nowPage >= maxPage) {
  %> [다음] <%
  	} else {
- %> <a href="./post?action=list_all&page=<%=nowPage + 1%>">[다음]</a>&nbsp;
+ %> <a href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage + 1%>">[다음]</a>&nbsp;
 					<%
 						}
 					%>
 				</td>
 				<td width="20%" align="right"><input type=button value="글쓰기"
-					onClick="location.href='post?action=show_write&board_code=<%=boardCode%>'">&nbsp;&nbsp;</td>
+					onClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">&nbsp;&nbsp;</td>
 			</tr>
 		</table>
 	</div>

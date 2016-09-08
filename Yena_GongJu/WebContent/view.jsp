@@ -3,9 +3,9 @@
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
-	int boardCode = 0; // 현재 파트 목록 코드
-	if (request.getAttribute("board_code") != null) {
-		boardCode = ((Integer) request.getAttribute("board_code")).intValue();
+	int tabCode = 0; // 현재 파트 목록 코드
+	if (request.getAttribute("tab_code") != null) {
+		tabCode = ((Integer) request.getAttribute("tab_code")).intValue();
 	}
 	Post post = (Post) request.getAttribute("post");
 	String boardName = (String) request.getAttribute("board_name"); // 지금 보고있는 게시물 파트명
@@ -120,12 +120,6 @@ h2 {
 -->
 </style>
 
-<script language="javascript">
-	function check() {
-		
-	}
-</script>
-
 </head>
 <body>
 
@@ -142,18 +136,18 @@ h2 {
 	<div id="tabsF">
 		<ul>
 			<b>
-				<li <%if (boardCode == 0) {%> id="current" <%}%>><a
-					href="post?action=list_all"><span>Home</span></a></li>
-				<li <%if (boardCode == 1) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
-				<li <%if (boardCode == 2) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=2"><span>MS SQL</span></a></li>
-				<li <%if (boardCode == 3) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
-				<li <%if (boardCode == 4) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=4"><span>Network</span></a></li>
-				<li <%if (boardCode == 5) {%> id="current" <%}%>><a
-					href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
+				<li <%if (tabCode == 0) {%> id="current" <%}%>><a
+					href="post?action=list"><span>Home</span></a></li>
+				<li <%if (tabCode == 1) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=1"><span>Windows</span></a></li>
+				<li <%if (tabCode == 2) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=2"><span>MS SQL</span></a></li>
+				<li <%if (tabCode == 3) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
+				<li <%if (tabCode == 4) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=4"><span>Network</span></a></li>
+				<li <%if (tabCode == 5) {%> id="current" <%}%>><a
+					href="post?action=list&tab_code=5"><span>SAP</span></a></li>
 			</b>
 		</ul>
 	</div>
@@ -196,7 +190,7 @@ h2 {
 						<tr>
 							<td width="0">&nbsp;</td>
 							<td align="center" width="140">게시물타입</td>
-							<td align="center" width="1000"><%=post.getPost_type() == 1 ? "일반" : "공지"%></td>
+							<td align="center" width="1000"><%=post.getPost_type() == 0 ? "공지" : "일반"%></td>
 							<td width="0">&nbsp;</td>
 						</tr>
 						<tr height="1" bgcolor="#dddddd">
@@ -255,11 +249,11 @@ h2 {
 						<tr align="center">
 							<td width="0">&nbsp;</td>
 							<td colspan="2" width="399"><input type=button value="글쓰기"
-								OnClick="location.href='post?action=show_write<%=boardCode != 0 ? "&board_code=" + boardCode : ""%>'">
+								OnClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
 								<input type=button value="목록" OnClick="jsp:history.back(-1)">
 								<input type=button value="수정"
-								OnClick="location.href='post?action=show_modify&post_code=<%=post.getPost_code()%><%=boardCode != 0 ? "&board_code=" + boardCode : ""%>'">
-								<input type=button value="삭제" OnClick="">
+								OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+								<input type=button value="삭제" OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
 							<td width="0">&nbsp;</td>
 						</tr>
 					</table>
