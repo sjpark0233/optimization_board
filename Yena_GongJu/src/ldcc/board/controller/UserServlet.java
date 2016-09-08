@@ -284,7 +284,7 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		
-//		if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
+		//if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
 		if(true)
 		{
 			 ArrayList<User> list= dao.doList();
@@ -306,21 +306,26 @@ public class UserServlet extends HttpServlet {
 	}
 
 
-	private void doUser_accept(HttpServletRequest request, HttpServletResponse response) {
+	private void doUser_accept(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
+		String resultJson = null;
 		
-		if(((User)session.getAttribute("user")).getUser_id().equals("admin"))
+		if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
 		{
-			boolean flag = dao.doAccept(request.getParameter("accept_id"),1);
+			boolean flag = dao.doAccept(request.getParameter("user_id"),1);
 
 			if(flag == true)
 			{
 				System.out.println("승인 완료");
+				resultJson = "{ \"success\" : 1}";
+				response.getWriter().print(resultJson);
 			}
 			else
 			{
 				System.out.println("승인 실패(아이디가 없거나 이미 승인된 회원입니다.)");
+				resultJson = null;
+				response.getWriter().print(resultJson);
 			}
 		}
 		else
@@ -334,9 +339,9 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		
-		if(((User)session.getAttribute("user")).getUser_id().equals("admin"))
+		if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
 		{
-			boolean flag = dao.doAccept(request.getParameter("team_id"),2);
+			boolean flag = dao.doAccept(request.getParameter("user_id"),2);
 
 			if(flag == true)
 			{
