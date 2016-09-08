@@ -14,7 +14,7 @@ public class UserDAO {
 	private String dropSQL = "delete from User where user_id = ? and user_pw = ?";
 	private String updateSQL = "update User set team_name = ? ,user_name = ?,user_phone = ?,user_email = ? where user_id = ? and user_pw = ?";
 	private String select_allSQL = "select user_id, team_name, user_name, user_phone, user_email, user_accept from User";
-	private String find_updateSQL = "update User set user_accept = 1 where user_id = ? and user_accept = 0";
+	private String find_updateSQL = "update User set user_accept = ? where user_id = ?";
 	
  	public void doLogin(User user)
 	{
@@ -30,7 +30,6 @@ public class UserDAO {
 
 			if(rst.next()){
 				user.setUser_name(rst.getString(5));
-				System.out.println(user.getUser_name());
 			}
 		}catch(SQLException e){
 			System.out.println("login error : "+e);
@@ -119,6 +118,7 @@ public class UserDAO {
 			rst = stmt.executeQuery();
 
 			if(rst.next()){
+				user.setUser_id(rst.getString(1));
 				user.setTeam_name(rst.getString(4));
 				user.setUser_name(rst.getString(5));
 				user.setUser_phone(rst.getString(6));
@@ -185,6 +185,7 @@ public class UserDAO {
 				user.setUser_name(rst.getString(3));
 				user.setUser_phone(rst.getString(4));
 				user.setUser_email(rst.getString(5));
+				user.setUser_accept(Integer.parseInt(rst.getString(6)));
 				
 				list.add(user);
 			}
@@ -198,7 +199,7 @@ public class UserDAO {
 		}
 	}
 
-	public boolean doAccept(String user_id)
+	public boolean doAccept(String user_id, int accept_num)
 	{
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -206,7 +207,8 @@ public class UserDAO {
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(find_updateSQL);
-			stmt.setString(1, user_id);
+			stmt.setString(1, Integer.toString(accept_num));
+			stmt.setString(2, user_id);
 			int cnt = stmt.executeUpdate();
 			
 			System.out.println(cnt ==1 ? "insert success" : "fail");
