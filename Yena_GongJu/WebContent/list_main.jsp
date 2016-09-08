@@ -4,6 +4,10 @@
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
+	int boardCode = 0;
+	if (request.getAttribute("board_code") != null) {
+		boardCode = ((Integer) request.getAttribute("board_code")).intValue();
+	}
 	List<Post> postList = (List<Post>) request.getAttribute("post_list");
 	int listAllCount = ((Integer) request.getAttribute("list_all_count")).intValue();
 	int nowPage = ((Integer) request.getAttribute("page")).intValue();
@@ -133,12 +137,13 @@ h2 {
 	<div id="tabsF">
 		<ul>
 			<b>
-				<li id="current"><a href="list_main.jsp"><span>Home</span></a></li>
-				<li><a href=""><span>Windows</span></a></li>
-				<li><a href="" target="_blank"><span>MS SQL</span></a></li>
-				<li><a href=""><span>Oracle</span></a></li>
-				<li><a href=""><span>Network</span></a></li>
-				<li><a href=""><span>SAP</span></a></li>
+				<li id="current"><a href="post?action=list_all"><span>Home</span></a></li>
+				<li><a href="post?action=list_all&board_code=1"><span>Windows</span></a></li>
+				<li><a href="post?action=list_all&board_code=2"><span>MS
+							SQL</span></a></li>
+				<li><a href="post?action=list_all&board_code=3"><span>Oracle</span></a></li>
+				<li><a href="post?action=list_all&board_code=4"><span>Network</span></a></li>
+				<li><a href="post?action=list_all&board_code=5"><span>SAP</span></a></li>
 			</b>
 		</ul>
 	</div>
@@ -164,7 +169,8 @@ h2 {
 
 			<!-- 내용부분 -->
 
-			<tr height="10" align="center"></tr>
+			<tr height="10" align="center">
+			</tr>
 			<%
 				for (int i = 0; i < postList.size(); i++) {
 					Post post = (Post) postList.get(i);
@@ -200,28 +206,34 @@ h2 {
 			<tr>
 				<td width="20%"></td>
 				<td align="center">
-					<% if (nowPage <= 1) { %>
-					[이전]&nbsp;
-					<% } else { %>
-					<a href="./post?action=list_all&page=<%=nowPage-1 %>">[이전]</a>&nbsp;
-					<% } %>
-					
-					<% for (int i = startPage ; i <= endPage ; i++) {
-						if (i == nowPage) {%>
-						[<%= i %>]
-						<% } else { %>
-						<a href="./post?action=list_all&page=<%= i %>">[<%= i %>]</a>&nbsp;
-						<% } %>
-					<% } %>
-					
-					<% if (nowPage >= maxPage) { %>
-					[다음]
-					<% } else { %>
-					<a href="./post?action=list_all&page=<%=nowPage+1 %>">[다음]</a>&nbsp;
-					<% } %>
+					<%
+						if (nowPage <= 1) {
+					%> [이전]&nbsp; <%
+ 	} else {
+ %> <a href="./post?action=list_all&page=<%=nowPage - 1%>">[이전]</a>&nbsp;
+					<%
+						}
+					%> <%
+ 	for (int i = startPage; i <= endPage; i++) {
+ 		if (i == nowPage) {
+ %> [<%=i%>] <%
+ 	} else {
+ %> <a href="./post?action=list_all&page=<%=i%>">[<%=i%>]
+				</a>&nbsp; <%
+ 	}
+ %> <%
+ 	}
+ %> <%
+ 	if (nowPage >= maxPage) {
+ %> [다음] <%
+ 	} else {
+ %> <a href="./post?action=list_all&page=<%=nowPage + 1%>">[다음]</a>&nbsp;
+					<%
+						}
+					%>
 				</td>
 				<td width="20%" align="right"><input type=button value="글쓰기"
-					onClick="location.href='write.jsp'">&nbsp;&nbsp;</td>
+					onClick="location.href='post?action=show_write&board_code=<%=boardCode%>'">&nbsp;&nbsp;</td>
 			</tr>
 		</table>
 	</div>

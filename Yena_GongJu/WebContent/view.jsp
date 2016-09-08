@@ -213,8 +213,7 @@ h2 {
 							<td align="center" width="1000">
 								<%
 									if (post.getPost_filepath() != null && !post.getPost_filepath().equals("")) {
-								%>
-								<a href="./upload/<%=post.getPost_filepath()%>"><%=post.getPost_filepath()%></a>
+								%> <a href="./upload/<%=post.getPost_filepath()%>"><%=post.getPost_filepath()%></a>
 								<%
 									}
 								%>
@@ -241,9 +240,10 @@ h2 {
 							<td width="0">&nbsp;</td>
 							<td colspan="2" width="399"><input type=button value="글쓰기"
 								OnClick="location.href='write.jsp'"> <input type=button
-								value="목록" OnClick="location.href='list_in.jsp'"> <input
-								type=button value="수정" OnClick="location.href='modify.jsp'">
-								<input type=button value="삭제">
+								value="목록" OnClick="location.href=\'post?action=list_all">
+								<input type=button value="수정"
+								OnClick=<%="location.href=\'post?action=show_modify&post_code=" + post.getPost_code() + "\'"%>>
+								<input type=button value="삭제" OnClick="">
 							<td width="0">&nbsp;</td>
 						</tr>
 					</table>
