@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ page import="ldcc.board.vo.*" %>
+<% String phone = ((User)request.getAttribute("result")).getUser_phone().split("-")[0];%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -99,66 +101,120 @@
 	
 </style>
 
-<script language = "javascript">
-	function InfoCheck(){
-		
-		var form = document.userInfo;
-			
-		if( !form.pw1.value ){
-			alert("비밀번호를 입력하세요");
-			form.pw1.focus();
-			return false;		
-		}
-		
-		if( !form.pw2.value ){
-			alert("비밀번호를 다시한번 입력해주세요");
-			form.pw2.focus();
-			return false;		
-		}
-		
-		if( form.pw1.value != form.pw2.value){
-			alert("비밀번호가 다릅니다.");
-			form.pw1.value="";
-			form.pw2.value="";
-			form.pw.focus();
-			return false;		
-		}
-		
-		if( !form.name.value ){
-			alert("이름을 입력하세요");
-			form.name.focus();
-			return false;
-		}
-		
-		if( !form.team.value ){
-			alert("부서명을 입력하세요");
-			form.team.focus();
-			return false;	
-		}	
 
-		if( !form.tel1.value ){
-			alert("전화번호를 입력하세요");
-			form.tel1.focus();
-			return false;		
-			}
-		if( !form.tel2.value ){
-			alert("전화번호를 입력하세요");
-			form.tel2.focus();
-			return false;		
-			}	
-		if( !form.tel3.value ){
-			alert("전화번호를 입력하세요");
-			form.tel3.focus();
-			return false;		
-			}
-			
-		if( !form.email.value ){
-			alert("이메일 주소를 입력하세요");
-			form.email.focus();
-			return false;		
-			}
-		form.submit();
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script language = "javascript">
+function InfoCheck(){
+	var user_pw = document.getElementById('user_pw');
+	var user_pw2 = document.getElementById('user_pw2');
+	var user_name = document.getElementById('user_name');
+	var team_name = document.getElementById('team_name');
+	var tel1 = document.getElementById('tel1'); 
+	var tel2 = document.getElementById('tel2'); 
+	var tel3 = document.getElementById('tel3'); 
+	var user_email = document.getElementById('user_email');
+
+	if (user_pw.value == '' || user_pw.value == null) {
+		alert('비밀번호를 입력하세요');
+		focus.user_pw;
+		return false;
 	}
+
+	if (user_pw2.value == '' || user_pw2.value == null) {
+		alert('비밀번호확인란을 입력하세요');
+		focus.user_pw2;
+		return false;
+	}
+	
+	/*비밀번호와 비밀번호확인란 같은지 확인*/
+	if (user_pw.value != user_pw2.value){
+		alert("비밀번호와 비밀번호 확인란이 다릅니다");
+		focus.user_pw;
+		return false;
+	}
+	
+	/*비밀번호 길이 확인*/
+	if (user_pw.value.length <5){
+		alert("비밀번호는 5자 이상으로 입력해주세요");
+		focus.user_pw;
+		return false;
+	}
+	
+	if (user_name.value == '' || user_name.value == null) {
+		alert('이름을 입력하세요');
+		focus.user_name;
+		return false;
+	}
+	
+	if (team_name.value == '' || team_name.value == null) {
+		alert('팀을 입력하세요');
+		focus.team_name;
+		return false;
+	}
+	
+	/*핸드폰 번호 길이 체크*/
+	if(tel2.value.length<=2 || tel3.value.length!=4){
+		alert("휴대폰번호를 제대로 입력해주세요");
+		focus.tel2;
+		return false;
+	}
+		
+		/*핸드폰이 숫자만 들어가는지 체크*/
+	if(isNaN(tel2.value) || isNaN(tel3.value)){
+		alert("휴대폰번호는 숫자만 들어갈 수 있습니다");
+		return false;
+	}
+		/**/
+	if (tel2.value.length > 2 || tel3.value.length==4){
+		document.getElementById("user_phone").value = tel1.value + "-" + tel2.value + "-" + tel3.value;;
+	}
+		
+	if (user_email.value == '' || user_email.value == null){
+		alert('메일을 입력하세요');
+		focus.user_email;
+		return false;
+	}
+	
+	else{
+		save();
+	}
+	
+}
+
+
+function save() {
+	var param = "user_pw" + "="+ $("#user_pw").val() + "&" +"user_name" + "="+ $("#user_name").val() + "&" +"team_name" + "="+ $("#team_name").val() + "&" +"user_phone" + "="+ $("#user_phone").val() + "&" +"user_email" + "="+ $("#user_email").val();
+	
+	$.ajax({
+		url : "user?action=user_info_modify",
+		type : "POST",
+		data : param,
+		cache : false,
+		async : false,
+		dataType : "text",
+
+		success : function(responseData) {
+			var data = JSON.parse(responseData);
+		if(data != null)
+		{
+			alert("수정되었습니다.");
+			location.replace("user?action=user_info");				
+		}
+		else
+		{
+			alert("수정을 실패했습니다.");
+			location.replace("user?action=user_info");				
+		}						
+		},
+		error : function(request, status, error) {
+			if (request.status != '0') {
+				alert("code : " + request.status + "\r\nmessage : "
+						+ request.reponseText + "\r\nerror : " + error);
+			}
+		}
+
+	});
+}
 
 		
 </script>
@@ -171,7 +227,7 @@
 
 <div align=right>
 <br>
-<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
+<font class="font2"> <a href="user?action=logout">LogOut</a> | <a href="user?action=user_info">회원정보확인</a> </font>
 </div>
 
 
@@ -201,60 +257,61 @@
 </div>
 
 <div class="font3" align ="center">
-<form name="userInfo" method="get" action="userInfoModify_ok.jsp">
+<form name="modify" method="post" action="user" id="user_info_modify">
     <table border="3">
     <tr>
       <td>&nbsp;아이디&nbsp;</td>
-      <td width="1000"></td>
+      <td width="1000">&nbsp;&nbsp;${result.user_id}</td>
     </tr>
         <tr>
             <td>&nbsp;비밀번호&nbsp;</td>
             <td>
-                &nbsp;&nbsp;<input type="password" name="pw1" size="15" maxlength="12">
+                &nbsp;&nbsp;<input type="password" name="user_pw" size="15" maxlength="12" id ="user_pw">
             </td>
         </tr>
         
          <tr>
             <td>&nbsp;비밀번호  중복확인&nbsp;</td>
             <td>
-                &nbsp;&nbsp;<input type="password" name="pw2" size="15" maxlength="12">
+                &nbsp;&nbsp;<input type="password" name="user_pw2" size="15" maxlength="12" id ="user_pw2">
             </td>
         </tr>
                
         <tr>
             <td>&nbsp;이름&nbsp;</td>
             <td>
-                &nbsp;&nbsp;<input type="text" name="name" size="15" maxlength="12">
+                &nbsp;&nbsp;<input type="text" name="user_name" size="15" maxlength="12" id ="user_name" value = ${result.user_name}>
             </td>
         </tr>
        
        <tr>
             <td>&nbsp;소속&nbsp;</td>
             <td>
-                &nbsp;&nbsp;<input type="text" name="team" size="15" maxlength="12"> 팀
+                &nbsp;&nbsp;<input type="text" name="team_name" size="15" maxlength="12" id = "team_name" value = ${result.team_name}>팀
             </td>
+            
         </tr>
-       
          <tr>
             <td>&nbsp;전화번호</td>
             <td>&nbsp;
-                <select name="tel1">
-  					<option value="010"> 010 </option>
- 					<option value="011"> 011 </option>
-   					<option value="016"> 016 </option>
-   					<option value="017"> 017 </option>
-  	 				<option value="018"> 018 </option>
-   					<option value="019"> 019 </option>
+                <select name="tel1" id ="tel1">
+  					<option value="010" <% if(phone.equals("010")){%>selected="selected" <%}%>> 010 </option>
+ 					<option value="011" <% if(phone.equals("011")){%>selected="selected" <%}%>> 011 </option>
+   					<option value="016" <% if(phone.equals("016")){%>selected="selected" <%}%>> 016 </option>
+   					<option value="017" <% if(phone.equals("017")){%>selected="selected" <%}%>> 017 </option>
+  	 				<option value="018" <% if(phone.equals("018")){%>selected="selected" <%}%>> 018 </option>
+   					<option value="019" <% if(phone.equals("019")){%>selected="selected" <%}%>> 019 </option>
    				</select> - 
-   				<input type="text" name="tel2" size="5" maxlength="4"> - 
-   				<input type="text" name="tel3" size="5" maxlength="4"> 
+   				<input type="text" name="tel2" size="5" maxlength="4" id ="tel2" value = ${result.user_phone.split('-')[1]}> - 
+   				<input type="text" name="tel3" size="5" maxlength="4" id ="tel3" value = ${result.user_phone.split('-')[2]}>   
+   				<input type=hidden id ="user_phone" name = "user_phone">
   			</td> 
         </tr>
 
         <tr>
             <td>&nbsp;E-Mail&nbsp;</td>
             <td>
-                &nbsp;&nbsp;<input type="text" name="email">
+                &nbsp;&nbsp;<input type="text" name="user_email" value = ${result.user_email} id ="user_email">
             </td> 
         </tr>
     </table>

@@ -94,6 +94,51 @@
 
 	
 </style>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script language = "javascript">
+
+
+function loginCheck(){
+	var param = "user_id" + "=" + $("#user_id").val() + "&" +"user_pw" + "="+ $("#user_pw").val();
+	$.ajax({
+		url : "user?action=login",
+		type : "POST",
+		data : param,
+		cache : false,
+		async : false,
+		dataType : "text",
+
+		success : function(responseData) {
+			var data = JSON.parse(responseData);
+			if(data != null)
+			{
+				var str3 = document.getElementById('login');
+				str3.submit();
+				alert("로그인 되었습니다.");
+				location.replace("list_in.jsp");
+			}
+			else
+			{
+				var str3 = document.getElementById('login');
+				str3.submit();
+				alert("아이디 또는 비번이 틀렸습니다. 다시 입력하세요.");
+				location.replace("login.jsp");
+			}	
+			
+		},
+		error : function(request, status, error) {
+			if (request.status != '0') {
+				alert("code : " + request.status + "\r\nmessage : "
+						+ request.reponseText + "\r\nerror : " + error);
+			}
+		}
+
+	});
+}
+</script>
+
 </head>
 
 <body>
@@ -131,23 +176,20 @@
 
 <div class="font3" align="center">
 
-
-<form action="loginCheck.jsp" method="post">
+<form name="login" method="post" action="user" id="login">
 <table align="center" border="3" width="400" height="150" border= "solid" bordercolor = "#333333">
 <tr>
 	<td>
-	&nbsp;<label>아이디 : </label> <input type="text" name="id" size="15" maxlength="12"> <br><br>
-	&nbsp;<label>비밀번호 : </label> <input type="password" name="pw" size="15" maxlength="12">
+	&nbsp;<label>아이디 : </label> <input type="text" id = "user_id" name="user_id" size="15" maxlength="12"> <br><br>
+	&nbsp;<label>비밀번호 : </label> <input type="password" id="user_pw" name="user_pw" size="15" maxlength="12">
 	</td>
 </tr>
 
 </table>
 <br>
-	&nbsp;<input type="submit" value="로그인">&nbsp;&nbsp;
-	<input type="reset" value="다시입력">&nbsp;&nbsp;
+	&nbsp;<input type="submit" value="로그인" onClick='loginCheck()'>&nbsp;&nbsp;
 	<input type="button" value="회원가입" onClick="location.href='join.jsp'">&nbsp;
 </form>
-
 
 </div>
 

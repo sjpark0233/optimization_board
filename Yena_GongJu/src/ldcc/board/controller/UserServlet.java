@@ -1,6 +1,7 @@
 package ldcc.board.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -32,6 +33,8 @@ public class UserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		String action = request.getParameter("action");
+		System.out.println(action);
+		
 		if("login".equals(action)){
 			doLogin(request,response);
 		}
@@ -47,6 +50,9 @@ public class UserServlet extends HttpServlet {
 		else if("user_info".equals(action)){
 			doUser_info(request,response);
 		}
+		else if("user_info2".equals(action)){
+			doUser_info2(request,response);
+		}
 		else if("user_info_modify".equals(action)){
 			doUser_info_modify(request,response);
 		}
@@ -59,17 +65,19 @@ public class UserServlet extends HttpServlet {
 		else if("team_accept".equals(action)){
 			doTeam_accept(request,response);
 		}
+		else if("user_check".equals(action)){
+			doUser_check(request,response);
+		}
 			
 	}
 
 	
 	private void doJoin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String result = "fail";
 		UserDAO dao = new UserDAO();
 		User user = new User();
+		String resultJson;
 		
-		
-		if(request.getParameter("user_id")!=null&request.getParameter("user_pw")!=null&request.getParameter("user_name")!=null&request.getParameter("user_phone")!=null&request.getParameter("user_email")!=null&request.getParameter("team_name")!=null)
+		if(request.getParameter("user_id")!=null&&request.getParameter("user_pw")!=null&&request.getParameter("user_name")!=null&&request.getParameter("user_phone")!=null&&request.getParameter("user_email")!=null&&request.getParameter("team_name")!=null)
 		{
 			user.setUser_id(request.getParameter("user_id"));
 			user.setUser_pw(request.getParameter("user_pw"));
@@ -81,25 +89,23 @@ public class UserServlet extends HttpServlet {
 			
 			boolean flag = dao.doInsert(user);
 			if(flag){
-				result = user.getUser_name();
+				resultJson = "{ \"success\" : 1}";
+				response.getWriter().print(resultJson);
 			}
 		}
 		else
 		{
 			System.out.println("형식을 모두 채워주세요");
+			resultJson = null;
+			response.getWriter().print(resultJson);
 		}
-		
-		request.setAttribute("result", result);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-		dispatcher.forward(request, response);
-		
 	}
 
 	
 	private void doLogout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		System.out.println("로그아웃 중..");
 		HttpSession session = request.getSession();
 		session.invalidate();
-
 		response.sendRedirect("list_main.jsp");
 		
 	}
@@ -109,19 +115,24 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		User user = new User();
+		String resultJson;
 		
 		user.setUser_id(request.getParameter("user_id"));
 		user.setUser_pw(request.getParameter("user_pw"));
-		
+			
 		dao.doLogin(user);
 		if(user.getUser_name()!=null){
 			session.setAttribute("user",user);
 			System.out.println("user connect : "+user.getUser_id());
-			response.sendRedirect("list_in.jsp");
+//			response.sendRedirect("post/action=list_all");
+			resultJson = "{ \"success\" : 1}";
+			response.getWriter().print(resultJson);
 		}
 		else
 		{
-			response.sendRedirect("login.jsp");
+			System.out.println("로그인 실패");
+			resultJson = null ;
+			response.getWriter().print(resultJson);
 		}
 	}
 	
@@ -130,8 +141,11 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		User user = new User();
+		String resultJson;
 		
-		if(request.getParameter("user_pw")!=null)
+		System.out.println(((User)session.getAttribute("user")));
+		System.out.println(request.getParameter("user_pw"));
+		if(request.getParameter("user_pw")!=null&&((User)session.getAttribute("user")).getUser_id()!=null)
 		{
 			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
 			user.setUser_pw(request.getParameter("user_pw"));
@@ -141,10 +155,14 @@ public class UserServlet extends HttpServlet {
 			if(flag == true)
 			{
 				System.out.println("회원탈퇴 성공, 로그아웃 합니다.");
-				doLogout(request,response);
+				session.invalidate();
+				resultJson = "{ \"success\" : 1}";
+				response.getWriter().print(resultJson);
 			}
 			else
 			{
+				resultJson = null;
+				response.getWriter().print(resultJson);
 				System.out.println("회원탈퇴 실패");
 			}
 		}
@@ -165,37 +183,77 @@ public class UserServlet extends HttpServlet {
 	
 	private void doUser_info(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		String result = "fail";
 		UserDAO dao = new UserDAO();
 		User user = new User();
-
-		user.setUser_id((String)session.getAttribute("user_id"));
-		user.setUser_pw((String)session.getAttribute("user_pw"));
 		
-		if(user.getUser_id() == null || user.getUser_pw() == null)
+		System.out.println("정보 세션");
+		System.out.println(((User)session.getAttribute("user")).getUser_id());
+		System.out.println(((User)session.getAttribute("user")).getUser_pw());
+		
+		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
 			//@로그인 페이지로 돌아가기..
-//			response.sendRedirect("login.jsp");
+			System.out.println("세션없음");
+			response.sendRedirect("login.jsp");
+		}
+		else{
+			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
+			user.setUser_pw(((User)session.getAttribute("user")).getUser_pw());
+			
+			dao.doInfo(user);
+			if(user.getUser_name()!=null){
+				request.setAttribute("result", user);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("userInfo.jsp");
+				dispatcher.forward(request, response);
+			}
+			else
+			{
+				System.out.println("회원 정보 조회에 실패했습니다.");
+			}
 		}
 		
-		dao.doCheck(user);
-		if(user.getUser_name()!=null){
-			request.setAttribute("result", user.getUser_name());
-			RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-			dispatcher.forward(request, response);
-		}
-		else
-		{
-			System.out.println("회원 정보 조회에 실패했습니다.");
-		}
 	}
-	
+
+	private void doUser_info2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		UserDAO dao = new UserDAO();
+		User user = new User();
+		
+//		System.out.println(((User)session.getAttribute("user")).getUser_id());
+//		System.out.println(((User)session.getAttribute("user")).getUser_pw());
+
+		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
+		{
+			//@로그인 페이지로 돌아가기..
+			System.out.println("세션없음");
+			response.sendRedirect("login.jsp");
+		}
+		else{
+			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
+			user.setUser_pw(((User)session.getAttribute("user")).getUser_pw());
+			
+			dao.doInfo(user);
+			if(user.getUser_name()!=null){
+				request.setAttribute("result", user);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("userInfoModify.jsp");
+				dispatcher.forward(request, response);
+			}
+			else
+			{
+				System.out.println("회원 정보 조회에 실패했습니다.");
+			}
+		}
+		
+	}
 	
 	private void doUser_info_modify(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		String result = "fail";
 		UserDAO dao = new UserDAO();
 		User user = new User();
+		String resultJson;
+
+		System.out.println(((User)session.getAttribute("user")).getUser_id());
+		System.out.println(request.getParameter("user_phone"));
 		
 		if(((User)session.getAttribute("user")).getUser_id()!=null&&request.getParameter("user_pw")!=null&&request.getParameter("user_name")!=null&&request.getParameter("user_phone")!=null&&request.getParameter("user_email")!=null&&request.getParameter("team_name")!=null)
 		{
@@ -208,17 +266,17 @@ public class UserServlet extends HttpServlet {
 			
 			boolean flag = dao.doUpdate(user);
 			if(flag){
-				result = "수정 완료";
+				session.setAttribute("user",user);
+				resultJson = "{ \"success\" : 1}";
+				response.getWriter().print(resultJson);
 			}
 		}
 		else
 		{
 			System.out.println("형식을 모두 채워주세요");
+			resultJson = null;
+			response.getWriter().print(resultJson);
 		}
-		
-		request.setAttribute("result", result);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-		dispatcher.forward(request, response);
 		
 	}
 
@@ -294,4 +352,26 @@ public class UserServlet extends HttpServlet {
 			System.out.println("권한이 없습니다.");	
 		}
 	}
+
+	private void doUser_check(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		UserDAO dao = new UserDAO();
+		User user = new User();
+		String resultJson;
+		
+		user.setUser_id(request.getParameter("user_id"));
+		
+		System.out.println(user.getUser_id());
+		boolean flag = dao.doCheck(user);
+		
+		if(!flag){
+			resultJson = "{ \"success\" : 1}";
+			response.getWriter().print(resultJson);
+		}
+		else
+		{
+			resultJson = null ;
+			response.getWriter().print(resultJson);
+		}
+	}
+	
 }
