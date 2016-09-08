@@ -5,11 +5,6 @@
 <%@ page import="ldcc.board.vo.*"%>
 <%
 	List<User> userList = (List<User>)request.getAttribute("result");
-	//int listAllCount = ((Integer) request.getAttribute("list_all_count")).intValue();
-	//int nowPage = ((Integer) request.getAttribute("page")).intValue();
-	//int maxPage = ((Integer) request.getAttribute("max_page")).intValue();
-	//int startPage = ((Integer) request.getAttribute("start_page")).intValue();
-	//int endPage = ((Integer) request.getAttribute("end_page")).intValue();
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -99,6 +94,88 @@
 
 	
 </style>
+<script language = "javascript">
+
+function user_accept(){
+
+	alert("승인되었습니다.");
+	var param = "user_id" + "=" + user.getUser_id();
+
+	alert("승인되었습니다.");
+	$.ajax({
+		url : "user?action=user_accept",
+		type : "POST",
+		data : param,
+		cache : false,
+		async : false,
+		dataType : "text",
+
+		success : function(responseData) {
+			var data = JSON.parse(responseData);
+			if(data != null)
+			{
+				alert("승인되었습니다.");
+				location.reload();
+			}
+			else
+			{
+				alert("승인 실패.");
+				location.reload();
+			}	
+			
+		},
+		error : function(request, status, error) {
+			if (request.status != '0') {
+				alert("code : " + request.status + "\r\nmessage : "
+						+ request.reponseText + "\r\nerror : " + error);
+			}
+		}
+
+	});
+}
+function team_accept(){
+	
+}
+
+function loginCheck(){
+	var param = "user_id" + "=" + $("#user_id").val() + "&" +"user_pw" + "="+ $("#user_pw").val();
+	$.ajax({
+		url : "user?action=login",
+		type : "POST",
+		data : param,
+		cache : false,
+		async : false,
+		dataType : "text",
+
+		success : function(responseData) {
+			var data = JSON.parse(responseData);
+			if(data != null)
+			{
+				var str3 = document.getElementById('login');
+				str3.submit();
+				alert("로그인 되었습니다.");
+				location.replace("list_in.jsp");
+			}
+			else
+			{
+				var str3 = document.getElementById('login');
+				str3.submit();
+				alert("아이디나 비밀번호가 틀렸거나 권한이 없습니다.");
+				location.replace("login.jsp");
+			}	
+			
+		},
+		error : function(request, status, error) {
+			if (request.status != '0') {
+				alert("code : " + request.status + "\r\nmessage : "
+						+ request.reponseText + "\r\nerror : " + error);
+			}
+		}
+
+	});
+}
+</script>
+
 </head>
 
 <body>
@@ -135,11 +212,12 @@
 	<tr style="background:url('img/table_mid.gif') repeat-x; text-align:center;">
  		<td width="5"><img src="img/table_left.gif" width="5" height="30" /></td>
    		<td width="50">회원 이름</td>
-   		<td width="100">회원 ID</td>
-   		<td width="100">팀</td>
-	 	<td width="100">전화 번호</td>
-	 	<td width="100">이메일</td>
+   		<td width="80">회원 ID</td>
+   		<td width="80">팀</td>
+	 	<td width="80">전화 번호</td>
+	 	<td width="80">이메일</td>
 	 	<td width="30">승인 코드</td>	
+	 	<td width="30">승인</td>
    		<td width="5"><img src="img/table_right.gif" width="5" height="30" /></td>
     </tr>
 
@@ -153,11 +231,13 @@
 			<tr style="text-align: center;">
 				<td width="5"></td>
 				<td width="50"><%=user.getUser_name()%></td>
-				<td width="100"><%=user.getUser_id()%></td>
-				<td width="100"><%=user.getTeam_name()%></td>
-				<td width="100"><%=user.getUser_phone()%></td>
-				<td width="100"><%=user.getUser_email() %></td>
+				<td width="80"><%=user.getUser_id()%></td>
+				<td width="80"><%=user.getTeam_name()%></td>
+				<td width="80"><%=user.getUser_phone()%></td>
+				<td width="80"><%=user.getUser_email() %></td>
 				<td width="30"><%=user.getUser_accept()%></td>
+				<td width="30"><input type=button value="승인" onClick="user_accept()"></td>
+				<td width="30"><input type=button value="최적화팀" onClick="team_accept()'"></td>
 			</tr>
 			<tr height="5" align="center"></tr>
 			<%
