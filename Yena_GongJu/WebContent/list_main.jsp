@@ -4,11 +4,20 @@
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
+	// 로그인 여부
+	Object user = request.getSession().getAttribute("user");
+	boolean loggedIn = user != null && user instanceof User;
+
+	//현재 게시판 텝 번호
 	int tabCode = 0;
 	if (request.getAttribute("tab_code") != null) {
 		tabCode = ((Integer) request.getAttribute("tab_code")).intValue();
 	}
+
+	// 게시물 리스트 객체
 	List<Post> postList = (List<Post>) request.getAttribute("post_list");
+
+	// 하단의 게시물 페이지 표시를 위한 변수
 	int listAllCount = ((Integer) request.getAttribute("list_all_count")).intValue();
 	int nowPage = ((Integer) request.getAttribute("page")).intValue();
 	int maxPage = ((Integer) request.getAttribute("max_page")).intValue();
@@ -124,9 +133,22 @@ h2 {
 
 	<!-- 상단 -->
 	<div align=right>
-		<br> <font class="font2"> <a href="login.jsp">LogIn</a> |
-			<a href="join.jsp">회원가입</a>
+		<br>
+		<%
+			if (loggedIn) {
+		%>
+		<font class="font2"> <a href="user?action=logout">LogOut</a> |
+			<a href="user?action=user_info">회원정보확인</a>
 		</font>
+		<%
+			} else {
+		%>
+		<font class="font2"> <a href="login.jsp">LogIn</a> | <a
+			href="join.jsp">회원가입</a>
+		</font>
+		<%
+			}
+		%>
 	</div>
 
 	<div>
@@ -215,7 +237,8 @@ h2 {
 						if (nowPage <= 1) {
 					%> [이전]&nbsp; <%
  	} else {
- %> <a href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage - 1%>">[이전]</a>&nbsp;
+ %> <a
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage - 1%>">[이전]</a>&nbsp;
 					<%
 						}
 					%> <%
@@ -223,7 +246,8 @@ h2 {
  		if (i == nowPage) {
  %> [<%=i%>] <%
  	} else {
- %> <a href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%>">[<%=i%>]
+ %> <a
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%>">[<%=i%>]
 				</a>&nbsp; <%
  	}
  %> <%
@@ -232,7 +256,8 @@ h2 {
  	if (nowPage >= maxPage) {
  %> [다음] <%
  	} else {
- %> <a href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage + 1%>">[다음]</a>&nbsp;
+ %> <a
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage + 1%>">[다음]</a>&nbsp;
 					<%
 						}
 					%>

@@ -135,11 +135,16 @@ public class PostServlet extends HttpServlet {
 
 	private void doShowWrite(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getParameter("tab_code") != null) {
-			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+		// 로그인 세션 확인
+		if (request.getSession().getAttribute("user") == null) {
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		} else {
+			if (request.getParameter("tab_code") != null) {
+				request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+			}
+			request.setAttribute("board_list", new BoardDAO().doGetList());
+			request.getRequestDispatcher("write.jsp").forward(request, response);
 		}
-		request.setAttribute("board_list", new BoardDAO().doGetList());
-		request.getRequestDispatcher("write.jsp").forward(request, response);
 	}
 
 	private void doWritePost(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
