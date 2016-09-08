@@ -240,7 +240,7 @@ function save() {
 <div id="tabsF">
     <ul>
 		<b>
-		<li id="current"><a href="list_main.jsp"><span>Home</span></a></li>
+		<li id="current"><a href="post?action=list"><span>Home</span></a></li>
 		<li><a href=""><span>Windows</span></a></li>
 		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
 		<li><a href=""><span>Oracle</span></a></li>

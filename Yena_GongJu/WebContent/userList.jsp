@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.text.*"%>
+<%@ page import="ldcc.board.vo.*"%>
+<%
+	List<User> userList = (List<User>)request.getAttribute("result");
+	//int listAllCount = ((Integer) request.getAttribute("list_all_count")).intValue();
+	//int nowPage = ((Integer) request.getAttribute("page")).intValue();
+	//int maxPage = ((Integer) request.getAttribute("max_page")).intValue();
+	//int startPage = ((Integer) request.getAttribute("start_page")).intValue();
+	//int endPage = ((Integer) request.getAttribute("end_page")).intValue();
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -123,24 +134,42 @@
 	<tr height="5"><td width="5"></td></tr>
 	<tr style="background:url('img/table_mid.gif') repeat-x; text-align:center;">
  		<td width="5"><img src="img/table_left.gif" width="5" height="30" /></td>
-   		<td width="58">번호</td>
-   		<td width="140">가입자</td>
-   		<td width="140">아이디</td>
-   		<td width="130">소속</td>
-	 	<td width="139">가입일</td>
-	 	<td width="140">최근 접속 시간</td>	
+   		<td width="50">회원 이름</td>
+   		<td width="100">회원 ID</td>
+   		<td width="100">팀</td>
+	 	<td width="100">전화 번호</td>
+	 	<td width="100">이메일</td>
+	 	<td width="30">승인 코드</td>	
    		<td width="5"><img src="img/table_right.gif" width="5" height="30" /></td>
     </tr>
 
 <!-- 내용부분 -->    
-   
-	<tr height="25" align="center">
-		
-	</tr>
-    
-	<tr height="25" align="center"></tr>
-  	<tr height="1" bgcolor="#D2D2D2"><td colspan="7"></td></tr>
- 	<tr height="1" bgcolor="#82B5DF"><td colspan="7" width="752"></td></tr>
+
+   	<%
+				for (int i = 0; i < userList.size(); i++) {
+					User user = (User) userList.get(i);
+			%>
+	<tr height="5" align="center"></tr>
+			<tr style="text-align: center;">
+				<td width="5"></td>
+				<td width="50"><%=user.getUser_name()%></td>
+				<td width="100"><%=user.getUser_id()%></td>
+				<td width="100"><%=user.getTeam_name()%></td>
+				<td width="100"><%=user.getUser_phone()%></td>
+				<td width="100"><%=user.getUser_email() %></td>
+				<td width="30"><%=user.getUser_accept()%></td>
+			</tr>
+			<tr height="5" align="center"></tr>
+			<%
+				}
+			%>
+			<tr height="10" align="center"></tr>
+			<tr height="1" bgcolor="#D2D2D2">
+				<td colspan="6"></td>
+			</tr>
+			<tr height="1" bgcolor="#82B5DF">
+				<td colspan="6" width="752"></td>
+			</tr>
 </table>
  
 <!--  <table width="100%" cellpadding="0" cellspacing="0" border="0">

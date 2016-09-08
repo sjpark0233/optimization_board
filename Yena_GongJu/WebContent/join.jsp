@@ -282,12 +282,12 @@
 				if(data != null)
 				{
 					alert("회원가입 되었습니다.");
-					location.replace("list_main.jsp");				
+					location.replace("post?action=list");				
 				}
 				else
 				{
 					alert("회원가입에 실패했습니다.");
-					location.replace("list_main.jsp");				
+					location.replace("post?action=list");				
 				}					
 			},
 			error : function(request, status, error) {
@@ -326,7 +326,7 @@
 <div id="tabsF">
     <ul>
 		<b>
-		<li id="current"><a href="list_main.jsp"><span>Home</span></a></li>
+		<li id="current"><a href="post?action=list"><span>Home</span></a></li>
 		<li><a href=""><span>Windows</span></a></li>
 		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
 		<li><a href=""><span>Oracle</span></a></li>

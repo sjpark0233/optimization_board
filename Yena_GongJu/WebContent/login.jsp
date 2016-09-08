@@ -123,7 +123,7 @@ function loginCheck(){
 			{
 				var str3 = document.getElementById('login');
 				str3.submit();
-				alert("아이디 또는 비번이 틀렸습니다. 다시 입력하세요.");
+				alert("아이디나 비밀번호가 틀렸거나 권한이 없습니다.");
 				location.replace("login.jsp");
 			}	
 			
@@ -158,7 +158,7 @@ function loginCheck(){
 <div id="tabsF">
     <ul>
 		<b>
-		<li id="current"><a href="list_main.jsp"><span>Home</span></a></li>
+		<li id="current"><a href="post?action=list"><span>Home</span></a></li>
 		<li><a href=""><span>Windows</span></a></li>
 		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
 		<li><a href=""><span>Oracle</span></a></li>

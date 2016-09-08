@@ -106,7 +106,7 @@ public class UserServlet extends HttpServlet {
 		System.out.println("·Î±×¾Æ¿ô Áß..");
 		HttpSession session = request.getSession();
 		session.invalidate();
-		response.sendRedirect("list_main.jsp");
+		response.sendRedirect("post?action=list");
 		
 	}
 
@@ -121,10 +121,9 @@ public class UserServlet extends HttpServlet {
 		user.setUser_pw(request.getParameter("user_pw"));
 			
 		dao.doLogin(user);
-		if(user.getUser_name()!=null){
+		if(user.getUser_name()!=null&&user.getUser_accept()!=0){
 			session.setAttribute("user",user);
 			System.out.println("user connect : "+user.getUser_id());
-//			response.sendRedirect("post/action=list_all");
 			resultJson = "{ \"success\" : 1}";
 			response.getWriter().print(resultJson);
 		}
@@ -285,13 +284,14 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		
-		if(((User)session.getAttribute("user")).getUser_id().equals("admin"))
+//		if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
+		if(true)
 		{
-			ArrayList<User> list = dao.doList();
+			 ArrayList<User> list= dao.doList();
 			if(list.size()!=0){
 				System.out.println(list);
 				request.setAttribute("result", list);
-				RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("userList.jsp");
 				dispatcher.forward(request, response);
 			}
 			else
