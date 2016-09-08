@@ -12,9 +12,10 @@ public class UserDAO {
 	private String selectSQL = "select * from User where user_id = ? and user_pw = ?";
 	private String insertSQL = "insert into User(user_id,user_pw,user_accept,team_name,user_name,user_phone,user_email) values(?,?,?,?,?,?,?)";
 	private String dropSQL = "delete from User where user_id = ? and user_pw = ?";
-	private String updateSQL = "update User set team_name = ? ,user_name = ?,user_phone = ?,user_email = ? where user_id = ? and user_pw = ?";
+	private String updateSQL = "update User set user_pw = ?, team_name = ? ,user_name = ?,user_phone = ?,user_email = ? where user_id = ?";
 	private String select_allSQL = "select user_id, team_name, user_name, user_phone, user_email, user_accept from User";
 	private String find_updateSQL = "update User set user_accept = ? where user_id = ?";
+	private String checkSQL = "select * from User where user_id =? ";
 	
  	public void doLogin(User user)
 	{
@@ -105,7 +106,7 @@ public class UserDAO {
 		}
 	}
 
-	public void doCheck(User user)
+	public void doInfo(User user)
 	{
 		Connection con =null;
 		PreparedStatement stmt = null;
@@ -139,12 +140,12 @@ public class UserDAO {
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(updateSQL);
-			stmt.setString(1, user.getTeam_name());
-			stmt.setString(2, user.getUser_name());
-			stmt.setString(3, user.getUser_phone());
-			stmt.setString(4, user.getUser_email());
-			stmt.setString(5, user.getUser_id());
-			stmt.setString(6, user.getUser_pw());
+			stmt.setString(1, user.getUser_pw());
+			stmt.setString(2, user.getTeam_name());
+			stmt.setString(3, user.getUser_name());
+			stmt.setString(4, user.getUser_phone());
+			stmt.setString(5, user.getUser_email());
+			stmt.setString(6, user.getUser_id());
 
 			int cnt = stmt.executeUpdate();
 			
@@ -226,6 +227,32 @@ public class UserDAO {
 		}catch(SQLException e){
 			System.out.println("user insert error : " + e);
 			JDBCUtil.close(stmt, con);
+			return false;
+		}
+	}
+
+	public boolean doCheck(User user)
+	{
+		Connection con =null;
+		PreparedStatement stmt = null;
+		ResultSet rst =null;
+		try{
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(checkSQL);
+			stmt.setString(1,user.getUser_id());
+			rst = stmt.executeQuery();
+
+			if(rst.next()){
+				JDBCUtil.close(rst, stmt,con);
+				return true;
+			}
+			else
+			{
+				JDBCUtil.close(rst, stmt,con);
+				return false;
+			}
+		}catch(SQLException e){
+			System.out.println("login error : "+e);
 			return false;
 		}
 	}

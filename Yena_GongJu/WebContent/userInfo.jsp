@@ -106,7 +106,7 @@
 
 <div align=right>
 <br>
-<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
+<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="user?action=user_info">회원정보확인</a> </font>
 </div>
 
 <div>
@@ -141,7 +141,7 @@
     <tr>
       <td width="0">&nbsp;</td>
       <td align="center" width="140">아이디</td>
-      <td width="1000"></td>
+      <td width="1000">${result.user_id}</td>
       <td width="0">&nbsp;</td>
     </tr>
 	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
@@ -149,7 +149,7 @@
     <tr>
       <td width="0">&nbsp;</td>
       <td align="center" width="140">이름</td>
-      <td width="1000"></td>
+      <td width="1000">${result.user_name}</td>
       <td width="0">&nbsp;</td>
     </tr>
 	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
@@ -157,7 +157,7 @@
     <tr>
       <td width="0">&nbsp;</td>
       <td align="center" width="140">소속</td>
-      <td width="1000"></td>
+      <td width="1000">${result.team_name}</td>
       <td width="0">&nbsp;</td>
     </tr>
 	<tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
@@ -165,7 +165,7 @@
     <tr>
       <td width="0">&nbsp;</td>
       <td align="center" width="140">전화번호</td>
-      <td width="1000"></td>
+      <td width="1000">${result.user_phone}</td>
       <td width="0">&nbsp;</td>
     </tr>
     <tr height="1" bgcolor="#dddddd"><td colspan="4"></td></tr>
@@ -173,7 +173,7 @@
     <tr>
       <td width="0">&nbsp;</td>
       <td align="center" width="140">이메일</td>
-      <td width="1000"></td>
+      <td width="1000">${result.user_email}</td>
       <td width="0">&nbsp;</td>
     </tr>
     <tr height="1" bgcolor="#dddddd"><td colspan="4" width="407"></td></tr>
@@ -183,7 +183,7 @@
     <tr align="center">
   
       <td width="0">&nbsp;</td>
-      <td colspan="2" width="399"><input type=button value="회원정보수정" OnClick="location.href='userInfoModify.jsp'">
+      <td colspan="2" width="399"><input type=button value="회원정보수정" OnClick="location.href='user?action=user_info2'">
 	<input type=button value="회원탈퇴" OnClick="location.href='userWithdraw.jsp'">
       <td width="0">&nbsp;</td>
      </tr>

@@ -99,21 +99,57 @@
 
 </style>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 <script language="javascript"> 
  
 	function begin() {
-		document.myform.passwd.focus();
+		document.myform.user_pw.focus();
 	}
 
 	function checkIt() {
-		if (!document.myform.passwd.value) {
+		if (!document.myform.user_pw.value) {
 			alert("비밀번호를 입력하지 않으셨습니다.");
-			document.myform.passwd.focus();
-			
-			return false;
-
+			location.reload();		
+		}
+		else
+		{
+			withdraw();
 		}
 
+	}
+	
+	function withdraw(){
+			var param = "user_pw" + "=" + $("#user_pw").val();
+		$.ajax({
+			url : "user?action=user_withdraw",
+			type : "POST",
+			data : param,
+			cache : false,
+			async : false,
+			dataType : "text",
+
+			success : function(responseData) {
+				var data = JSON.parse(responseData);
+				if(data != null)
+				{
+					alert("회원탈퇴 되었습니다.");	
+					alert("첫 화면으로 돌아갑니다.");		
+					location.replace("list_main.jsp");				
+				}
+				else
+				{
+					alert("회원탈퇴에 실패했습니다.");
+					location.reload();				
+				}					
+			},
+			error : function(request, status, error) {
+				if (request.status != '0') {
+					alert("code : " + request.status + "\r\nmessage : "
+							+ request.reponseText + "\r\nerror : " + error);
+				}
+			}
+
+		});
 	}
 	
 </script> 
@@ -122,7 +158,7 @@
 <body onload="begin()">
 <div align=right>
 <br>
-<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
+<font class="font2"> <a href="user?action=logout">LogOut</a> | <a href="user?action=user_info">회원정보확인</a> </font>
 </div>
 
 
@@ -151,17 +187,16 @@
 	</center>
 </div>
 <div class="font3">
-	<form name="myform" action="userWithdrawPro.jsp" method="post" onSubmit="return checkIt()">
-		
+<form name="myform" method="post" action="list_main.jsp" id="withdraw">
 		<table cellSpacing=1 cellPadding=1 width="300" align="center">
 			<tr height="30">
 				<td width="500" align="center">비밀번호</td>
-				<td width="200" align="center"><INPUT type="password" name="pw" size="15" maxlength="12"></td>
+				<td width="200" align="center"><input type="password" name="user_pw" id="user_pw" size="15" maxlength="12"></td>
 			</tr>
 			<tr height="10"></tr>
 			<tr height="30">
 				<td colspan="2" align="center">
-				<input type="submit" value="회원탈퇴">&nbsp;&nbsp;
+				<input type="submit" name="withdraw" value="회원탈퇴" OnClick="checkIt()">&nbsp;&nbsp;
 				<input type="button" value="취 소"  OnClick="jsp:history.back(-1)"></td>
 			</tr>
 
