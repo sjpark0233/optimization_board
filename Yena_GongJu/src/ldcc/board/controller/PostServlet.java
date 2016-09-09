@@ -118,29 +118,33 @@ public class PostServlet extends HttpServlet {
 	private void doReadPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 로그인 세션 확인
-		// if (request.getSession().getAttribute("user") == null) {
-		// request.getRequestDispatcher("login.jsp").forward(request, response);
-		// } else {
-
-		PostDAO postDAO = new PostDAO();
-		postDAO.doIncreaseView(Integer.parseInt(request.getParameter("post_code")));
-		Post post = postDAO.doGet(Integer.parseInt(request.getParameter("post_code")));
-		request.setAttribute("post", post);
-		request.setAttribute("board_name", new BoardDAO().doGet(post.getBoard_code()).getBoard_name());
-		if (request.getParameter("tab_code") != null) {
-			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+		if (request.getSession().getAttribute("user") == null) {
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		} else {
+			PostDAO postDAO = new PostDAO();
+			postDAO.doIncreaseView(Integer.parseInt(request.getParameter("post_code")));
+			Post post = postDAO.doGet(Integer.parseInt(request.getParameter("post_code")));
+			request.setAttribute("post", post);
+			request.setAttribute("board_name", new BoardDAO().doGet(post.getBoard_code()).getBoard_name());
+			if (request.getParameter("tab_code") != null) {
+				request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+			}
+			request.getRequestDispatcher("view.jsp").forward(request, response);
 		}
-		request.getRequestDispatcher("view.jsp").forward(request, response);
-		// }
 	}
 
 	private void doShowWrite(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		if (request.getParameter("tab_code") != null) {
-			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+		// 로그인 세션 확인
+		if (request.getSession().getAttribute("user") == null) {
+			request.getRequestDispatcher("login.jsp").forward(request, response);
+		} else {
+			if (request.getParameter("tab_code") != null) {
+				request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+			}
+			request.setAttribute("board_list", new BoardDAO().doGetList());
+			request.getRequestDispatcher("write.jsp").forward(request, response);
 		}
-		request.setAttribute("board_list", new BoardDAO().doGetList());
-		request.getRequestDispatcher("write.jsp").forward(request, response);
 	}
 
 	private void doWritePost(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)

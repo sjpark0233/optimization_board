@@ -246,16 +246,32 @@ h2 {
 							<td colspan="4" width="407"></td>
 						</tr>
 
-						<tr align="center">
-							<td width="0">&nbsp;</td>
-							<td colspan="2" width="399"><input type=button value="글쓰기"
-								OnClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
-								<input type=button value="목록" OnClick="jsp:history.back(-1)">
-								<input type=button value="수정"
-								OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
-								<input type=button value="삭제" OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
-							<td width="0">&nbsp;</td>
-						</tr>
+						<table>
+							<tr>
+								<td>
+									<p>
+										<textarea cols="100%" rows="4"></textarea>
+									<p>
+										<button type="button">댓글 달기</button>
+								</td>
+							</tr>
+						</table>
+
+						<table align="right">
+							<tr height="10"></tr>
+							<tr>
+								<td width="0">&nbsp;</td>
+								<td colspan="2"><input type=button value="글쓰기"
+									OnClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
+									<input type=button value="목록"
+									OnClick="location.href='post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
+									<input type=button value="수정"
+									OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+									<input type=button value="삭제"
+									OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+								<td width="0">&nbsp;</td>
+							</tr>
+						</table>
 					</table>
 
 				</td>
