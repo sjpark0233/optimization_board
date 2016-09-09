@@ -18,9 +18,9 @@ import ldcc.board.vo.User;
 
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    public UserServlet() {
+	private static final long serialVersionUID = 543951347059854446L;
+
+	public UserServlet() {
         super();
      }
 
@@ -185,9 +185,7 @@ public class UserServlet extends HttpServlet {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		
-		System.out.println("정보 세션");
-		System.out.println(((User)session.getAttribute("user")).getUser_id());
-		System.out.println(((User)session.getAttribute("user")).getUser_pw());
+		
 		
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
@@ -199,8 +197,15 @@ public class UserServlet extends HttpServlet {
 			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
 			user.setUser_pw(((User)session.getAttribute("user")).getUser_pw());
 			
+			System.out.println("정보 세션");
+			System.out.println(((User)session.getAttribute("user")).getUser_id());
+			System.out.println(((User)session.getAttribute("user")).getUser_pw());
 			dao.doInfo(user);
 			if(user.getUser_name()!=null){
+
+				System.out.println(user.getUser_id());
+				System.out.println(user.getUser_pw());
+				
 				request.setAttribute("result", user);
 				RequestDispatcher dispatcher = request.getRequestDispatcher("userInfo.jsp");
 				dispatcher.forward(request, response);
@@ -218,8 +223,6 @@ public class UserServlet extends HttpServlet {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		
-//		System.out.println(((User)session.getAttribute("user")).getUser_id());
-//		System.out.println(((User)session.getAttribute("user")).getUser_pw());
 
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
@@ -250,11 +253,15 @@ public class UserServlet extends HttpServlet {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		String resultJson;
-
-		System.out.println(((User)session.getAttribute("user")).getUser_id());
-		System.out.println(request.getParameter("user_phone"));
+		String user_pw0 = request.getParameter("user_pw0");
 		
-		if(((User)session.getAttribute("user")).getUser_id()!=null&&request.getParameter("user_pw")!=null&&request.getParameter("user_name")!=null&&request.getParameter("user_phone")!=null&&request.getParameter("user_email")!=null&&request.getParameter("team_name")!=null)
+		if(((User)session.getAttribute("user")).getUser_id()==null)
+		{
+			System.out.println("세션없음!");
+			resultJson = null;
+			response.getWriter().print(resultJson);
+		}
+		else if(request.getParameter("user_pw")!=null&&request.getParameter("user_pw")!=""&&request.getParameter("user_name")!=null&&request.getParameter("user_phone")!=null&&request.getParameter("user_email")!=null&&request.getParameter("team_name")!=null)
 		{
 			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
 			user.setUser_pw(request.getParameter("user_pw"));
@@ -263,10 +270,38 @@ public class UserServlet extends HttpServlet {
 			user.setUser_phone(request.getParameter("user_phone"));
 			user.setUser_email(request.getParameter("user_email"));
 			
-			boolean flag = dao.doUpdate(user);
+			boolean flag = dao.doUpdate(user,user_pw0);
 			if(flag){
 				session.setAttribute("user",user);
 				resultJson = "{ \"success\" : 1}";
+				response.getWriter().print(resultJson);
+			}
+			else
+			{
+				System.out.println("비밀번호 오류!");
+				resultJson = "{ \"success\" : 0}";
+				response.getWriter().print(resultJson);
+			}
+		}
+		else if(request.getParameter("user_pw")==null||request.getParameter("user_pw")=="")
+		{
+			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
+			user.setUser_pw(user_pw0);
+			user.setTeam_name(request.getParameter("team_name"));
+			user.setUser_name(request.getParameter("user_name"));
+			user.setUser_phone(request.getParameter("user_phone"));
+			user.setUser_email(request.getParameter("user_email"));
+			
+			boolean flag = dao.doUpdate(user,user_pw0);
+			if(flag){
+				session.setAttribute("user",user);
+				resultJson = "{ \"success\" : 1}";
+				response.getWriter().print(resultJson);
+			}
+			else
+			{
+				System.out.println("비밀번호 오류!");
+				resultJson = "{ \"success\" : 0}";
 				response.getWriter().print(resultJson);
 			}
 		}

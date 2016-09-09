@@ -105,6 +105,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 <script language = "javascript">
 function InfoCheck(){
+	var user_pw0 = document.getElementById('user_pw0');
 	var user_pw = document.getElementById('user_pw');
 	var user_pw2 = document.getElementById('user_pw2');
 	var user_name = document.getElementById('user_name');
@@ -113,31 +114,36 @@ function InfoCheck(){
 	var tel2 = document.getElementById('tel2'); 
 	var tel3 = document.getElementById('tel3'); 
 	var user_email = document.getElementById('user_email');
-
-	if (user_pw.value == '' || user_pw.value == null) {
+	
+	if (user_pw0.value == '' || user_pw0.value == null) {
 		alert('비밀번호를 입력하세요');
 		focus.user_pw;
 		return false;
 	}
+	
+	if (user_pw.value != '' && user_pw.value != null) {
+		focus.user_pw;
+		if (user_pw2.value == '' || user_pw2.value == null) {
+			alert('비밀번호확인란을 입력하세요');
+			focus.user_pw2;
+			return false;
+		}
+		else
+		{
+			/*비밀번호와 비밀번호확인란 같은지 확인*/
+			if (user_pw.value != user_pw2.value){
+				alert("새 비밀번호와 새 비밀번호 확인란이 다릅니다");
+				focus.user_pw;
+				return false;
+			}
 
-	if (user_pw2.value == '' || user_pw2.value == null) {
-		alert('비밀번호확인란을 입력하세요');
-		focus.user_pw2;
-		return false;
-	}
-	
-	/*비밀번호와 비밀번호확인란 같은지 확인*/
-	if (user_pw.value != user_pw2.value){
-		alert("비밀번호와 비밀번호 확인란이 다릅니다");
-		focus.user_pw;
-		return false;
-	}
-	
-	/*비밀번호 길이 확인*/
-	if (user_pw.value.length <5){
-		alert("비밀번호는 5자 이상으로 입력해주세요");
-		focus.user_pw;
-		return false;
+			/*비밀번호 길이 확인*/
+			if (user_pw.value.length <5){
+				alert("비밀번호는 5자 이상으로 입력해주세요");
+				focus.user_pw;
+				return false;
+			}
+		}
 	}
 	
 	if (user_name.value == '' || user_name.value == null) {
@@ -183,7 +189,7 @@ function InfoCheck(){
 
 
 function save() {
-	var param = "user_pw" + "="+ $("#user_pw").val() + "&" +"user_name" + "="+ $("#user_name").val() + "&" +"team_name" + "="+ $("#team_name").val() + "&" +"user_phone" + "="+ $("#user_phone").val() + "&" +"user_email" + "="+ $("#user_email").val();
+	var param = "user_pw0" + "=" + $("#user_pw0").val() + "&" +"user_pw" + "="+ $("#user_pw").val() + "&" +"user_name" + "="+ $("#user_name").val() + "&" +"team_name" + "="+ $("#team_name").val() + "&" +"user_phone" + "="+ $("#user_phone").val() + "&" +"user_email" + "="+ $("#user_email").val();
 	
 	$.ajax({
 		url : "user?action=user_info_modify",
@@ -195,10 +201,15 @@ function save() {
 
 		success : function(responseData) {
 			var data = JSON.parse(responseData);
-		if(data != null)
+		if(data.success == 1)
 		{
 			alert("수정되었습니다.");
-			location.replace("user?action=user_info");				
+			location.replace("user?action=user_info");	
+		}
+		else if(data.success == 0)
+		{
+			alert("비밀번호가 맞지 않습니다.");	
+			location.reload();
 		}
 		else
 		{
@@ -263,15 +274,21 @@ function save() {
       <td>&nbsp;아이디&nbsp;</td>
       <td width="1000">&nbsp;&nbsp;${result.user_id}</td>
     </tr>
+    <tr>
+            <td>&nbsp;이전 비밀번호&nbsp;</td>
+            <td>
+                &nbsp;&nbsp;<input type="password" name="user_pw0" size="15" maxlength="12" id ="user_pw0">
+            </td>
+        </tr>
         <tr>
-            <td>&nbsp;비밀번호&nbsp;</td>
+            <td>&nbsp;새 비밀번호&nbsp;</td>
             <td>
                 &nbsp;&nbsp;<input type="password" name="user_pw" size="15" maxlength="12" id ="user_pw">
             </td>
         </tr>
         
          <tr>
-            <td>&nbsp;비밀번호  중복확인&nbsp;</td>
+            <td>&nbsp;새 비밀번호 확인&nbsp;</td>
             <td>
                 &nbsp;&nbsp;<input type="password" name="user_pw2" size="15" maxlength="12" id ="user_pw2">
             </td>

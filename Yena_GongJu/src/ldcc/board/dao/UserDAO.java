@@ -12,7 +12,7 @@ public class UserDAO {
 	private String selectSQL = "select * from User where user_id = ? and user_pw = ?";
 	private String insertSQL = "insert into User(user_id,user_pw,user_accept,team_name,user_name,user_phone,user_email) values(?,?,?,?,?,?,?)";
 	private String dropSQL = "delete from User where user_id = ? and user_pw = ?";
-	private String updateSQL = "update User set user_pw = ?, team_name = ? ,user_name = ?,user_phone = ?,user_email = ? where user_id = ?";
+	private String updateSQL = "update User set user_pw = ?, team_name = ? ,user_name = ?,user_phone = ?,user_email = ? where user_id = ? and user_pw = ?";
 	private String select_allSQL = "select user_id, team_name, user_name, user_phone, user_email, user_accept from User";
 	private String find_updateSQL = "update User set user_accept = ? where user_id = ?";
 	private String checkSQL = "select * from User where user_id =? ";
@@ -133,20 +133,28 @@ public class UserDAO {
 		}
 	}
 
-	public boolean doUpdate(User user)
+	public boolean doUpdate(User user, String user_pw0)
 	{
 		Connection con = null;
-		PreparedStatement stmt = null;
+		PreparedStatement stmt = null;	
 		
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(updateSQL);
-			stmt.setString(1, user.getUser_pw());
+			if(user.getUser_pw()!=null)
+			{
+				stmt.setString(1, user.getUser_pw());
+			}
+			else
+			{
+				stmt.setString(1, user_pw0);
+			}
 			stmt.setString(2, user.getTeam_name());
 			stmt.setString(3, user.getUser_name());
 			stmt.setString(4, user.getUser_phone());
 			stmt.setString(5, user.getUser_email());
 			stmt.setString(6, user.getUser_id());
+			stmt.setString(7, user_pw0);
 
 			int cnt = stmt.executeUpdate();
 			
