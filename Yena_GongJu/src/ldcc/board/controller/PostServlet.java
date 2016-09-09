@@ -2,6 +2,7 @@ package ldcc.board.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -110,10 +111,20 @@ public class PostServlet extends HttpServlet {
 			request.setAttribute("tab_code", tabCode);
 		}
 
-		// 게시물 리스트 객체 반환
+		// 공지 게시물 리스트 객체 반환
 		PostDAO postDAO = new PostDAO();
-		request.setAttribute("notice_list", tabCode == 0 ? postDAO.doGetNoticeList() : postDAO.doGetNoticeList(tabCode));
-		request.setAttribute("post_list", tabCode == 0 ? postDAO.doGetList(page) : postDAO.doGetList(tabCode, page));
+		List<String> noticeUserList = new ArrayList<String>();
+		List<Post> noticeList = tabCode == 0 ? postDAO.doGetNoticeList(noticeUserList)
+				: postDAO.doGetNoticeList(tabCode, noticeUserList);
+		request.setAttribute("notice_list", noticeList);
+		request.setAttribute("notice_user_list", noticeUserList);
+
+		// 일반 게시물 리스트 객체 반환
+		List<String> postUserList = new ArrayList<String>();
+		List<Post> postList = tabCode == 0 ? postDAO.doGetList(page, postUserList)
+				: postDAO.doGetList(tabCode, page, postUserList);
+		request.setAttribute("post_list", postList);
+		request.setAttribute("post_user_list", postUserList);
 
 		// 페이지 관련 변수
 		int listAllCount = tabCode == 0 ? postDAO.doGetListAllCount() : postDAO.doGetListAllCount(tabCode);
