@@ -156,10 +156,10 @@ h2 {
 			%><a href="user?action=logout">LogOut</a>
 			<%
 				if (((User) userObj).getUser_accept() == 3) {
-			%> | <a href="user?action=user_info">회원정보확인</a>
+			%> | <a href="user?action=user_list">회원관리</a>
 			<%
 				} else {
-			%> | <a href="user?action=user_list">회원관리</a>
+			%> | <a href="user?action=user_info">회원정보확인</a>
 			<%
 				}
 				} else {
