@@ -5,8 +5,8 @@
 <%@ page import="ldcc.board.vo.*"%>
 <%
 	// 로그인 여부
-	Object user = request.getSession().getAttribute("user");
-	boolean loggedIn = user != null && user instanceof User;
+	Object userObj = request.getSession().getAttribute("user");
+	boolean loggedIn = userObj != null && userObj instanceof User;
 
 	//현재 게시판 텝 번호
 	int tabCode = 0;
@@ -133,22 +133,24 @@ h2 {
 
 	<!-- 상단 -->
 	<div align=right>
-		<br>
-		<%
-			if (loggedIn) {
-		%>
-		<font class="font2"> <a href="user?action=logout">LogOut</a> |
-			<a href="user?action=user_info">회원정보확인</a>
+		<br> <font class="font2">
+			<%
+				if (loggedIn) {
+			%><a href="user?action=logout">LogOut</a>
+			<%
+				if (((User) userObj).getUser_accept() == 3) {
+			%> | <a href="user?action=user_info">회원정보확인</a>
+			<%
+				} else {
+			%> | <a href="user?action=user_list">회원관리</a>
+			<%
+				}
+				} else {
+			%><a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a>
+			<%
+				}
+			%>
 		</font>
-		<%
-			} else {
-		%>
-		<font class="font2"> <a href="login.jsp">LogIn</a> | <a
-			href="join.jsp">회원가입</a>
-		</font>
-		<%
-			}
-		%>
 	</div>
 
 	<div>
@@ -206,7 +208,7 @@ h2 {
 			<tr style="text-align: center;">
 				<td width="5"></td>
 				<td width="103"><%=post.getPost_code()%></td>
-				<td width="349" align="left"><a
+				<td width="349" align="center"><a
 					href="post?action=read<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"><%=post.getPost_title()%></a></td>
 				<td width="73"><%=post.getUser_id()%></td>
 				<td width="164"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPost_date())%></td>
