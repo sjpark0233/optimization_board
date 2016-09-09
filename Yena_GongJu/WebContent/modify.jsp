@@ -3,8 +3,8 @@
 <%@ page import="ldcc.board.vo.*"%>
 <%
 	// 로그인 여부
-	Object user = request.getSession().getAttribute("user");
-	boolean loggedIn = user != null && user instanceof User;
+	Object userObj = request.getSession().getAttribute("user");
+	boolean loggedIn = userObj != null && userObj instanceof User;
 
 	//현재 게시판 텝 번호
 	int tabCode = 0;
@@ -157,23 +157,25 @@ h2 {
 
 </head>
 <body>
-
 	<div align=right>
-		<%
-			if (loggedIn) {
-		%>
-		<font class="font2"> <a href="user?action=logout">LogOut</a> |
-			<a href="user?action=user_info">회원정보확인</a>
+		<br> <font class="font2">
+			<%
+				if (loggedIn) {
+			%><a href="user?action=logout">LogOut</a>
+			<%
+				if (((User) userObj).getUser_accept() == 3) {
+			%> | <a href="user?action=user_info">회원정보확인</a>
+			<%
+				} else {
+			%> | <a href="user?action=user_list">회원관리</a>
+			<%
+				}
+				} else {
+			%><a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a>
+			<%
+				}
+			%>
 		</font>
-		<%
-			} else {
-		%>
-		<font class="font2"> <a href="login.jsp">LogIn</a> | <a
-			href="join.jsp">회원가입</a>
-		</font>
-		<%
-			}
-		%>
 	</div>
 
 	<div>
