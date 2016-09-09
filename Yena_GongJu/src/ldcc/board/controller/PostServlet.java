@@ -112,8 +112,8 @@ public class PostServlet extends HttpServlet {
 
 		// 게시물 리스트 객체 반환
 		PostDAO postDAO = new PostDAO();
-		List<Post> postList = tabCode == 0 ? postDAO.doGetList(page) : postDAO.doGetList(tabCode, page);
-		request.setAttribute("post_list", postList);
+		request.setAttribute("notice_list", tabCode == 0 ? postDAO.doGetNoticeList() : postDAO.doGetNoticeList(tabCode));
+		request.setAttribute("post_list", tabCode == 0 ? postDAO.doGetList(page) : postDAO.doGetList(tabCode, page));
 
 		// 페이지 관련 변수
 		int listAllCount = tabCode == 0 ? postDAO.doGetListAllCount() : postDAO.doGetListAllCount(tabCode);
