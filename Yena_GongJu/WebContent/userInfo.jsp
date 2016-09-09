@@ -106,7 +106,7 @@
 
 <div align=right>
 <br>
-<font class="font2"> <a href="list_in.jsp">LogOut</a> | <a href="user?action=user_info">회원정보확인</a> </font>
+<font class="font2"> <a href="post?action=list">LogOut</a> | <a href="user?action=user_info">회원정보확인</a> </font>
 </div>
 
 <div>
@@ -117,12 +117,12 @@
 <div id="tabsF">
     <ul>
 		<b>
-		<li><a href="list_in.jsp"><span>Home</span></a></li>
-		<li><a href=""><span>Windows</span></a></li>
-		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
-		<li><a href=""><span>Oracle</span></a></li>
-		<li><a href=""><span>Network</span></a></li>
-		<li><a href=""><span>SAP</span></a></li>
+		<li><a href="post?action=list"><span>Home</span></a></li>
+		<li><a href="post?action=list&tab_code=1"><span>Windows</span></a></li>
+		<li><a href="post?action=list&tab_code=2"><span>MS SQL</span></a></li>
+		<li><a href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
+		<li><a href="post?action=list&tab_code=4"><span>Network</span></a></li>
+		<li><a href="post?action=list&tab_code=5"><span>SAP</span></a></li>
 		</b>
 	</ul>
 </div>

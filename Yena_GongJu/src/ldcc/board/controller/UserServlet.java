@@ -284,8 +284,25 @@ public class UserServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		
-		//if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
-		if(true)
+		boolean check = false;
+		check = (((User)session.getAttribute("user"))!=null);
+		if(check)
+		{
+			check = (((User)session.getAttribute("user")).getUser_accept()==3);
+		}
+		else{
+			System.out.println("세션 없음");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('다시 로그인 해주세요.');");
+			out.println("location.replace('login.jsp');");
+			out.println("</script>");
+			out.close();
+		}
+		
+		
+		if(check)
 		{
 			 ArrayList<User> list= dao.doList();
 			if(list.size()!=0){
@@ -297,11 +314,25 @@ public class UserServlet extends HttpServlet {
 			else
 			{
 				System.out.println("조회되는 회원이 없습니다.");
+				response.setContentType("text/html;charset=euc-kr");
+				PrintWriter out =response.getWriter();
+				out.println("<script>");
+				out.println("alert('조회되는 회원이 없습니다.');");
+				out.println("history.back(-1);");
+				out.println("</script>");
+				out.close();
 			}
 		}
 		else
 		{
 			System.out.println("권한이 없습니다.");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('권한이 없습니다.');");
+			out.println("history.back(-1);");
+			out.println("</script>");
+			out.close();
 		}
 	}
 
@@ -309,52 +340,118 @@ public class UserServlet extends HttpServlet {
 	private void doUser_accept(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
-		String resultJson = null;
+
+		boolean check = false;
+		check = (((User)session.getAttribute("user"))!=null);
+		if(check)
+		{
+			check = (((User)session.getAttribute("user")).getUser_accept()==3);
+		}
+		else{
+			System.out.println("세션 없음");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('다시 로그인 해주세요.');");
+			out.println("location.replace('login.jsp');");
+			out.println("</script>");
+			out.close();
+		}
 		
-		if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
+		if(check)
 		{
 			boolean flag = dao.doAccept(request.getParameter("user_id"),1);
+			System.out.println(request.getParameter("user_id"));
 
 			if(flag == true)
 			{
 				System.out.println("승인 완료");
-				resultJson = "{ \"success\" : 1}";
-				response.getWriter().print(resultJson);
+				response.setContentType("text/html;charset=euc-kr");
+				PrintWriter out =response.getWriter();
+				out.println("<script>");
+				out.println("alert('승인 완료.');");
+				out.println("location.replace('user?action=user_list');");
+				out.println("</script>");
+				out.close();
 			}
 			else
 			{
 				System.out.println("승인 실패(아이디가 없거나 이미 승인된 회원입니다.)");
-				resultJson = null;
-				response.getWriter().print(resultJson);
+				response.setContentType("text/html;charset=euc-kr");
+				PrintWriter out =response.getWriter();
+				out.println("<script>");
+				out.println("alert('승인 실패(아이디가 없거나 이미 승인된 회원입니다)');");
+				out.println("location.replace('user?action=user_list');");
+				out.println("</script>");
+				out.close();
 			}
 		}
 		else
 		{
-			System.out.println("권한이 없습니다.");	
+			System.out.println("권한이 없습니다.");
+			response.sendRedirect("user?action=user_list");	
 		}
 	}
 
 	
-	private void doTeam_accept(HttpServletRequest request, HttpServletResponse response) {
+	private void doTeam_accept(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		
-		if(Integer.toString(((User)session.getAttribute("user")).getUser_accept()).equals("3"))
+		boolean check = false;
+		check = (((User)session.getAttribute("user"))!=null);
+		if(check)
+		{
+			check = (((User)session.getAttribute("user")).getUser_accept()==3);
+		}
+		else{
+			System.out.println("세션 없음");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('다시 로그인 해주세요.');");
+			out.println("location.replace('login.jsp');");
+			out.println("</script>");
+			out.close();
+		}
+		
+		if(check)
 		{
 			boolean flag = dao.doAccept(request.getParameter("user_id"),2);
 
 			if(flag == true)
 			{
 				System.out.println("승인 완료");
+				response.setContentType("text/html;charset=euc-kr");
+				PrintWriter out =response.getWriter();
+				out.println("<script>");
+				out.println("alert('승인 완료.');");
+				out.println("location.replace('user?action=user_list');");
+				out.println("</script>");
+				out.close();
 			}
 			else
 			{
 				System.out.println("승인 실패(아이디가 없거나 이미 승인된 회원입니다.)");
+				response.setContentType("text/html;charset=euc-kr");
+				PrintWriter out =response.getWriter();
+				out.println("<script>");
+				out.println("alert('승인 실패(아이디가 없거나 이미 승인된 회원입니다)');");
+				out.println("location.replace('user?action=user_list');");
+				out.println("</script>");
+				out.close();
 			}
 		}
 		else
 		{
-			System.out.println("권한이 없습니다.");	
+			System.out.println("권한이 없습니다.");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('권한이 없습니다.');");
+			out.println("location.replace('post?action=list')");
+			out.println("</script>");
+			out.close();	
 		}
 	}
 

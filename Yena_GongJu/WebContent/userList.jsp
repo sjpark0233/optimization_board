@@ -97,83 +97,14 @@
 <script language = "javascript">
 
 function user_accept(){
-
-	alert("승인되었습니다.");
-	var param = "user_id" + "=" + user.getUser_id();
-
-	alert("승인되었습니다.");
-	$.ajax({
-		url : "user?action=user_accept",
-		type : "POST",
-		data : param,
-		cache : false,
-		async : false,
-		dataType : "text",
-
-		success : function(responseData) {
-			var data = JSON.parse(responseData);
-			if(data != null)
-			{
-				alert("승인되었습니다.");
-				location.reload();
-			}
-			else
-			{
-				alert("승인 실패.");
-				location.reload();
-			}	
-			
-		},
-		error : function(request, status, error) {
-			if (request.status != '0') {
-				alert("code : " + request.status + "\r\nmessage : "
-						+ request.reponseText + "\r\nerror : " + error);
-			}
-		}
-
-	});
+	var str3 = document.getElementById('accept');
+	str3.submit();
 }
 function team_accept(){
-	
+	var str3 = document.getElementById('team_accept');
+	str3.submit();
 }
 
-function loginCheck(){
-	var param = "user_id" + "=" + $("#user_id").val() + "&" +"user_pw" + "="+ $("#user_pw").val();
-	$.ajax({
-		url : "user?action=login",
-		type : "POST",
-		data : param,
-		cache : false,
-		async : false,
-		dataType : "text",
-
-		success : function(responseData) {
-			var data = JSON.parse(responseData);
-			if(data != null)
-			{
-				var str3 = document.getElementById('login');
-				str3.submit();
-				alert("로그인 되었습니다.");
-				location.replace("list_in.jsp");
-			}
-			else
-			{
-				var str3 = document.getElementById('login');
-				str3.submit();
-				alert("아이디나 비밀번호가 틀렸거나 권한이 없습니다.");
-				location.replace("login.jsp");
-			}	
-			
-		},
-		error : function(request, status, error) {
-			if (request.status != '0') {
-				alert("code : " + request.status + "\r\nmessage : "
-						+ request.reponseText + "\r\nerror : " + error);
-			}
-		}
-
-	});
-}
 </script>
 
 </head>
@@ -183,7 +114,7 @@ function loginCheck(){
 <!-- 상단 -->
 <div align=right>
 <br>
-<font class="font2"> <a href="logout.jsp">LogOut</a> | <a href="userInfo.jsp">회원정보확인</a> </font>
+<font class="font2"> <a href="user?action=logout">LogOut</a> | <a href="user?action=user_list">회원정보확인</a> </font>
 </div>
 
 <div>
@@ -195,12 +126,12 @@ function loginCheck(){
 <div id="tabsF">
     <ul>
 		<b>
-		<li><a href="list_in.jsp"><span>Home</span></a></li>
-		<li><a href=""><span>Windows</span></a></li>
-		<li><a href="" target="_blank"><span>MS SQL</span></a></li>
-		<li><a href=""><span>Oracle</span></a></li>
-		<li><a href=""><span>Network</span></a></li>
-		<li><a href=""><span>SAP</span></a></li>
+		<li><a href="post?action=list"><span>Home</span></a></li>
+		<li><a href="post?action=list&tab_code=1"><span>Windows</span></a></li>
+		<li><a href="post?action=list&tab_code=2"><span>MS SQL</span></a></li>
+		<li><a href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
+		<li><a href="post?action=list&tab_code=4"><span>Network</span></a></li>
+		<li><a href="post?action=list&tab_code=5"><span>SAP</span></a></li>
 		</b>
 	</ul>
 </div>
@@ -226,6 +157,8 @@ function loginCheck(){
    	<%
 				for (int i = 0; i < userList.size(); i++) {
 					User user = (User) userList.get(i);
+					if(user.getUser_accept()==3){continue;}
+					else{
 			%>
 	<tr height="5" align="center"></tr>
 			<tr style="text-align: center;">
@@ -236,12 +169,24 @@ function loginCheck(){
 				<td width="80"><%=user.getUser_phone()%></td>
 				<td width="80"><%=user.getUser_email() %></td>
 				<td width="30"><%=user.getUser_accept()%></td>
-				<td width="30"><input type=button value="승인" onClick="user_accept()"></td>
-				<td width="30"><input type=button value="최적화팀" onClick="team_accept()'"></td>
+				<td width="30">
+				<form  name="user_accept" method="post" action="user" id="accept">
+				<input type="hidden" id = "action" name="action" value="user_accept">
+				<input type="hidden" id = "user_id" name="user_id" value="<%=user.getUser_id()%>">
+				<input type="submit" value="승인" Onclick='user_accept()'>
+				</form>
+				</td>
+				<td width="30">
+				<form  name="user_accept" method="post" action="user" id="team_accept">
+				<input type="hidden" id = "action" name="action" value="team_accept">
+				<input type="hidden" id = "user_id" name="user_id" value="<%=user.getUser_id()%>">
+				<input type="submit" value="최적화팀" onClick="team_accept()'">
+				</form>
+				</td>
 			</tr>
 			<tr height="5" align="center"></tr>
 			<%
-				}
+					}}
 			%>
 			<tr height="10" align="center"></tr>
 			<tr height="1" bgcolor="#D2D2D2">
