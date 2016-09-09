@@ -1,6 +1,7 @@
 package ldcc.board.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import ldcc.board.dao.BoardDAO;
 import ldcc.board.dao.PostDAO;
+import ldcc.board.dao.UserDAO;
 import ldcc.board.vo.Post;
 import ldcc.board.vo.User;
 
@@ -81,23 +83,39 @@ public class PostServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * 게시물 목록보기 <br>
+	 * ex1) URI : {@code "./post?action=list"} <br>
+	 * ex2) URI : {@code "./post?action=list&page=5"}<br>
+	 * ex3) URI : {@code "./post?action=list&tab_code=1"}<br>
+	 * ex4) URI : {@code "./post?action=list&tab_code=1&page=5"}
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void doShowList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// 게시판의 현재 페이지
 		int page = 1;
 		if (request.getParameter("page") != null) {
 			page = Integer.parseInt(request.getParameter("page"));
 		}
 
+		// 게시판 파트 텝 번호 (0은 모든 파트게시판)
 		int tabCode = 0;
 		if (request.getParameter("tab_code") != null) {
 			tabCode = Integer.parseInt(request.getParameter("tab_code"));
 			request.setAttribute("tab_code", tabCode);
 		}
 
+		// 게시물 리스트 객체 반환
 		PostDAO postDAO = new PostDAO();
 		List<Post> postList = tabCode == 0 ? postDAO.doGetList(page) : postDAO.doGetList(tabCode, page);
 		request.setAttribute("post_list", postList);
 
+		// 페이지 관련 변수
 		int listAllCount = tabCode == 0 ? postDAO.doGetListAllCount() : postDAO.doGetListAllCount(tabCode);
 		int maxPage = (int) ((double) listAllCount / 10 + 0.95);
 		int startPage = (((int) ((double) page / 10 + 0.9)) - 1) * 10 + 1;
@@ -115,44 +133,87 @@ public class PostServlet extends HttpServlet {
 		request.getRequestDispatcher("list_main.jsp").forward(request, response);
 	}
 
+	/**
+	 * 게시물 상세보기 <br>
+	 * ex1) URI : {@code "./post?action=read&post_code=1"} <br>
+	 * ex2) URI : {@code "./post?action=read&tab_code=1&post_code=1"}
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void doReadPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 로그인 세션 확인
-		if (request.getSession().getAttribute("user") == null) {
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-			PostDAO postDAO = new PostDAO();
-			postDAO.doIncreaseView(Integer.parseInt(request.getParameter("post_code")));
-			Post post = postDAO.doGet(Integer.parseInt(request.getParameter("post_code")));
-			request.setAttribute("post", post);
-			request.setAttribute("board_name", new BoardDAO().doGet(post.getBoard_code()).getBoard_name());
-			if (request.getParameter("tab_code") != null) {
-				request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
-			}
-			request.getRequestDispatcher("view.jsp").forward(request, response);
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
 		}
+
+		// 조회수 1증가
+		PostDAO postDAO = new PostDAO();
+		postDAO.doIncreaseView(Integer.parseInt(request.getParameter("post_code")));
+
+		// 대상 게시물 객체 반환
+		Post post = postDAO.doGet(Integer.parseInt(request.getParameter("post_code")));
+		request.setAttribute("post", post);
+		request.setAttribute("board_name", new BoardDAO().doGet(post.getBoard_code()).getBoard_name());
+		if (request.getParameter("tab_code") != null) {
+			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+		}
+
+		request.getRequestDispatcher("view.jsp").forward(request, response);
 	}
 
+	/**
+	 * 게시물 쓰기 전 화면 보여주기 <br>
+	 * ex1) URI : {@code "./post?action=show_write"} <br>
+	 * ex2) URI : {@code "./post?action=show_write&tab_code=1"}
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void doShowWrite(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 로그인 세션 확인
-		if (request.getSession().getAttribute("user") == null) {
-			request.getRequestDispatcher("login.jsp").forward(request, response);
-		} else {
-			if (request.getParameter("tab_code") != null) {
-				request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
-			}
-			request.setAttribute("board_list", new BoardDAO().doGetList());
-			request.getRequestDispatcher("write.jsp").forward(request, response);
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
 		}
+
+		// 게시판 파트 텝 번호
+		if (request.getParameter("tab_code") != null) {
+			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
+		}
+
+		// 게시판 파트 리스트 반환. 게시물 쓸 때 파트 선택 콤보박스 완성을 위함
+		request.setAttribute("board_list", new BoardDAO().doGetList());
+
+		request.getRequestDispatcher("write.jsp").forward(request, response);
 	}
 
+	/**
+	 * 게시물 쓰기 실행용 <br>
+	 * ex1) URI : {@code "./post?action=write&post_code=1"} <br>
+	 * ex2) URI : {@code "./post?action=write&tab_code=1&post_code=1"}
+	 * 
+	 * @param request
+	 * @param response
+	 * @param multi
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void doWritePost(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
 			throws ServletException, IOException {
 		// 로그인 세션 확인
-		// if (request.getSession().getAttribute("user") == null) {
-		// request.getRequestDispatcher("login.jsp").forward(request, response);
-		// } else {
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+
 		// 새 게시글 올리기
 		Post post = new Post();
 		post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
@@ -163,40 +224,83 @@ public class PostServlet extends HttpServlet {
 		post.setPost_filepath(multi.getFilesystemName((String) multi.getFileNames().nextElement()));
 		new PostDAO().doInsert(post);
 
-		// 게시글 목록으로
+		// 게시판 파트 텝 번호 반환
 		int tabCode = 0;
 		if (request.getParameter("tab_code") != null) {
 			tabCode = Integer.parseInt(request.getParameter("tab_code"));
 		}
-		request.getRequestDispatcher("post?action=list" + (tabCode != 0 ? "&tabCode=" + tabCode : "")).forward(request,
-				response);
+
+		response.setContentType("text/html;charset=euc-kr");
+		PrintWriter out = response.getWriter();
+		out.println("<script>");
+		out.println("alert('등록되었습니다.');");
+		out.println("location.href=\"post?action=list" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "\";");
+		out.println("</script>");
+		out.close();
 	}
 
+	/**
+	 * 게시물 수정 전 화면 보여주기 <br>
+	 * ex1) URI : {@code "./post?action=show_modify&post_code=1"} <br>
+	 * ex2) URI : {@code "./post?action=show_modify&tab_code=1&post_code=1"}
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void doShowModify(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 로그인 세션 확인
-		// if (request.getSession().getAttribute("user") == null) {
-		// request.getRequestDispatcher("login.jsp").forward(request, response);
-		// } else {
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+
+		// 게시판 파트 텝 번호 반환
 		if (request.getParameter("tab_code") != null) {
 			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
 		}
+
+		// 수정 전 게시물 정보 반환. 만일 현재 유저와 게시물 유저가 일치하지 않으면 수정을 못하도록 함
 		int postCode = Integer.parseInt(request.getParameter("post_code"));
 		Post post = new PostDAO().doGet(postCode);
-		// if (!((User)
-		// request.getSession().getAttribute("user")).getUser_id().equals(post.getUser_id()))
-		// {
-		// request.getRequestDispatcher("login.jsp").forward(request, response);
-		// }
+		if (!((User) request.getSession().getAttribute("user")).getUser_id().equals(post.getUser_id())) {
+			// 주인이 아닌 경우 alert 출력
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('자신의 글만 수정할 수 있습니다.');");
+			out.println("history.back()");
+			out.println("</script>");
+			out.close();
+			return;
+		}
 		request.setAttribute("post", post);
+
 		request.getRequestDispatcher("modify.jsp").forward(request, response);
-		// }
 	}
 
-	// incomplete !!!
+	/**
+	 * 게시물 수정 실행용 <br>
+	 * ex1) URI : {@code "./post?action=modify&&post_code=1"} <br>
+	 * ex2) URI : {@code "./post?action=modify&tab_code=1&post_code=1"}
+	 * 
+	 * @param request
+	 * @param response
+	 * @param multi
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void doModifyPost(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
 			throws ServletException, IOException {
-		// 새 게시글 수정하기
+		// 로그인 세션 확인
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+
+		// 게시글 수정하기
 		boolean fileEdited = Boolean.parseBoolean(multi.getParameter("file_edited"));
 		Post post = new Post();
 		post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
@@ -210,26 +314,70 @@ public class PostServlet extends HttpServlet {
 		post.setPost_code(Integer.parseInt(multi.getParameter("post_code")));
 		new PostDAO().doUpdate(post, fileEdited);
 
-		// 수정 된 글 보기
+		// 게시판 파트 텝 반환
 		int tabCode = 0;
 		if (request.getParameter("tab_code") != null) {
 			tabCode = Integer.parseInt(request.getParameter("tab_code"));
 		}
-		request.getRequestDispatcher(
-				"post?action=read" + (tabCode != 0 ? "&tabCode=" + tabCode : "") + "&post_code=" + post.getPost_code())
-				.forward(request, response);
+
+		response.setContentType("text/html;charset=euc-kr");
+		PrintWriter out = response.getWriter();
+		out.println("<script>");
+		out.println("alert('수정되었습니다.');");
+		out.println("location.href=\"post?action=list" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "\";");
+		out.println("</script>");
+		out.close();
 	}
 
 	private void doDeletePost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// 로그인 세션 확인
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+
+		int postCode = Integer.parseInt(request.getParameter("post_code"));
+		Post post = new PostDAO().doGet(postCode);
+		if (!((User) request.getSession().getAttribute("user")).getUser_id().equals(post.getUser_id())) {
+			// 주인이 아닌 경우 alert 출력
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('자신의 글만 삭제할 수 있습니다.');");
+			out.println("history.back()");
+			out.println("</script>");
+			out.close();
+			return;
+		}
+
+		// 게시글 삭제
 		new PostDAO().doDelete(Integer.parseInt(request.getParameter("post_code")));
 
+		// 게시판 텝 번호 반환
 		int tabCode = 0;
 		if (request.getParameter("tab_code") != null) {
 			tabCode = Integer.parseInt(request.getParameter("tab_code"));
 		}
-		request.getRequestDispatcher("post?action=list" + (tabCode != 0 ? "&tab_code=" + tabCode : "")).forward(request,
-				response);
-		;
+
+		response.setContentType("text/html;charset=euc-kr");
+		PrintWriter out = response.getWriter();
+		out.println("<script>");
+		out.println("alert('삭제되었습니다.');");
+		out.println("location.href=\"post?action=list" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "\";");
+		out.println("</script>");
+		out.close();
+	}
+
+	/**
+	 * 유저 로그인 세션 여부 확인
+	 * 
+	 * @param request
+	 * @param response
+	 * @return true or false
+	 */
+	private boolean doCheckSession(HttpServletRequest request, HttpServletResponse response) {
+		Object user = request.getSession().getAttribute("user");
+		return user != null && user instanceof User && new UserDAO().doCheck((User) user);
 	}
 }
