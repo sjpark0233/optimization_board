@@ -3,11 +3,17 @@
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
-	int tabCode = 0; // 현재 파트 목록 코드
+	// 로그인 여부
+	Object user = request.getSession().getAttribute("user");
+	boolean loggedIn = user != null && user instanceof User;
+
+	//현재 게시판 텝 번호
+	int tabCode = 0;
 	if (request.getAttribute("tab_code") != null) {
 		tabCode = ((Integer) request.getAttribute("tab_code")).intValue();
 	}
-	Post post = (Post) request.getAttribute("post");
+	
+	Post post = (Post) request.getAttribute("post"); // 게시물 객체
 	String boardName = (String) request.getAttribute("board_name"); // 지금 보고있는 게시물 파트명
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -124,9 +130,22 @@ h2 {
 <body>
 
 	<div align=right>
-		<br> <font class="font2"> <a href="list_main.jsp">LogOut</a>
-			| <a href="userInfo.jsp">회원정보확인</a>
+		<br>
+		<%
+			if (loggedIn) {
+		%>
+		<font class="font2"> <a href="user?action=logout">LogOut</a> |
+			<a href="user?action=user_info">회원정보확인</a>
 		</font>
+		<%
+			} else {
+		%>
+		<font class="font2"> <a href="login.jsp">LogIn</a> | <a
+			href="join.jsp">회원가입</a>
+		</font>
+		<%
+			}
+		%>
 	</div>
 
 	<div>
