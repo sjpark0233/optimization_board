@@ -117,7 +117,7 @@ function loginCheck(){
 				var str3 = document.getElementById('login');
 				str3.submit();
 				alert("로그인 되었습니다.");
-				location.replace("list_in.jsp");
+				location.replace("post?action=list");
 			}
 			else
 			{
