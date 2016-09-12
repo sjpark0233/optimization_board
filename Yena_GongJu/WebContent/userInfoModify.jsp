@@ -5,138 +5,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link rel="stylesheet" href="main.css" type="text/css"/>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>회원정보 수정 페이지</title>
-<style type="text/css">
-<!--
-body {
-	margin: 0;
-	padding: 0;
-	font: 11px/1.5em Verdana;
-}
-
-.font1 {
-	font: bold 30px Verdana, sans-serif;
-	color: #000;
-	margin: 0px;
-	padding: 5px 20px 15px 20px;
-}
-
-.font2 {
-	font: bold 14px Verdana, sans-serif;
-	color: #000;
-	margin: 0px;
-	padding: 0px 20px 0px 0px;
-}
-
-.font3 {
-	font: 20px Verdana, sans-serif;
-	color: #000;
-}
-
-.font4 {
-	font: bold 30px Verdana, sans-serif;
-	color: #000;
-	margin: 0px;
-	padding: 5px 20px 5px 20px;
-}
-
-h2 {
-	font: bold 14px Verdana, Arial, Helvetica, sans-serif;
-	color: #000;
-	margin: 0px;
-	padding: 0px 0px 0px 15px;
-}
-
-/*- Menu Tabs F--------------------------- */
-#tabsF {
-	float: left;
-	width: 100%;
-	background: #fff;
-	font-size: 93%;
-	line-height: normal;
-	border-bottom: 1px solid #666;
-}
-
-#tabsF ul {
-	margin: 0;
-	padding: 10px 10px 0 50px;
-	list-style: none;
-}
-
-#tabsF li {
-	display: inline;
-	margin: 0;
-	padding: 0;
-}
-
-#tabsF a {
-	float: left;
-	background:
-		url(http://pds7.egloos.com/pds/200803/09/83/b0050083_47d2b60bb22d2.gif)
-		no-repeat left top;
-	margin: 0;
-	padding: 0 0 0 4px;
-	text-decoration: none;
-}
-
-#tabsF a span {
-	float: left;
-	display: block;
-	background:
-		url(http://pds8.egloos.com/pds/200803/09/83/b0050083_47d2b60d5f78a.gif)
-		no-repeat right top;
-	padding: 5px 15px 4px 6px;
-	color: #666;
-}
-/* Commented Backslash Hack hides rule from IE5-Mac \*/
-#tabsF a span {
-	float: none;
-}
-/* End IE5-Mac hack */
-#tabsF a:hover span {
-	color: #FFF;
-}
-
-#tabsF a:hover {
-	background-position: 0% -42px;
-}
-
-#tabsF a:hover span {
-	background-position: 100% -42px;
-}
-
-#tabsF #current a {
-	background-position: 0% -42px;
-}
-
-#tabsF #current a span {
-	background-position: 100% -42px;
-}
--->
-
-input.button_style{
-	font: bold 14px Verdana, Arial, Helvetica, sans-serif;	
-	height: 2em;
-  -webkit-box-shadow: 0px 1px 3px #666666;
-  -moz-box-shadow: 0px 1px 3px #666666;
-  box-shadow: 0px 1px 3px #666666;
-  color: #000000;
-  padding: 4px 2px 4px 2px;
-  background: #ffffff;
-  border: solid #82B5DF 2px;
-  text-decoration: none;
-}
-
-input.button_style:hover {
-  background: #f2f5f7;
-  text-decoration: none;
-	color: gray;
-}
-
-
-</style>
-
 
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
@@ -380,9 +251,9 @@ function save() {
 				</tr>
 			</table>
 
-			<br> <input type="button" value="수정하기" Onclick="InfoCheck()">
+			<br> <input type="button" value="수정하기" Onclick="InfoCheck()" class="button_style2">
 			<input type="button" name="cancel" value="취소"
-				onClick="jsp:history.back(-1)">
+				onClick="jsp:history.back(-1)" class="button_style2">
 		</form>
 
 	</div>
