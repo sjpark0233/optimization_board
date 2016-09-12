@@ -298,8 +298,9 @@ public class PostServlet extends HttpServlet {
 		// 수정 전 게시물 정보 반환. 만일 현재 유저와 게시물 유저가 일치하지 않으면 수정을 못하도록 함
 		int postCode = Integer.parseInt(request.getParameter("post_code"));
 		Post post = new PostDAO().doGet(postCode);
-		if (!((User) request.getSession().getAttribute("user")).getUser_id().equals(post.getUser_id())) {
-			// 주인이 아닌 경우 alert 출력
+		User user = (User) request.getSession().getAttribute("user");
+		if (!(user.getUser_accept() == 3 || user.getUser_id().equals(post.getUser_id()))) {
+			// 관리자 또는 주인이 아닌 경우 alert 출력
 			response.setContentType("text/html;charset=euc-kr");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
@@ -382,8 +383,9 @@ public class PostServlet extends HttpServlet {
 
 		int postCode = Integer.parseInt(request.getParameter("post_code"));
 		Post post = new PostDAO().doGet(postCode);
-		if (!((User) request.getSession().getAttribute("user")).getUser_id().equals(post.getUser_id())) {
-			// 주인이 아닌 경우 alert 출력
+		User user = (User) request.getSession().getAttribute("user");
+		if (!(user.getUser_accept() == 3 || user.getUser_id().equals(post.getUser_id()))) {
+			// 관리자 또는 주인이 아닌 경우 alert 출력
 			response.setContentType("text/html;charset=euc-kr");
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
