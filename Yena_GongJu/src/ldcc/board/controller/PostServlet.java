@@ -15,8 +15,10 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import ldcc.board.dao.BoardDAO;
+import ldcc.board.dao.CommentDAO;
 import ldcc.board.dao.PostDAO;
 import ldcc.board.dao.UserDAO;
+import ldcc.board.vo.Comment;
 import ldcc.board.vo.Post;
 import ldcc.board.vo.User;
 
@@ -174,6 +176,13 @@ public class PostServlet extends HttpServlet {
 			request.setAttribute("tab_code", Integer.parseInt(request.getParameter("tab_code")));
 		}
 
+		// 대상 게시물의 댓글 리스트 반환
+		List<String> commentUserList = new ArrayList<String>();
+		List<Comment> commentList = new CommentDAO().doGetList(Integer.parseInt(request.getParameter("post_code")),
+				commentUserList);
+		request.setAttribute("comment_list", commentList);
+		request.setAttribute("comment_user_list", commentUserList);
+
 		request.getRequestDispatcher("view.jsp").forward(request, response);
 	}
 
@@ -192,6 +201,19 @@ public class PostServlet extends HttpServlet {
 		// 로그인 세션 확인
 		if (!this.doCheckSession(request, response)) {
 			response.sendRedirect("login.jsp");
+			return;
+		}
+
+		// 사용자 글쓰기 권한 검사 (user_accept == 2 or 3)
+		int userAccept = ((User) request.getSession().getAttribute("user")).getUser_accept();
+		if (!(userAccept == 2 || userAccept == 3)) {
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('글쓰기 권한이 없습니다.');");
+			out.println("history.back()");
+			out.println("</script>");
+			out.close();
 			return;
 		}
 
@@ -340,6 +362,16 @@ public class PostServlet extends HttpServlet {
 		out.close();
 	}
 
+	/**
+	 * 게시물 삭제 실행용 <br>
+	 * ex1) URI : {@code "./post?action=delete&&post_code=1"} <br>
+	 * ex2) URI : {@code "./post?action=delete&tab_code=1&post_code=1"}
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	private void doDeletePost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 로그인 세션 확인

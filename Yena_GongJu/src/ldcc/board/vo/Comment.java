@@ -1,10 +1,12 @@
 package ldcc.board.vo;
 
+import java.sql.Timestamp;
+
 public class Comment {
 	private int comment_code;
 	private int post_code;
 	private String user_id;
-	private String comment_date;
+	private Timestamp comment_date;
 	private String comment_content;
 	private String comment_user_name;
 //	private int comment_auth; //0:권한 없음 1:권한 있음
@@ -33,11 +35,11 @@ public class Comment {
 		this.user_id = user_id;
 	}
 
-	public String getComment_date() {
+	public Timestamp getComment_date() {
 		return comment_date;
 	}
 
-	public void setComment_date(String comment_date) {
+	public void setComment_date(Timestamp comment_date) {
 		this.comment_date = comment_date;
 	}
 

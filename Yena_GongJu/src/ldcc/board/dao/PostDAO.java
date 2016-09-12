@@ -59,7 +59,7 @@ public class PostDAO {
 				post.setPost_view(rst.getInt(10));
 			}
 		} catch (SQLException e) {
-			System.out.println("PostDAO.doGetList() error : " + e.getMessage());
+			System.out.println("PostDAO.doGet() error : " + e.getMessage());
 		} finally {
 			JDBCUtil.close(rst, stmt, con);
 		}
@@ -94,7 +94,7 @@ public class PostDAO {
 				postList.add(post);
 			}
 		} catch (SQLException e) {
-			System.out.println("PostDAO.doGetList() error : " + e.getMessage());
+			System.out.println("PostDAO.doGetNoticeList() error : " + e.getMessage());
 		} finally {
 			JDBCUtil.close(rst, stmt, con);
 		}
@@ -130,7 +130,7 @@ public class PostDAO {
 				postList.add(post);
 			}
 		} catch (SQLException e) {
-			System.out.println("PostDAO.doGetList() error : " + e.getMessage());
+			System.out.println("PostDAO.doGetNoticeList() error : " + e.getMessage());
 		} finally {
 			JDBCUtil.close(rst, stmt, con);
 		}
@@ -264,7 +264,7 @@ public class PostDAO {
 				count = rst.getInt(1);
 			}
 		} catch (SQLException e) {
-			System.out.println("PostDAO.doGet() error : " + e.getMessage());
+			System.out.println("PostDAO.doGetListAllCount() error : " + e.getMessage());
 		} finally {
 			JDBCUtil.close(rst, stmt, con);
 		}
@@ -362,7 +362,7 @@ public class PostDAO {
 			stmt.setInt(1, post_code);
 			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("PostDAO.doUpdate() error : " + e);
+			System.out.println("PostDAO.delete() error : " + e);
 		} finally {
 			JDBCUtil.close(stmt, con);
 		}

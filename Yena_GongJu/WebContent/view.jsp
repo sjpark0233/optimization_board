@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
+<%@ page import="java.util.*" %>
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
@@ -12,9 +13,12 @@
 	if (request.getAttribute("tab_code") != null) {
 		tabCode = ((Integer) request.getAttribute("tab_code")).intValue();
 	}
-	
+
 	Post post = (Post) request.getAttribute("post"); // 게시물 객체
 	String boardName = (String) request.getAttribute("board_name"); // 지금 보고있는 게시물 파트명
+
+	List<Comment> commentList = (List<Comment>) request.getAttribute("comment_list"); // 댓글 리스트 객체
+	List<String> commentUserList = (List<String>) request.getAttribute("comment_user_list"); // 댓글 작성자 리스트 객체
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -129,23 +133,18 @@ h2 {
 </head>
 <body>
 	<div align=right>
-		<br> <font class="font2">
-			<%
-				if (loggedIn) {
-			%><a href="user?action=logout">LogOut</a>
-			<%
-				if (((User) userObj).getUser_accept() == 3) {
-			%> | <a href="user?action=user_list">회원관리</a>
-			<%
-				} else {
-			%> | <a href="user?action=user_info">회원정보확인</a>
-			<%
-				}
-				} else {
-			%><a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a>
-			<%
-				}
-			%>
+		<br> <font class="font2"> <%
+ 	if (loggedIn) {
+ %><a href="user?action=logout">LogOut</a> <%
+ 	if (((User) userObj).getUser_accept() == 3) {
+ %> | <a href="user?action=user_list">회원관리</a> <%
+ 	} else {
+ %> | <a href="user?action=user_info">회원정보확인</a> <%
+ 	}
+ 	} else {
+ %><a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> <%
+ 	}
+ %>
 		</font>
 	</div>
 
@@ -259,21 +258,37 @@ h2 {
 							<td align="center" width="140">내용</td>
 							<td valign="top" width="1000" colspan="2" height="300"><%=post.getPost_content()%></td>
 						</tr>
-						<tr height="1" bgcolor="#dddddd">
-							<td colspan="4" width="407"></td>
-						</tr>
 						<tr height="1" bgcolor="#82B5DF">
 							<td colspan="4" width="407"></td>
 						</tr>
 
-						<table>
+						<tr height="10"></tr>
+
+						<table width="100%">
+							<tr height="1" bgcolor="#82B5DF">
+								<td colspan="4" width="100%"></td>
+							</tr>
+							<tr height="3">
+								<td colspan="4" width="100%"></td>
+							</tr>
+							<%
+								for (int i = 0; i < commentList.size(); i++) {
+							%>
+							<%
+								}
+							%>
 							<tr>
-								<td>
-									<p>
-										<textarea cols="100%" rows="4"></textarea>
-									<p>
-										<button type="button">댓글 달기</button>
-								</td>
+								<td><textarea cols="100%" rows="1"></textarea></td>
+								<td><button type="button">댓글 달기</button></td>
+							</tr>
+							<tr height="3">
+								<td colspan="4" width="100%"></td>
+							</tr>
+							<tr height="1" bgcolor="#dddddd">
+								<td colspan="4" width="100%"></td>
+							</tr>
+							<tr height="1" bgcolor="#82B5DF">
+								<td colspan="4" width="100%"></td>
 							</tr>
 						</table>
 
