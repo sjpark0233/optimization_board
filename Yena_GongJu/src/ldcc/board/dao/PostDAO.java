@@ -19,8 +19,7 @@ public class PostDAO {
 	private final String getListSQL2 = "select * from (select @rownum := @rownum + 1 as rnum, P.*  from (select P.*, U.USER_NAME from POST P, USER U where BOARD_CODE=? and P.USER_ID=U.USER_ID order by POST_CODE desc) P, (select @rownum := 0) R) PR where rnum>=? and rnum<=?";
 	private final String getListAllCountSQL = "select count(*) from POST";
 	private final String getListAllCountSQL2 = "select count(*) from POST where BOARD_CODE=?";
-	private final String getMaxPostNumSQL = "select max(POST_NUM) as POST_NUM from POST where BOARD_CODE=?";
-	private final String insertSQL = "insert into POST(BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_NUM, POST_VIEW) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String insertSQL = "insert into POST(BOARD_CODE, USER_ID, POST_DATE, POST_TITLE, POST_CONTENT, POST_FILEPATH, POST_TYPE, POST_VIEW) values(?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String updateSQL = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_TYPE=? where POST_CODE=?";
 	private final String updateSQL2 = "update POST set BOARD_CODE=?, POST_TITLE=?, POST_CONTENT=?, POST_FILEPATH=?, POST_TYPE=? where POST_CODE=?";
 	private final String deleteSQL = "delete from POST where POST_CODE=?";
@@ -55,8 +54,7 @@ public class PostDAO {
 				post.setPost_content(rst.getString(6));
 				post.setPost_filepath(rst.getString(7));
 				post.setPost_type(rst.getInt(8));
-				post.setPost_num(rst.getInt(9));
-				post.setPost_view(rst.getInt(10));
+				post.setPost_view(rst.getInt(9));
 			}
 		} catch (SQLException e) {
 			System.out.println("PostDAO.doGet() error : " + e.getMessage());
@@ -88,9 +86,8 @@ public class PostDAO {
 				post.setPost_content(rst.getString(6));
 				post.setPost_filepath(rst.getString(7));
 				post.setPost_type(rst.getInt(8));
-				post.setPost_num(rst.getInt(9));
-				post.setPost_view(rst.getInt(10));
-				noticeUserList.add(rst.getString(11));
+				post.setPost_view(rst.getInt(9));
+				noticeUserList.add(rst.getString(10));
 				postList.add(post);
 			}
 		} catch (SQLException e) {
@@ -124,9 +121,8 @@ public class PostDAO {
 				post.setPost_content(rst.getString(6));
 				post.setPost_filepath(rst.getString(7));
 				post.setPost_type(rst.getInt(8));
-				post.setPost_num(rst.getInt(9));
-				post.setPost_view(rst.getInt(10));
-				noticeUserList.add(rst.getString(11));
+				post.setPost_view(rst.getInt(9));
+				noticeUserList.add(rst.getString(10));
 				postList.add(post);
 			}
 		} catch (SQLException e) {
@@ -163,9 +159,8 @@ public class PostDAO {
 				post.setPost_content(rst.getString(7));
 				post.setPost_filepath(rst.getString(8));
 				post.setPost_type(rst.getInt(9));
-				post.setPost_num(rst.getInt(10));
-				post.setPost_view(rst.getInt(11));
-				postUserList.add(rst.getString(12));
+				post.setPost_view(rst.getInt(10));
+				postUserList.add(rst.getString(11));
 				postList.add(post);
 			}
 		} catch (SQLException e) {
@@ -211,9 +206,8 @@ public class PostDAO {
 				post.setPost_content(rst.getString(7));
 				post.setPost_filepath(rst.getString(8));
 				post.setPost_type(rst.getInt(9));
-				post.setPost_num(rst.getInt(10));
-				post.setPost_view(rst.getInt(11));
-				postUserList.add(rst.getString(12));
+				post.setPost_view(rst.getInt(10));
+				postUserList.add(rst.getString(11));
 				postList.add(post);
 			}
 		} catch (SQLException e) {
@@ -294,9 +288,7 @@ public class PostDAO {
 			stmt.setString(5, post.getPost_content());
 			stmt.setString(6, post.getPost_filepath());
 			stmt.setInt(7, post.getPost_type()); // 0 - 공지, 1 - 일반
-			int newPostNum = this.doGetMaxPostNumByBoardNum(post.getBoard_code()) + 1;
-			stmt.setInt(8, newPostNum); // 알고리즘 필요
-			stmt.setInt(9, 0);
+			stmt.setInt(8, 0);
 			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("PostDAO.doInsert() error : " + e);
@@ -368,37 +360,6 @@ public class PostDAO {
 		}
 
 		return retval == 1;
-	}
-
-	/**
-	 * select문을 통해 해당 BOARD_CODE에서 POST_NUM의 최고값을 반환
-	 * 
-	 * @param board_code
-	 *            게시판 코드
-	 * @return 해당 게시판에 게시물이 없으면 0 반환
-	 */
-	private int doGetMaxPostNumByBoardNum(int board_code) {
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
-		int retval = 0;
-
-		try {
-			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(this.getMaxPostNumSQL);
-			stmt.setInt(1, board_code);
-			rst = stmt.executeQuery();
-
-			if (rst.next()) {
-				retval = rst.getInt(1);
-			}
-		} catch (SQLException e) {
-			System.out.println("PostDAO.doGetMaxPostNumByBoardNum() error : " + e.getMessage());
-		} finally {
-			JDBCUtil.close(rst, stmt, con);
-		}
-
-		return retval;
 	}
 
 	public boolean doIncreaseView(int post_code) {

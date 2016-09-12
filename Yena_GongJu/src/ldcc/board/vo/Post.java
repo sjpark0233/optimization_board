@@ -11,7 +11,6 @@ public class Post {
 	private String post_content;
 	private String post_filepath;
 	private int post_type;
-	private int post_num;
 	private int post_view;
 
 	public int getPost_code() {
@@ -76,14 +75,6 @@ public class Post {
 
 	public void setPost_type(int post_type) {
 		this.post_type = post_type;
-	}
-
-	public int getPost_num() {
-		return post_num;
-	}
-
-	public void setPost_num(int post_num) {
-		this.post_num = post_num;
 	}
 
 	public int getPost_view() {
