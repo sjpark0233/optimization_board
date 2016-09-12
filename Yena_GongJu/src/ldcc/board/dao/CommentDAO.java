@@ -16,7 +16,37 @@ public class CommentDAO {
 	private String deleteSQL = "delete from Comment where comment_code = ?";
 	private String insertSQL = "insert into Comment(post_code, user_id, comment_date, comment_content) values(?,?,?,?)";
 
+	private final String getSQL = "select * from COMMENT where COMMENT_CODE=?";
 	private final String getListSQL = "select C.*, U.USER_NAME from COMMENT C, User U where C.USER_ID=U.USER_ID and POST_CODE=? order by COMMENT_CODE asc";
+
+	public Comment doGet(int comment_code) {
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rst = null;
+		Comment comment = null;
+
+		try {
+			con = JDBCUtil.getConnection();
+			stmt = con.prepareStatement(this.getSQL);
+			stmt.setInt(1, comment_code);
+			rst = stmt.executeQuery();
+
+			if (rst.next()) {
+				comment = new Comment();
+				comment.setComment_code(comment_code);
+				comment.setPost_code(rst.getInt(2));
+				comment.setUser_id(rst.getString(3));
+				comment.setComment_date(rst.getTimestamp(4));
+				comment.setComment_content(rst.getString(5));
+			}
+		} catch (SQLException e) {
+			System.out.println("CommentDAO.doGet() error : " + e.getMessage());
+		} finally {
+			JDBCUtil.close(rst, stmt, con);
+		}
+
+		return comment;
+	}
 
 	/**
 	 * 
@@ -33,7 +63,7 @@ public class CommentDAO {
 		try {
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(this.getListSQL);
-			stmt.setString(1, Integer.toString(post_code));
+			stmt.setInt(1, post_code);
 			rst = stmt.executeQuery();
 
 			while (rst.next()) {
@@ -70,7 +100,7 @@ public class CommentDAO {
 		try {
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(this.insertSQL);
-			stmt.setString(1, Integer.toString(comment.getPost_code()));
+			stmt.setInt(1, comment.getPost_code());
 			stmt.setString(2, comment.getUser_id());
 			stmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 			stmt.setString(4, comment.getComment_content());

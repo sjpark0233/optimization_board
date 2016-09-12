@@ -49,6 +49,9 @@ public class CommentServlet extends HttpServlet {
 		case "write":
 			this.doWriteComment(request, response, multi);
 			break;
+		case "delete":
+			this.doDeleteComment(request, response);
+			break;
 		}
 
 		/*
@@ -114,6 +117,47 @@ public class CommentServlet extends HttpServlet {
 		out.println("alert('등록되었습니다.');");
 		out.println("location.href=\"post?action=read" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code="
 				+ postCode + "\";");
+		out.println("</script>");
+		out.close();
+	}
+
+	private void doDeleteComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// 로그인 세션 확인
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+
+		int commentCode = Integer.parseInt(request.getParameter("comment_code"));
+		Comment comment = new CommentDAO().doGet(commentCode);
+		User user = (User) request.getSession().getAttribute("user");
+		if (!(user.getUser_accept() == 3 || user.getUser_id().equals(comment.getUser_id()))) {
+			// 관리자 또는 주인이 아닌 경우 alert 출력
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('자신의 댓글만 삭제할 수 있습니다.');");
+			out.println("history.back()");
+			out.println("</script>");
+			out.close();
+			return;
+		}
+
+		// 댓글 삭제
+		new CommentDAO().doDelete(Integer.parseInt(request.getParameter("comment_code")));
+
+		// 게시판 텝 번호, 게시글 번호 반환
+		int tabCode = 0;
+		if (request.getParameter("tab_code") != null) {
+			tabCode = Integer.parseInt(request.getParameter("tab_code"));
+		}
+
+		response.setContentType("text/html;charset=euc-kr");
+		PrintWriter out = response.getWriter();
+		out.println("<script>");
+		out.println("alert('삭제되었습니다.');");
+		out.println("location.href=\"post?action=read" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code="
+				+ comment.getPost_code() + "\";");
 		out.println("</script>");
 		out.close();
 	}

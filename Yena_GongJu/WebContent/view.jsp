@@ -95,10 +95,10 @@
 		<table align="center" border=1>
 			<tr>
 				<td>
-					<table align="center">
+					<table align="center" border=1>
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">글번호</td>
+							<td align="center" width="140">글번호</td>
 							<td align="center" width="1000"><%=post.getPost_code()%></td>
 							<td width="0">&nbsp;</td>
 						</tr>
@@ -108,7 +108,7 @@
 
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">분류</td>
+							<td align="center" width="140">분류</td>
 							<td align="center" width="1000"><%=boardName%></td>
 							<td width="0">&nbsp;</td>
 						</tr>
@@ -118,7 +118,7 @@
 
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">조회수</td>
+							<td align="center" width="140">조회수</td>
 							<td align="center" width="1000"><%=post.getPost_view()%></td>
 							<td width="0">&nbsp;</td>
 						</tr>
@@ -128,7 +128,7 @@
 
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">게시물타입</td>
+							<td align="center" width="140">게시물타입</td>
 							<td align="center" width="1000"><%=post.getPost_type() == 0 ? "공지" : "일반"%></td>
 							<td width="0">&nbsp;</td>
 						</tr>
@@ -138,7 +138,7 @@
 
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">작성일</td>
+							<td align="center" width="140">작성일</td>
 							<td align="center" width="1000"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPost_date())%></td>
 							<td width="0">&nbsp;</td>
 						</tr>
@@ -148,7 +148,7 @@
 
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">제목</td>
+							<td align="center" width="140">제목</td>
 							<td align="center" width="1000"><%=post.getPost_title()%></td>
 							<td width="0">&nbsp;</td>
 						</tr>
@@ -158,7 +158,7 @@
 
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">첨부파일</td>
+							<td align="center" width="140">첨부파일</td>
 							<td align="center" width="1000">
 								<%
 									if (post.getPost_filepath() != null && !post.getPost_filepath().equals("")) {
@@ -175,21 +175,26 @@
 
 						<tr>
 							<td width="0">&nbsp;</td>
-							<td align="center" width="200">내용</td>
+							<td align="center" width="140">내용</td>
 							<td valign="top" width="1000" colspan="2" height="300"><%=post.getPost_content()%></td>
 						</tr>
 						<tr height="1" bgcolor="#82B5DF">
 							<td colspan="4" width="407"></td>
 						</tr>
-
-						<tr height="10"></tr>
-
-						<table width="100%">
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form name=modifyform method=post
+						action="comment?action=modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"
+						enctype="multipart/form-data">
+						<table align="center" border=1>
 							<tr height="1" bgcolor="#82B5DF">
-								<td colspan="4" width="100%"></td>
+								<td colspan="6"></td>
 							</tr>
 							<tr height="1">
-								<td colspan="4" width="100%"></td>
+								<td colspan="6"></td>
 							</tr>
 							<%
 								for (int i = 0; i < commentList.size(); i++) {
@@ -197,65 +202,94 @@
 									String commentUser = commentUserList.get(i);
 							%>
 							<tr>
-								<td align="center" width=160><%=commentUser%></td>
-								<td width="1000">: <%=comment.getComment_content()%></td>
+								<td width="0">&nbsp;</td>
+								<td align="center" width=10%><%=commentUser%></td>
+								<td width="80%">: <%=comment.getComment_content()%> <font
+									style="font-size: 50%;">(<%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(comment.getComment_date())%>)
+								</font></td>
+								<%
+									if (((User) userObj).getUser_accept() == 3
+												|| ((User) userObj).getUser_id().equals(comment.getUser_id())) {
+								%>
+								<td><button type="button">수정</button></td>
+								<td><button type="button"
+										OnClick="location.href='comment?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&comment_code=<%=comment.getComment_code()%>'">삭제</button></td>
+								<%
+									} else {
+								%>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+								<%
+									}
+								%>
 							</tr>
 							<tr height="1">
-								<td colspan="4" width="100%"></td>
+								<td colspan="5"></td>
 							</tr>
 							<%
 								}
 							%>
-						</table>
-						<table width="100%">
-							<tr height="1" bgcolor="#dddddd">
-								<td colspan="4" width="100%"></td>
-							</tr>
-							<tr height="1">
-								<td colspan="4" width="100%"></td>
-							</tr>
-							<form name=commentform method=post
-								action="comment?action=write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"
-								enctype="multipart/form-data">
-								<tr>
-									<td align="center" width=160>
-										<!-- 자신의 이름 -->
-									</td>
-									<td width=1000>: <textarea name=comment_content rows="1"></textarea></td>
-									<td><button type="button" OnClick="checkComment()">댓글
-											달기</button></td>
-								</tr>
-							</form>
-							<tr height="1">
-								<td colspan="4" width="100%"></td>
-							</tr>
-							<tr height="1" bgcolor="#dddddd">
-								<td colspan="4" width="100%"></td>
-							</tr>
 							<tr height="1" bgcolor="#82B5DF">
-								<td colspan="4" width="100%"></td>
+								<td colspan="5"></td>
 							</tr>
 						</table>
-
-						<table align="right">
-							<tr height="10"></tr>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<form name=commentform method=post
+						action="comment?action=write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"
+						enctype="multipart/form-data">
+						<table align="center">
+							<tr height="1" bgcolor="#82B5DF">
+								<td colspan="4"></td>
+							</tr>
+							<tr height="1">
+								<td colspan="4"></td>
+							</tr>
 							<tr>
 								<td width="0">&nbsp;</td>
-								<td colspan="2"><input type=button value="글쓰기" class="button_style2"
-									OnClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
-									<input type=button value="목록" class="button_style2"
-									OnClick="location.href='post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
-									<input type=button value="수정" class="button_style2"
-									OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
-									<input type=button value="삭제" class="button_style2"
-									OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+								<td align="center" width=140>
+									<!-- 자신의 이름 -->
+								</td>
+								<td width=1000>: <textarea cols=100% name=comment_content
+										rows="1"></textarea></td>
+								<td><button type="button" OnClick="checkComment()">댓글
+										달기</button></td>
 								<td width="0">&nbsp;</td>
 							</tr>
+							<tr height="1">
+								<td colspan="4"></td>
+							</tr>
+							<tr height="1" bgcolor="#82B5DF">
+								<td colspan="4"></td>
+							</tr>
 						</table>
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<table align="right">
+						<tr height="10"></tr>
+						<tr>
+							<td width="0">&nbsp;</td>
+							<td colspan="2"><input type=button value="글쓰기"
+								class="button_style2"
+								OnClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
+								<input type=button value="목록" class="button_style2"
+								OnClick="location.href='post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
+								<input type=button value="수정" class="button_style2"
+								OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+								<input type=button value="삭제" class="button_style2"
+								OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+							<td width="0">&nbsp;</td>
+						</tr>
 					</table>
-
 				</td>
 			</tr>
 		</table>
+	</div>
 </body>
 </html>
