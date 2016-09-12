@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="EUC-KR"%>
-<%@ page import="java.util.*" %>
+<%@ page import="java.util.*"%>
 <%@ page import="java.text.*"%>
 <%@ page import="ldcc.board.vo.*"%>
 <%
@@ -129,6 +129,20 @@ h2 {
 }
 -->
 </style>
+
+<script language="javascript">
+	function checkComment() {
+		var form = document.commentform;
+
+		if (!form.comment_content.value) {
+			alert("댓글 내용을 적어주세요");
+			form.comment_content.focus();
+			return;
+		}
+
+		form.submit();
+	}
+</script>
 
 </head>
 <body>
@@ -268,20 +282,45 @@ h2 {
 							<tr height="1" bgcolor="#82B5DF">
 								<td colspan="4" width="100%"></td>
 							</tr>
-							<tr height="3">
+							<tr height="1">
 								<td colspan="4" width="100%"></td>
 							</tr>
 							<%
 								for (int i = 0; i < commentList.size(); i++) {
+									Comment comment = commentList.get(i);
+									String commentUser = commentUserList.get(i);
 							%>
+							<tr>
+								<td align="center" width=160><%=commentUser%></td>
+								<td width="1000">: <%=comment.getComment_content()%></td>
+							</tr>
+							<tr height="1">
+								<td colspan="4" width="100%"></td>
+							</tr>
 							<%
 								}
 							%>
-							<tr>
-								<td><textarea cols="100%" rows="1"></textarea></td>
-								<td><button type="button">댓글 달기</button></td>
+						</table>
+						<table width="100%">
+							<tr height="1" bgcolor="#dddddd">
+								<td colspan="4" width="100%"></td>
 							</tr>
-							<tr height="3">
+							<tr height="1">
+								<td colspan="4" width="100%"></td>
+							</tr>
+							<form name=commentform method=post
+								action="comment?action=write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"
+								enctype="multipart/form-data">
+								<tr>
+									<td align="center" width=105>
+										<!-- 자신의 이름 -->
+									</td>
+									<td>: <textarea name=comment_content cols="80%" rows="1"></textarea></td>
+									<td><button type="button" OnClick="checkComment()">댓글
+											달기</button></td>
+								</tr>
+							</form>
+							<tr height="1">
 								<td colspan="4" width="100%"></td>
 							</tr>
 							<tr height="1" bgcolor="#dddddd">

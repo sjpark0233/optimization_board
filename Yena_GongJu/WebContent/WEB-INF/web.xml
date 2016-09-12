@@ -15,6 +15,14 @@
      Welcome to Tomcat
   </description>
   <servlet>
+    <servlet-name>front</servlet-name>
+    <servlet-class>ldcc.board.controller.FrontServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>front</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>user</servlet-name>
     <servlet-class>ldcc.board.controller.UserServlet</servlet-class>
   </servlet>
