@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+	pageEncoding="EUC-KR"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,101 +7,136 @@
 <title>회원가입 페이지</title>
 <style type="text/css">
 <!--
-    body {
-        margin:0;
-        padding:0;
-        font: 11px/1.5em Verdana;
-	}
-	.font1 {
-		font: bold 30px Verdana,sans-serif;
-		color: #000;
-		margin: 0px;
-        padding: 5px 20px 15px 20px;
-		}
-	.font2 {
-		font: bold 14px Verdana, sans-serif;
-		color: #000;
-		margin: 0px;
-        padding: 0px 20px 0px 0px;
-		}
-	.font3 {
-		font: 20px Verdana, sans-serif;
-		color: #000;
-		}
-	.font4 {
-		font: bold 30px Verdana,sans-serif;
-		color: #000;
-		margin: 0px;
-        padding: 5px 20px 5px 20px;
-		}	
-	h2 {
-        font: bold 14px Verdana, Arial, Helvetica, sans-serif;
-        color: #000;
-        margin: 0px;
-        padding: 0px 0px 0px 15px;
-	}
+body {
+	margin: 0;
+	padding: 0;
+	font: 11px/1.5em Verdana;
+}
+
+.font1 {
+	font: bold 30px Verdana, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 5px 20px 15px 20px;
+}
+
+.font2 {
+	font: bold 14px Verdana, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 0px 20px 0px 0px;
+}
+
+.font3 {
+	font: 20px Verdana, sans-serif;
+	color: #000;
+}
+
+.font4 {
+	font: bold 30px Verdana, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 5px 20px 5px 20px;
+}
+
+h2 {
+	font: bold 14px Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 0px 0px 0px 15px;
+}
 
 /*- Menu Tabs F--------------------------- */
+#tabsF {
+	float: left;
+	width: 100%;
+	background: #fff;
+	font-size: 93%;
+	line-height: normal;
+	border-bottom: 1px solid #666;
+}
 
-    #tabsF {
-      float:left;
-      width:100%;
-      background:#fff;
-      font-size:93%;
-      line-height:normal;
-      border-bottom:1px solid #666;
-      }
-    #tabsF ul {
-       margin:0;
-       padding:10px 10px 0 50px;
-       list-style:none;
-      }
-    #tabsF li {
-      display:inline;
-      margin:0;
-      padding:0;
-      }
-    #tabsF a {
-      float:left;
-      background:url(http://pds7.egloos.com/pds/200803/09/83/b0050083_47d2b60bb22d2.gif) no-repeat left top;
-      margin:0;
-      padding:0 0 0 4px;
-      text-decoration:none;
-      }
-    #tabsF a span {
-      float:left;
-      display:block;
-      background:url(http://pds8.egloos.com/pds/200803/09/83/b0050083_47d2b60d5f78a.gif) no-repeat right top;
-      padding:5px 15px 4px 6px;
-      color:#666;
-      }
-    /* Commented Backslash Hack hides rule from IE5-Mac \*/
-    #tabsF a span {float:none;}
-    /* End IE5-Mac hack */
-    #tabsF a:hover span {
-      color:#FFF;
-      }
-    #tabsF a:hover {
-      background-position:0% -42px;
-      }
-    #tabsF a:hover span {
-      background-position:100% -42px;
-      }
+#tabsF ul {
+	margin: 0;
+	padding: 10px 10px 0 50px;
+	list-style: none;
+}
 
-	#tabsF #current a {
-      background-position:0% -42px;
-      }
-    #tabsF #current a span {
-      background-position:100% -42px;
-      }
+#tabsF li {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+#tabsF a {
+	float: left;
+	background:
+		url(http://pds7.egloos.com/pds/200803/09/83/b0050083_47d2b60bb22d2.gif)
+		no-repeat left top;
+	margin: 0;
+	padding: 0 0 0 4px;
+	text-decoration: none;
+}
+
+#tabsF a span {
+	float: left;
+	display: block;
+	background:
+		url(http://pds8.egloos.com/pds/200803/09/83/b0050083_47d2b60d5f78a.gif)
+		no-repeat right top;
+	padding: 5px 15px 4px 6px;
+	color: #666;
+}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#tabsF a span {
+	float: none;
+}
+/* End IE5-Mac hack */
+#tabsF a:hover span {
+	color: #FFF;
+}
+
+#tabsF a:hover {
+	background-position: 0% -42px;
+}
+
+#tabsF a:hover span {
+	background-position: 100% -42px;
+}
+
+#tabsF #current a {
+	background-position: 0% -42px;
+}
+
+#tabsF #current a span {
+	background-position: 100% -42px;
+}
 -->
 
-	
+input.button_style{
+	font: bold 14px Verdana, Arial, Helvetica, sans-serif;	
+	height: 2em;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  color: #000000;
+  padding: 4px 2px 4px 2px;
+  background: #ffffff;
+  border: solid #82B5DF 2px;
+  text-decoration: none;
+}
+
+input.button_style:hover {
+  background: #f2f5f7;
+  text-decoration: none;
+	color: gray;
+}
 </style>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 
-<script language = "javascript">
+<script language="javascript">
 		//function winOpen(){
 	//	window.open("user?action=user_check&user_id="+form.id.value,"w","width=300, height=100, resizable=yes");
 	//}
@@ -121,9 +156,9 @@
 				alert("한글이나 특수문자는 입력불가능 합니다.");
 				return false;
 			}
-            else if(text.length<4){
-            	alert("아이디가 너무 짧습니다.");
-				return false;
+            else if(text.length>10 || text.length<5){
+            	alert("아이디는 5~15자 이내로 만들어주세요.");
+            	return false;
             }
         }
         overlapCheck();       
@@ -198,7 +233,13 @@
 			focus.user_pw;
 			return false;
 		}
-
+		
+		if (user_pw.value.length<5|| user_pw.value.length>10){
+			alert('비밀번호는 5~10자 사이로 입력해주세요.');
+			focus.user_pw;
+			return false;
+		}
+		
 		if (user_pw2.value == '' || user_pw2.value == null) {
 			alert('비밀번호확인란을 입력하세요');
 			focus.user_pw2;
@@ -212,10 +253,27 @@
 			return false;
 		}
 		
-		/*비밀번호 길이 확인*/
-		if (user_pw.value.length <5){
-			alert("비밀번호는 5자 이상으로 입력해주세요");
-			focus.user_pw;
+		if (user_name.value == '' || user_name.value == null) {
+			alert('이름을 입력하세요');
+			focus.user_name;
+			return false;
+		}
+		
+		if (user_name.value.length > 4){
+			alert('제대로된 이름을 입력해주세요.');
+			focus.user_name;
+			return false;
+		}
+		
+		if (team_name.value == '' || team_name.value == null) {
+			alert('팀을 입력하세요');
+			focus.team_name;
+			return false;
+		}
+		
+		if (team_name.value.length > 15){
+			alert('팀 이름은 15자 이내로 입력해주세요.');
+			focus.team_name;
 			return false;
 		}
 		
@@ -235,23 +293,15 @@
 		if (tel2.value.length > 2 || tel3.value.length==4){
 			document.getElementById("user_phone").value = tel1.value + "-" + tel2.value + "-" + tel3.value;;
 		}
-		
-		if (user_name.value == '' || user_name.value == null) {
-			alert('이름을 입력하세요');
-			focus.user_name;
-			return false;
-		}
-		
-		if (team_name.value == '' || team_name.value == null) {
-			alert('팀을 입력하세요');
-			focus.team_name;
-			return false;
-		}
-		
- 		
  		
  		if (user_email.value == '' || user_email.value == null) {
 			alert('메일을 입력하세요');
+			focus.user_email;
+			return false;
+		}
+ 		
+ 		if (user_email.value.length >20){
+			alert('제대로된 메일 주소를 입력해주세요.');
 			focus.user_email;
 			return false;
 		}
@@ -311,109 +361,112 @@
 
 <body>
 
-<!-- 상단 -->
-<div align=right>
-<br>
-<font class="font2"> <a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> </font>
-</div>
+	<!-- 상단 -->
+	<div align=right>
+	<!-- <br> <font class="font2"> <a href="login.jsp">LogIn</a> |
+			<a href="join.jsp">회원가입</a>
+		</font>-->
+		<font class = "font2"><br>
+		<input type="button" value="LogIn" onClick="location.href='login.jsp'" class="button_style">&nbsp| 
+		<input type="button" value="회원가입" onClick="location.href='join.jsp'" class="button_style">
+		</font>
+	</div>
 
-<div>
-	<font class="font1"> 최적화팀 게시판 </font>
-	<br><br>
-</div>
+	<div>
+		<font class="font1"> 최적화팀 게시판 </font> <br>
+		<br>
+	</div>
 
-<!-- 탭 -->
-<div id="tabsF">
-    <ul>
-		<b>
-		<li id="current"><a href="post?action=list"><span>Home</span></a></li>
-		<li><a href="post?action=list&tab_code=1"><span>Windows</span></a></li>
-		<li><a href="post?action=list&tab_code=2"><span>MS SQL</span></a></li>
-		<li><a href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
-		<li><a href="post?action=list&tab_code=4"><span>Network</span></a></li>
-		<li><a href="post?action=list&tab_code=5"><span>SAP</span></a></li>
-		</b>
-	</ul>
-</div>
+	<!-- 탭 -->
+	<div id="tabsF">
+		<ul>
+			<b>
+				<li id="current"><a href="post?action=list"><span>Home</span></a></li>
+				<li><a href="post?action=list&tab_code=1"><span>Windows</span></a></li>
+				<li><a href="post?action=list&tab_code=2"><span>MS
+							SQL</span></a></li>
+				<li><a href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
+				<li><a href="post?action=list&tab_code=4"><span>Network</span></a></li>
+				<li><a href="post?action=list&tab_code=5"><span>SAP</span></a></li>
+			</b>
+		</ul>
+	</div>
 
-<div class="font4">
-    <center><br>
-    <H4>회원가입</H4>
-	</center>
-</div>
-<div class="font3" align ="center">
-<form name="joinform" method="post" action="user" id="join">
-    <table border="3">
-        <tr>
-            <td width="200">&nbsp;아이디</td>
-            <td width="450">
-                    &nbsp;&nbsp;<input type="text" id="user_id" name="user_id" autofocus required>
-                    
-                    &nbsp;&nbsp;&nbsp;<input type="button" value="아이디 중복확인" onClick="idCheck()" size="15" maxlength="12">          
-          		
-         
-            </td>
-        </tr>
-        <tr>
-            <td>&nbsp;비밀번호</td>
-            <td>
-                &nbsp;&nbsp;<input type="password" id = "user_pw" name="user_pw" size="15" maxlength="12">
-            </td>
-        </tr>
-        
-         <tr>
-            <td>&nbsp;비밀번호  중복확인</td>
-            <td>
-                &nbsp;&nbsp;<input type="password" id = "user_pw2" name="user_pw2" size="15" maxlength="12">
-            </td>
-        </tr>
-               
-        <tr>
-            <td>&nbsp;이름</td>
-            <td>
-                &nbsp;&nbsp;<input type="text" id = "user_name" name="user_name" size="15" maxlength="12">
-            </td>
-        </tr>
-       
-       <tr>
-            <td>&nbsp;소속</td>
-            <td>
-                &nbsp;&nbsp;<input type="text" id = "team_name" name="team_name" size="15" maxlength="12"> 팀
-            </td>
-        </tr>
-       
-        <tr>
-            <td>&nbsp;전화번호</td>
-            <td>&nbsp;
-                <select id = "tel1" name="tel1">
-  					<option value="010"> 010 </option>
- 					<option value="011"> 011 </option>
-   					<option value="016"> 016 </option>
-   					<option value="017"> 017 </option>
-  	 				<option value="018"> 018 </option>
-   					<option value="019"> 019 </option>
-   				</select> - 
-   				<input type="text" id = "tel2" name="tel2" size="5" maxlength="4"> - 
-   				<input type="text" id = "tel3" name="tel3" size="5" maxlength="4"> 
-   				<input type=hidden id ="user_phone" name = "user_phone">
-  			</td> 
-        </tr>
+	<div class="font4">
+		<center>
+			<br>
+			<H4>회원가입</H4>
+		</center>
+	</div>
+	<div class="font3" align="center">
+		<form name="joinform" method="post" action="user" id="join">
+			<table border="3">
+				<tr>
+					<td width="200">&nbsp;아이디</td>
+					<td width="450">&nbsp;&nbsp;<input type="text" id="user_id"
+						name="user_id" autofocus required> &nbsp;&nbsp;&nbsp;<input
+						type="button" value="아이디 중복확인" onClick="idCheck()" size="15"
+						maxlength="12">
 
-        <tr>
-            <td>&nbsp;E-Mail</td>
-            <td>
-                &nbsp;&nbsp;<input type="text" id = "user_email" name="user_email">
-            </td> 
-        </tr>
-    </table>
 
-   <br>
-        <input type="button" name="join" value="회원가입" Onclick="joinCheck()">&nbsp;
-        <input type="reset" value="다시입력" onclick='init()'>&nbsp;
-        <input type="button" name="cancel" value="취소" onClick="jsp:history.back(-1)">
-    </form> 
-    
-</div>
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;비밀번호</td>
+					<td>&nbsp;&nbsp;<input type="password" id="user_pw"
+						name="user_pw" size="15" maxlength="12">
+					</td>
+				</tr>
 
+				<tr>
+					<td>&nbsp;비밀번호 중복확인</td>
+					<td>&nbsp;&nbsp;<input type="password" id="user_pw2"
+						name="user_pw2" size="15" maxlength="12">
+					</td>
+				</tr>
+
+				<tr>
+					<td>&nbsp;이름</td>
+					<td>&nbsp;&nbsp;<input type="text" id="user_name"
+						name="user_name" size="15" maxlength="12">
+					</td>
+				</tr>
+
+				<tr>
+					<td>&nbsp;소속</td>
+					<td>&nbsp;&nbsp;<input type="text" id="team_name"
+						name="team_name" size="15" maxlength="12"> 팀
+					</td>
+				</tr>
+
+				<tr>
+					<td>&nbsp;전화번호</td>
+					<td>&nbsp; <select id="tel1" name="tel1">
+							<option value="010">010</option>
+							<option value="011">011</option>
+							<option value="016">016</option>
+							<option value="017">017</option>
+							<option value="018">018</option>
+							<option value="019">019</option>
+					</select> - <input type="text" id="tel2" name="tel2" size="5" maxlength="4">
+						- <input type="text" id="tel3" name="tel3" size="5" maxlength="4">
+						<input type=hidden id="user_phone" name="user_phone">
+					</td>
+				</tr>
+
+				<tr>
+					<td>&nbsp;E-Mail</td>
+					<td>&nbsp;&nbsp;<input type="text" id="user_email"
+						name="user_email">
+					</td>
+				</tr>
+			</table>
+
+			<br> <input type="button" name="join" value="회원가입"
+				Onclick="joinCheck()">&nbsp; <input type="reset"
+				value="다시입력" onclick='init()'>&nbsp; <input type="button"
+				name="cancel" value="취소" onClick="jsp:history.back(-1)">
+		</form>
+	</div>
 </body>
 </html>

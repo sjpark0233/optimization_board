@@ -160,23 +160,17 @@ public class UserServlet extends HttpServlet {
 			}
 			else
 			{
-				resultJson = null;
+				resultJson = "{ \"success\" : 3}";
 				response.getWriter().print(resultJson);
-				System.out.println("회원탈퇴 실패");
+				System.out.println("비밀번호 오류");
 			}
 		}
 		else
 		{
-			System.out.println("비밀번호를 입력해 주세요.");
+			resultJson = "{ \"success\" : 0}";
+			response.getWriter().print(resultJson);
+			System.out.println("회원탈퇴 세션 없음.");
 		}
-//		String result = "fail";
-//		if(user.getUser_name()!=null){
-//			result = user.getUser_name();
-//		}
-		
-//		request.setAttribute("result", result);
-//		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-//		dispatcher.forward(request, response);
 	}
 
 	
@@ -185,21 +179,21 @@ public class UserServlet extends HttpServlet {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		
-		
-		
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
-			//@로그인 페이지로 돌아가기..
 			System.out.println("세션없음");
-			response.sendRedirect("login.jsp");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('다시 로그인 해주세요.');");
+			out.println("location.replace('login.jsp');");
+			out.println("</script>");
+			out.close();
 		}
 		else{
 			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
 			user.setUser_pw(((User)session.getAttribute("user")).getUser_pw());
 			
-			System.out.println("정보 세션");
-			System.out.println(((User)session.getAttribute("user")).getUser_id());
-			System.out.println(((User)session.getAttribute("user")).getUser_pw());
 			dao.doInfo(user);
 			if(user.getUser_name()!=null){
 
@@ -226,9 +220,14 @@ public class UserServlet extends HttpServlet {
 
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
-			//@로그인 페이지로 돌아가기..
 			System.out.println("세션없음");
-			response.sendRedirect("login.jsp");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('다시 로그인 해주세요.');");
+			out.println("location.replace('login.jsp');");
+			out.println("</script>");
+			out.close();
 		}
 		else{
 			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
@@ -255,9 +254,15 @@ public class UserServlet extends HttpServlet {
 		String resultJson;
 		String user_pw0 = request.getParameter("user_pw0");
 		
-		if(((User)session.getAttribute("user")).getUser_id()==null)
+		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
 			System.out.println("세션없음!");
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out =response.getWriter();
+			out.println("<script>");
+			out.println("alert('다시 로그인 해주세요.');");
+			out.println("</script>");
+			out.close();
 			resultJson = null;
 			response.getWriter().print(resultJson);
 		}

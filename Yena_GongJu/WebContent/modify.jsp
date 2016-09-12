@@ -123,6 +123,26 @@ h2 {
 	background-position: 100% -42px;
 }
 -->
+
+input.button_style{
+	font: bold 14px Verdana, Arial, Helvetica, sans-serif;	
+	height: 2em;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  color: #000000;
+  padding: 4px 2px 4px 2px;
+  background: #ffffff;
+  border: solid #82B5DF 2px;
+  text-decoration: none;
+}
+
+input.button_style:hover {
+  background: #f2f5f7;
+  text-decoration: none;
+	color: gray;
+}
+
 </style>
 
 
@@ -161,17 +181,16 @@ h2 {
 		<br> <font class="font2">
 			<%
 				if (loggedIn) {
-			%><a href="user?action=logout">LogOut</a>
-			<%
+			%><input type="button" value="LogOut" onClick="location.href='user?action=logout'" class="button_style"><%
 				if (((User) userObj).getUser_accept() == 3) {
-			%> | <a href="user?action=user_list">회원관리</a>
+			%> | <input type="button" value="회원관리" onClick="location.href='user?action=user_list'" class="button_style">
 			<%
 				} else {
-			%> | <a href="user?action=user_info">회원정보확인</a>
+			%> | <input type="button" value="회원정보" onClick="location.href='user?action=user_info'" class="button_style">
 			<%
 				}
 				} else {
-			%><a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a>
+			%><input type="button" value="LogIn" onClick="location.href='login.jsp'" class="button_style"> | <input type="button" value="회원가입" onClick="location.href='join.jsp'" class="button_style">
 			<%
 				}
 			%>

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<%@ page import="ldcc.board.vo.*" %>
+	pageEncoding="EUC-KR"%>
+<%@ page import="ldcc.board.vo.*"%>
 <% String phone = ((User)request.getAttribute("result")).getUser_phone().split("-")[0];%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -9,101 +9,138 @@
 <title>회원정보 수정 페이지</title>
 <style type="text/css">
 <!--
-    body {
-        margin:0;
-        padding:0;
-        font: 11px/1.5em Verdana;
-	}
-	.font1 {
-		font: bold 30px Verdana,sans-serif;
-		color: #000;
-		margin: 0px;
-        padding: 5px 20px 15px 20px;
-		}
-	.font2 {
-		font: bold 14px Verdana, sans-serif;
-		color: #000;
-		margin: 0px;
-        padding: 0px 20px 0px 0px;
-		}
-	.font3 {
-		font: 20px Verdana, sans-serif;
-		color: #000;
-		}
-	.font4 {
-		font: bold 30px Verdana,sans-serif;
-		color: #000;
-		margin: 0px;
-        padding: 5px 20px 5px 20px;
-		}	
-	h2 {
-        font: bold 14px Verdana, Arial, Helvetica, sans-serif;
-        color: #000;
-        margin: 0px;
-        padding: 0px 0px 0px 15px;
-	}
+body {
+	margin: 0;
+	padding: 0;
+	font: 11px/1.5em Verdana;
+}
+
+.font1 {
+	font: bold 30px Verdana, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 5px 20px 15px 20px;
+}
+
+.font2 {
+	font: bold 14px Verdana, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 0px 20px 0px 0px;
+}
+
+.font3 {
+	font: 20px Verdana, sans-serif;
+	color: #000;
+}
+
+.font4 {
+	font: bold 30px Verdana, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 5px 20px 5px 20px;
+}
+
+h2 {
+	font: bold 14px Verdana, Arial, Helvetica, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 0px 0px 0px 15px;
+}
 
 /*- Menu Tabs F--------------------------- */
+#tabsF {
+	float: left;
+	width: 100%;
+	background: #fff;
+	font-size: 93%;
+	line-height: normal;
+	border-bottom: 1px solid #666;
+}
 
-    #tabsF {
-      float:left;
-      width:100%;
-      background:#fff;
-      font-size:93%;
-      line-height:normal;
-      border-bottom:1px solid #666;
-      }
-    #tabsF ul {
-       margin:0;
-       padding:10px 10px 0 50px;
-       list-style:none;
-      }
-    #tabsF li {
-      display:inline;
-      margin:0;
-      padding:0;
-      }
-    #tabsF a {
-      float:left;
-      background:url(http://pds7.egloos.com/pds/200803/09/83/b0050083_47d2b60bb22d2.gif) no-repeat left top;
-      margin:0;
-      padding:0 0 0 4px;
-      text-decoration:none;
-      }
-    #tabsF a span {
-      float:left;
-      display:block;
-      background:url(http://pds8.egloos.com/pds/200803/09/83/b0050083_47d2b60d5f78a.gif) no-repeat right top;
-      padding:5px 15px 4px 6px;
-      color:#666;
-      }
-    /* Commented Backslash Hack hides rule from IE5-Mac \*/
-    #tabsF a span {float:none;}
-    /* End IE5-Mac hack */
-    #tabsF a:hover span {
-      color:#FFF;
-      }
-    #tabsF a:hover {
-      background-position:0% -42px;
-      }
-    #tabsF a:hover span {
-      background-position:100% -42px;
-      }
+#tabsF ul {
+	margin: 0;
+	padding: 10px 10px 0 50px;
+	list-style: none;
+}
 
-	#tabsF #current a {
-      background-position:0% -42px;
-      }
-    #tabsF #current a span {
-      background-position:100% -42px;
-      }
+#tabsF li {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+#tabsF a {
+	float: left;
+	background:
+		url(http://pds7.egloos.com/pds/200803/09/83/b0050083_47d2b60bb22d2.gif)
+		no-repeat left top;
+	margin: 0;
+	padding: 0 0 0 4px;
+	text-decoration: none;
+}
+
+#tabsF a span {
+	float: left;
+	display: block;
+	background:
+		url(http://pds8.egloos.com/pds/200803/09/83/b0050083_47d2b60d5f78a.gif)
+		no-repeat right top;
+	padding: 5px 15px 4px 6px;
+	color: #666;
+}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#tabsF a span {
+	float: none;
+}
+/* End IE5-Mac hack */
+#tabsF a:hover span {
+	color: #FFF;
+}
+
+#tabsF a:hover {
+	background-position: 0% -42px;
+}
+
+#tabsF a:hover span {
+	background-position: 100% -42px;
+}
+
+#tabsF #current a {
+	background-position: 0% -42px;
+}
+
+#tabsF #current a span {
+	background-position: 100% -42px;
+}
 -->
 
-	
+input.button_style{
+	font: bold 14px Verdana, Arial, Helvetica, sans-serif;	
+	height: 2em;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  color: #000000;
+  padding: 4px 2px 4px 2px;
+  background: #ffffff;
+  border: solid #82B5DF 2px;
+  text-decoration: none;
+}
+
+input.button_style:hover {
+  background: #f2f5f7;
+  text-decoration: none;
+	color: gray;
+}
+
+
 </style>
 
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-<script language = "javascript">
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script language="javascript">
 function InfoCheck(){
 	var user_pw0 = document.getElementById('user_pw0');
 	var user_pw = document.getElementById('user_pw');
@@ -209,12 +246,12 @@ function save() {
 		else if(data.success == 0)
 		{
 			alert("비밀번호가 맞지 않습니다.");	
-			location.reload();
+			return false;
 		}
 		else
 		{
 			alert("수정을 실패했습니다.");
-			location.replace("user?action=user_info");				
+			return false;				
 		}						
 		},
 		error : function(request, status, error) {
@@ -234,111 +271,121 @@ function save() {
 
 <body>
 
-<!-- 상단 -->
+	<!-- 상단 -->
 
-<div align=right>
-<br>
-<font class="font2"> <a href="user?action=logout">LogOut</a> | <a href="user?action=user_info">회원정보확인</a> </font>
-</div>
+	<div align=right>
+		<font class = "font2"><br>
+		<input type="button" value="LogOut" onClick="location.href='user?action=logout'" class="button_style">&nbsp| 
+		<input type="button" value="회원정보" onClick="location.href='user?action=user_info'" class="button_style">
+		</font>
+	</div>
 
 
-<div>
-	<font class="font1"> 최적화팀 게시판 </font>
-	<br><br>
-</div>
+	<div>
+		<font class="font1"> 최적화팀 게시판 </font> <br>
+		<br>
+	</div>
 
-<!-- 탭 -->
-<div id="tabsF">
-    <ul>
-		<b>
-		<li id="current"><a href="post?action=list"><span>Home</span></a></li>
-		<li><a href="post?action=list&tab_code=1"><span>Windows</span></a></li>
-		<li><a href="post?action=list&tab_code=2"><span>MS SQL</span></a></li>
-		<li><a href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
-		<li><a href="post?action=list&tab_code=4"><span>Network</span></a></li>
-		<li><a href="post?action=list&tab_code=5"><span>SAP</span></a></li>
-		</b>
-	</ul>
-</div>
+	<!-- 탭 -->
+	<div id="tabsF">
+		<ul>
+			<b>
+				<li id="current"><a href="post?action=list"><span>Home</span></a></li>
+				<li><a href="post?action=list&tab_code=1"><span>Windows</span></a></li>
+				<li><a href="post?action=list&tab_code=2"><span>MS
+							SQL</span></a></li>
+				<li><a href="post?action=list&tab_code=3"><span>Oracle</span></a></li>
+				<li><a href="post?action=list&tab_code=4"><span>Network</span></a></li>
+				<li><a href="post?action=list&tab_code=5"><span>SAP</span></a></li>
+			</b>
+		</ul>
+	</div>
 
-<div class="font4">
-    <center><br>
-    <H4>회원정보수정</H4>
-	</center>
-</div>
+	<div class="font4">
+		<center>
+			<br>
+			<H4>회원정보수정</H4>
+		</center>
+	</div>
 
-<div class="font3" align ="center">
-<form name="modify" method="post" action="user" id="user_info_modify">
-    <table border="3">
-    <tr>
-      <td>&nbsp;아이디&nbsp;</td>
-      <td width="1000">&nbsp;&nbsp;${result.user_id}</td>
-    </tr>
-    <tr>
-            <td>&nbsp;이전 비밀번호&nbsp;</td>
-            <td>
-                &nbsp;&nbsp;<input type="password" name="user_pw0" size="15" maxlength="12" id ="user_pw0">
-            </td>
-        </tr>
-        <tr>
-            <td>&nbsp;새 비밀번호&nbsp;</td>
-            <td>
-                &nbsp;&nbsp;<input type="password" name="user_pw" size="15" maxlength="12" id ="user_pw">
-            </td>
-        </tr>
-        
-         <tr>
-            <td>&nbsp;새 비밀번호 확인&nbsp;</td>
-            <td>
-                &nbsp;&nbsp;<input type="password" name="user_pw2" size="15" maxlength="12" id ="user_pw2">
-            </td>
-        </tr>
-               
-        <tr>
-            <td>&nbsp;이름&nbsp;</td>
-            <td>
-                &nbsp;&nbsp;<input type="text" name="user_name" size="15" maxlength="12" id ="user_name" value = ${result.user_name}>
-            </td>
-        </tr>
-       
-       <tr>
-            <td>&nbsp;소속&nbsp;</td>
-            <td>
-                &nbsp;&nbsp;<input type="text" name="team_name" size="15" maxlength="12" id = "team_name" value = ${result.team_name}>팀
-            </td>
-            
-        </tr>
-         <tr>
-            <td>&nbsp;전화번호</td>
-            <td>&nbsp;
-                <select name="tel1" id ="tel1">
-  					<option value="010" <% if(phone.equals("010")){%>selected="selected" <%}%>> 010 </option>
- 					<option value="011" <% if(phone.equals("011")){%>selected="selected" <%}%>> 011 </option>
-   					<option value="016" <% if(phone.equals("016")){%>selected="selected" <%}%>> 016 </option>
-   					<option value="017" <% if(phone.equals("017")){%>selected="selected" <%}%>> 017 </option>
-  	 				<option value="018" <% if(phone.equals("018")){%>selected="selected" <%}%>> 018 </option>
-   					<option value="019" <% if(phone.equals("019")){%>selected="selected" <%}%>> 019 </option>
-   				</select> - 
-   				<input type="text" name="tel2" size="5" maxlength="4" id ="tel2" value = ${result.user_phone.split('-')[1]}> - 
-   				<input type="text" name="tel3" size="5" maxlength="4" id ="tel3" value = ${result.user_phone.split('-')[2]}>   
-   				<input type=hidden id ="user_phone" name = "user_phone">
-  			</td> 
-        </tr>
+	<div class="font3" align="center">
+		<form name="modify" method="post" action="user" id="user_info_modify">
+			<table border="3">
+				<tr>
+					<td>&nbsp;아이디&nbsp;</td>
+					<td width="1000">&nbsp;&nbsp;${result.user_id}</td>
+				</tr>
+				<tr>
+					<td>&nbsp;이전 비밀번호&nbsp;</td>
+					<td>&nbsp;&nbsp;<input type="password" name="user_pw0"
+						size="15" maxlength="12" id="user_pw0">
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;새 비밀번호&nbsp;</td>
+					<td>&nbsp;&nbsp;<input type="password" name="user_pw"
+						size="15" maxlength="12" id="user_pw">
+					</td>
+				</tr>
 
-        <tr>
-            <td>&nbsp;E-Mail&nbsp;</td>
-            <td>
-                &nbsp;&nbsp;<input type="text" name="user_email" value = ${result.user_email} id ="user_email">
-            </td> 
-        </tr>
-    </table>
+				<tr>
+					<td>&nbsp;새 비밀번호 확인&nbsp;</td>
+					<td>&nbsp;&nbsp;<input type="password" name="user_pw2"
+						size="15" maxlength="12" id="user_pw2">
+					</td>
+				</tr>
 
-   <br>
-        <input type="button" value="수정하기" Onclick="InfoCheck()"> 
-        <input type="button" name="cancel" value="취소" onClick="jsp:history.back(-1)">
-    </form> 
-    
-</div>
+				<tr>
+					<td>&nbsp;이름&nbsp;</td>
+					<td>&nbsp;&nbsp;<input type="text" name="user_name" size="15"
+						maxlength="12" id="user_name" value=${result.user_name}>
+					</td>
+				</tr>
+
+				<tr>
+					<td>&nbsp;소속&nbsp;</td>
+					<td>&nbsp;&nbsp;<input type="text" name="team_name" size="15"
+						maxlength="12" id="team_name" value=${result.team_name}>팀
+					</td>
+
+				</tr>
+				<tr>
+					<td>&nbsp;전화번호</td>
+					<td>&nbsp; <select name="tel1" id="tel1">
+							<option value="010" <% if(phone.equals("010")){%>
+								selected="selected" <%}%>>010</option>
+							<option value="011" <% if(phone.equals("011")){%>
+								selected="selected" <%}%>>011</option>
+							<option value="016" <% if(phone.equals("016")){%>
+								selected="selected" <%}%>>016</option>
+							<option value="017" <% if(phone.equals("017")){%>
+								selected="selected" <%}%>>017</option>
+							<option value="018" <% if(phone.equals("018")){%>
+								selected="selected" <%}%>>018</option>
+							<option value="019" <% if(phone.equals("019")){%>
+								selected="selected" <%}%>>019</option>
+					</select> - <input type="text" name="tel2" size="5" maxlength="4" id="tel2"
+						value=${result.user_phone.split('-')[1]}> - <input
+						type="text" name="tel3" size="5" maxlength="4" id="tel3"
+						value=${result.user_phone.split('-')[2]}> <input
+						type=hidden id="user_phone" name="user_phone">
+					</td>
+				</tr>
+
+				<tr>
+					<td>&nbsp;E-Mail&nbsp;</td>
+					<td>&nbsp;&nbsp;<input type="text" name="user_email"
+						value=${result.user_email } id="user_email">
+					</td>
+				</tr>
+			</table>
+
+			<br> <input type="button" value="수정하기" Onclick="InfoCheck()">
+			<input type="button" name="cancel" value="취소"
+				onClick="jsp:history.back(-1)">
+		</form>
+
+	</div>
 
 </body>
 </html>
