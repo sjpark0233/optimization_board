@@ -14,41 +14,36 @@
   <description>
      Welcome to Tomcat
   </description>
-  
   <servlet>
-  	<servlet-name>user</servlet-name>
-  	<servlet-class>ldcc.board.controller.UserServlet</servlet-class>
+    <servlet-name>user</servlet-name>
+    <servlet-class>ldcc.board.controller.UserServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>user</servlet-name>
-  	<url-pattern>/user</url-pattern>
+    <servlet-name>user</servlet-name>
+    <url-pattern>/user</url-pattern>
   </servlet-mapping>
-  
   <servlet>
-  	<servlet-name>board</servlet-name>
-  	<servlet-class>ldcc.board.controller.BoardServlet</servlet-class>
+    <servlet-name>board</servlet-name>
+    <servlet-class>ldcc.board.controller.BoardServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>board</servlet-name>
-  	<url-pattern>/board</url-pattern>
+    <servlet-name>board</servlet-name>
+    <url-pattern>/board</url-pattern>
   </servlet-mapping>
-  
   <servlet>
-  	<servlet-name>comment</servlet-name>
-  	<servlet-class>ldcc.board.controller.CommentServlet</servlet-class>
+    <servlet-name>comment</servlet-name>
+    <servlet-class>ldcc.board.controller.CommentServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>comment</servlet-name>
-  	<url-pattern>/comment</url-pattern>
+    <servlet-name>comment</servlet-name>
+    <url-pattern>/comment</url-pattern>
   </servlet-mapping>
-  
   <servlet>
-  	<servlet-name>post</servlet-name>
-  	<servlet-class>ldcc.board.controller.PostServlet</servlet-class>
+    <servlet-name>post</servlet-name>
+    <servlet-class>ldcc.board.controller.PostServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>post</servlet-name>
-  	<url-pattern>/post</url-pattern>
+    <servlet-name>post</servlet-name>
+    <url-pattern>/post</url-pattern>
   </servlet-mapping>
-  
 </web-app>

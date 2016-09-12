@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Yena_GongJu">
+    <wb-module deploy-name="Web_Board">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="Yena_GongJu"/>
-        <property name="java-output-path" value="/Yena_GongJu/build/classes"/>
+        <property name="java-output-path" value="/Web_Board/build/classes"/>
+        <property name="context-root" value="Web_Board"/>
     </wb-module>
 </project-modules>
