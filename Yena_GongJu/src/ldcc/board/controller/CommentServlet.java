@@ -16,15 +16,13 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import ldcc.board.dao.CommentDAO;
-import ldcc.board.dao.PostDAO;
 import ldcc.board.dao.UserDAO;
 import ldcc.board.vo.Comment;
-import ldcc.board.vo.Post;
 import ldcc.board.vo.User;
 
 @WebServlet("/CommentServlet")
 public class CommentServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -184918101435996301L;
 
 	public CommentServlet() {
 		super();
@@ -35,6 +33,7 @@ public class CommentServlet extends HttpServlet {
 		doPost(request, response);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
@@ -45,7 +44,7 @@ public class CommentServlet extends HttpServlet {
 					new DefaultFileRenamePolicy());
 		} catch (IOException e) {
 		}
-		
+
 		switch (request.getParameter("action")) {
 		case "write":
 			this.doWriteComment(request, response, multi);
@@ -74,7 +73,8 @@ public class CommentServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	private void doWriteComment(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi) throws IOException {
+	private void doWriteComment(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
+			throws IOException {
 		// 로그인 세션 확인
 		if (!this.doCheckSession(request, response)) {
 			response.sendRedirect("login.jsp");
@@ -92,7 +92,7 @@ public class CommentServlet extends HttpServlet {
 			out.println("</script>");
 			out.close();
 			return;
-		}		
+		}
 
 		// 새 댓글 올리기
 		Comment comment = new Comment();

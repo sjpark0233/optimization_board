@@ -27,7 +27,7 @@ import ldcc.board.vo.User;
  */
 @WebServlet("/PostServlet")
 public class PostServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1861716954412570456L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
