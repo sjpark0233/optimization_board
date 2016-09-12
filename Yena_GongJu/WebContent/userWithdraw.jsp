@@ -121,7 +121,7 @@ input.button_style{
   -moz-box-shadow: 0px 1px 3px #666666;
   box-shadow: 0px 1px 3px #666666;
   color: #000000;
-  padding: 4px 2px 4px 2px;
+  padding: 4px 4px 4px 4px;
   background: #ffffff;
   border: solid #82B5DF 2px;
   text-decoration: none;
@@ -132,7 +132,24 @@ input.button_style:hover {
   text-decoration: none;
 	color: gray;
 }
+input.button_style2{
+	font: bold 20px Verdana, Arial, Helvetica, sans-serif;	
+	height: 2em;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  color: #000000;
+  padding: 1px 8px 1px 8px;
+  background: #ffffff;
+  border: solid #82B5DF 2px;
+  text-decoration: none;
+}
 
+input.button_style2:hover {
+  background: #f2f5f7;
+  text-decoration: none;
+	color: gray;
+}
 </style>
 
 <script
@@ -249,8 +266,8 @@ input.button_style:hover {
 				<tr height="10"></tr>
 				<tr height="30">
 					<td colspan="2" align="center"><input type="submit"
-						name="withdraw" value="È¸¿øÅ»Åð" OnClick="checkIt()">&nbsp;&nbsp;
-						<input type="button" value="Ãë ¼Ò" OnClick="jsp:history.back(-1)"></td>
+						name="withdraw" value="È¸¿øÅ»Åð" OnClick="checkIt()" class="button_style2">&nbsp;&nbsp;
+						<input type="button" value="Ãë ¼Ò" OnClick="jsp:history.back(-1)" class="button_style2"></td>
 				</tr>
 
 			</table>

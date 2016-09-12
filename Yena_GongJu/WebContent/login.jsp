@@ -114,7 +114,7 @@ input.button_style{
   -moz-box-shadow: 0px 1px 3px #666666;
   box-shadow: 0px 1px 3px #666666;
   color: #000000;
-  padding: 4px 2px 4px 2px;
+  padding: 4px 4px 4px 4px;
   background: #ffffff;
   border: solid #82B5DF 2px;
   text-decoration: none;
@@ -125,13 +125,30 @@ input.button_style:hover {
   text-decoration: none;
 	color: gray;
 }
+input.button_style2{
+	font: bold 20px Verdana, Arial, Helvetica, sans-serif;	
+	height: 2em;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  color: #000000;
+  padding: 1px 8px 1px 8px;
+  background: #ffffff;
+  border: solid #82B5DF 2px;
+  text-decoration: none;
+}
+
+input.button_style2:hover {
+  background: #f2f5f7;
+  text-decoration: none;
+	color: gray;
+}
 </style>
 
 
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 <script language="javascript">
-
 
 function loginCheck(){
 	var param = "user_id" + "=" + $("#user_id").val() + "&" +"user_pw" + "="+ $("#user_pw").val();
@@ -214,8 +231,8 @@ function loginCheck(){
 				</tr>
 			</table>
 			<br> &nbsp;<input type="submit" value="로그인"
-				onClick='loginCheck()'>&nbsp;&nbsp; <input type="button"
-				value="회원가입" onClick="location.href='join.jsp'">&nbsp;
+				onClick='loginCheck()' class="button_style2">&nbsp;&nbsp; <input type="button"
+				value="회원가입" onClick="location.href='join.jsp'" class="button_style2">&nbsp;
 		</form>
 	</div>
 </body>

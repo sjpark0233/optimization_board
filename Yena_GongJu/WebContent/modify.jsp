@@ -131,7 +131,7 @@ input.button_style{
   -moz-box-shadow: 0px 1px 3px #666666;
   box-shadow: 0px 1px 3px #666666;
   color: #000000;
-  padding: 4px 2px 4px 2px;
+  padding: 4px 4px 4px 4px;
   background: #ffffff;
   border: solid #82B5DF 2px;
   text-decoration: none;
@@ -142,7 +142,24 @@ input.button_style:hover {
   text-decoration: none;
 	color: gray;
 }
+input.button_style2{
+	font: bold 20px Verdana, Arial, Helvetica, sans-serif;	
+	height: 2em;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  color: #000000;
+  padding: 1px 8px 1px 8px;
+  background: #ffffff;
+  border: solid #82B5DF 2px;
+  text-decoration: none;
+}
 
+input.button_style2:hover {
+  background: #f2f5f7;
+  text-decoration: none;
+	color: gray;
+}
 </style>
 
 
@@ -295,8 +312,8 @@ input.button_style:hover {
 			</tr>
 			<tr align="center">
 				<td>&nbsp;</td>
-				<td colspan="2"><input type=button value="수정"
-					onClick="modifyCheck()"> <input type=button value="취소"
+				<td colspan="2"><input type=button value="수정" class="button_style2"
+					onClick="modifyCheck()"> <input type=button value="취소" class="button_style2"
 					onClick="jsp:history.back(-1)">
 				<td>&nbsp;</td>
 			</tr>

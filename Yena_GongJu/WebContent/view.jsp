@@ -357,13 +357,13 @@ input.button_style:hover {
 							<tr height="10"></tr>
 							<tr>
 								<td width="0">&nbsp;</td>
-								<td colspan="2"><input type=button value="글쓰기"
+								<td colspan="2"><input type=button value="글쓰기" class="button_style2"
 									OnClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
-									<input type=button value="목록"
+									<input type=button value="목록" class="button_style2"
 									OnClick="location.href='post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">
-									<input type=button value="수정"
+									<input type=button value="수정" class="button_style2"
 									OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
-									<input type=button value="삭제"
+									<input type=button value="삭제" class="button_style2"
 									OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
 								<td width="0">&nbsp;</td>
 							</tr>

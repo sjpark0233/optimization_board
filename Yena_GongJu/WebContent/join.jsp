@@ -120,13 +120,32 @@ input.button_style{
   -moz-box-shadow: 0px 1px 3px #666666;
   box-shadow: 0px 1px 3px #666666;
   color: #000000;
-  padding: 4px 2px 4px 2px;
+  padding: 4px 4px 4px 4px;
   background: #ffffff;
   border: solid #82B5DF 2px;
   text-decoration: none;
 }
 
 input.button_style:hover {
+  background: #f2f5f7;
+  text-decoration: none;
+	color: gray;
+}
+
+input.button_style2{
+	font: bold 20px Verdana, Arial, Helvetica, sans-serif;	
+	height: 2em;
+  -webkit-box-shadow: 0px 1px 3px #666666;
+  -moz-box-shadow: 0px 1px 3px #666666;
+  box-shadow: 0px 1px 3px #666666;
+  color: #000000;
+  padding: 1px 8px 1px 8px;
+  background: #ffffff;
+  border: solid #82B5DF 2px;
+  text-decoration: none;
+}
+
+input.button_style2:hover {
   background: #f2f5f7;
   text-decoration: none;
 	color: gray;
@@ -405,7 +424,7 @@ input.button_style:hover {
 					<td width="200">&nbsp;아이디</td>
 					<td width="450">&nbsp;&nbsp;<input type="text" id="user_id"
 						name="user_id" autofocus required> &nbsp;&nbsp;&nbsp;<input
-						type="button" value="아이디 중복확인" onClick="idCheck()" size="15"
+						type="button" value="아이디 중복확인" onClick="idCheck()" size="15" class="button_style2"
 						maxlength="12">
 
 
@@ -462,10 +481,9 @@ input.button_style:hover {
 				</tr>
 			</table>
 
-			<br> <input type="button" name="join" value="회원가입"
-				Onclick="joinCheck()">&nbsp; <input type="reset"
-				value="다시입력" onclick='init()'>&nbsp; <input type="button"
-				name="cancel" value="취소" onClick="jsp:history.back(-1)">
+			<br> <input type="button" name="join" value="회원가입" Onclick="joinCheck()" class="button_style2">&nbsp; 
+			<input type="reset"	value="다시입력" onclick='init()' class="button_style2">&nbsp; 
+			<input type="button" name="cancel" value="취소" onClick="jsp:history.back(-1)" class="button_style2">
 		</form>
 	</div>
 </body>
