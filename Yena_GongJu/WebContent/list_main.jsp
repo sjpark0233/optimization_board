@@ -15,7 +15,10 @@
 	}
 
 	// 게시물 리스트 객체
+	List<Post> noticeList = (List<Post>) request.getAttribute("notice_list");
+	List<String> noticeUserList = (List<String>) request.getAttribute("notice_user_list");
 	List<Post> postList = (List<Post>) request.getAttribute("post_list");
+	List<String> postUserList = (List<String>) request.getAttribute("post_user_list");
 
 	// 하단의 게시물 페이지 표시를 위한 변수
 	int listAllCount = ((Integer) request.getAttribute("list_all_count")).intValue();
@@ -133,23 +136,18 @@ h2 {
 
 	<!-- 상단 -->
 	<div align=right>
-		<br> <font class="font2">
-			<%
-				if (loggedIn) {
-			%><a href="user?action=logout">LogOut</a>
-			<%
-				if (((User) userObj).getUser_accept() == 3) {
-			%> | <a href="user?action=user_list">회원관리</a>
-			<%
-				} else {
-			%> | <a href="user?action=user_info">회원정보확인</a>
-			<%
-				}
-				} else {
-			%><a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a>
-			<%
-				}
-			%>
+		<br> <font class="font2"> <%
+ 	if (loggedIn) {
+ %><a href="user?action=logout">LogOut</a> <%
+ 	if (((User) userObj).getUser_accept() == 3) {
+ %> | <a href="user?action=user_list">회원관리</a> <%
+ 	} else {
+ %> | <a href="user?action=user_info">회원정보확인</a> <%
+ 	}
+ 	} else {
+ %><a href="login.jsp">LogIn</a> | <a href="join.jsp">회원가입</a> <%
+ 	}
+ %>
 		</font>
 	</div>
 
@@ -201,8 +199,29 @@ h2 {
 			<tr height="10" align="center">
 			</tr>
 			<%
-				for (int i = 0; i < postList.size(); i++) {
-					Post post = (Post) postList.get(i);
+				for (int i = 0 ; i < noticeList.size() ; i++) {
+					Post notice = noticeList.get(i);
+					String noticeUser = noticeUserList.get(i);
+			%>
+			<tr height="5" style="text-align: center;" bgcolor="F3F7FD"></tr>
+			<tr style="text-align: center;background-color:#F3F7FD;">
+				<td width="5"></td>
+				<td width="103">공지</td>
+				<td width="349" align="center"><a
+					href="post?action=read<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=notice.getPost_code()%>"><%=notice.getPost_title()%></a></td>
+				<td width="73"><%=noticeUser%></td>
+				<td width="164"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(notice.getPost_date())%></td>
+				<td width="58"><%=notice.getPost_view()%></td>
+				<td width="7"></td>
+			</tr>
+			<tr height="5" style="text-align: center;" bgcolor="F3F7FD"></tr>
+			<%
+				}
+			%>
+			<%
+				for (int i = 0 ; i < postList.size() ; i++) {
+					Post post = postList.get(i);
+					String postUser = postUserList.get(i);
 			%>
 			<tr height="5" align="center"></tr>
 			<tr style="text-align: center;">
@@ -210,7 +229,7 @@ h2 {
 				<td width="103"><%=post.getPost_code()%></td>
 				<td width="349" align="center"><a
 					href="post?action=read<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"><%=post.getPost_title()%></a></td>
-				<td width="73"><%=post.getUser_id()%></td>
+				<td width="73"><%=postUser%></td>
 				<td width="164"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPost_date())%></td>
 				<td width="58"><%=post.getPost_view()%></td>
 				<td width="7"></td>
