@@ -15,7 +15,7 @@ public class CommentDAO {
 	private final String getListSQL = "select C.*, U.USER_NAME from COMMENT C, User U where C.USER_ID=U.USER_ID and POST_CODE=? order by COMMENT_CODE asc";
 	private final String insertSQL = "insert into COMMENT(POST_CODE, USER_ID, COMMENT_DATE, COMMENT_CONTENT) values(?,?,?,?)";
 	private final String updateSQL = "update COMMENT set COMMENT_CONTENT = ? where COMMENT_CODE = ?";
-	private final String deleteSQL = "delete from COMMENT where COMMEN_CODE = ?";
+	private final String deleteSQL = "delete from COMMENT where COMMENT_CODE = ?";
 	
 	public Comment doGet(int comment_code) {
 		Connection con = null;
