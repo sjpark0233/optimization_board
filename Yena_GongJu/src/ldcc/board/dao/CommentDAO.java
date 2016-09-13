@@ -11,14 +11,12 @@ import java.util.List;
 import ldcc.board.vo.Comment;
 
 public class CommentDAO {
-	private String select_allSQL = "select comment_code, comment_user_name, comment_user_id, comment_content, comment_date from Comment where post_code = ? ";
-	private String updateSQL = "update Comment set comment_content = ? where comment_code = ? ";
-	private String deleteSQL = "delete from Comment where comment_code = ?";
-	private String insertSQL = "insert into Comment(post_code, user_id, comment_date, comment_content) values(?,?,?,?)";
-
 	private final String getSQL = "select * from COMMENT where COMMENT_CODE=?";
 	private final String getListSQL = "select C.*, U.USER_NAME from COMMENT C, User U where C.USER_ID=U.USER_ID and POST_CODE=? order by COMMENT_CODE asc";
-
+	private final String insertSQL = "insert into COMMENT(POST_CODE, USER_ID, COMMENT_DATE, COMMENT_CONTENT) values(?,?,?,?)";
+	private final String updateSQL = "update COMMENT set COMMENT_CONTENT = ? where COMMENT_CODE = ?";
+	private final String deleteSQL = "delete from COMMENT where COMMEN_CODE = ?";
+	
 	public Comment doGet(int comment_code) {
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -106,7 +104,7 @@ public class CommentDAO {
 			stmt.setString(4, comment.getComment_content());
 			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("CommentDAO.doInsert() error : " + e);
+			System.out.println("CommentDAO.doInsert() error : " + e.getMessage());
 		} finally {
 			JDBCUtil.close(stmt, con);
 		}
@@ -114,88 +112,42 @@ public class CommentDAO {
 		return retval == 1;
 	}
 
-	public ArrayList<Comment> doList(int post_code) {
-		ArrayList<Comment> list = new ArrayList<Comment>();
-		Connection con = null;
-		PreparedStatement stmt = null;
-		ResultSet rst = null;
-		try {
-			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(select_allSQL);
-			stmt.setString(1, Integer.toString(post_code));
-			rst = stmt.executeQuery();
-
-			while (rst.next() == true) {
-				Comment comment = new Comment();
-				comment.setComment_code(Integer.parseInt(rst.getString(1)));
-				comment.setComment_user_name(rst.getString(2));
-				comment.setUser_id(rst.getString(3));
-				comment.setComment_content(rst.getString(4));
-				comment.setComment_date(rst.getTimestamp(5));
-
-				list.add(comment);
-			}
-			return list;
-
-		} catch (SQLException e) {
-			System.out.println("check error : " + e);
-			return null;
-		} finally {
-			JDBCUtil.close(rst, stmt, con);
-		}
-	}
-
 	public boolean doUpdate(Comment comment) {
 		Connection con = null;
 		PreparedStatement stmt = null;
+		int retval = 0;
 
 		try {
 			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(updateSQL);
+			stmt = con.prepareStatement(this.updateSQL);
 			stmt.setString(1, comment.getComment_content());
-			stmt.setString(2, Integer.toString(comment.getComment_code()));
-
-			int cnt = stmt.executeUpdate();
-
-			System.out.println(cnt == 1 ? "insert success" : "fail");
-			if (cnt == 1) {
-				JDBCUtil.close(stmt, con);
-				return true;
-			} else {
-				JDBCUtil.close(stmt, con);
-				return false;
-			}
-
+			stmt.setInt(2, comment.getComment_code());
+			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("user insert error : " + e);
+			System.out.println("CommentDAO.doUpdate() error : " + e.getMessage());
+		} finally {
 			JDBCUtil.close(stmt, con);
-			return false;
 		}
+		
+		return retval == 1;
 	}
 
 	public boolean doDelete(int comment_code) {
 		Connection con = null;
 		PreparedStatement stmt = null;
+		int retval = 0;
 
 		try {
 			con = JDBCUtil.getConnection();
-			stmt = con.prepareStatement(deleteSQL);
-			stmt.setString(1, Integer.toString(comment_code));
-			int cnt = stmt.executeUpdate();
-
-			System.out.println(cnt == 1 ? "insert success" : "fail");
-			if (cnt == 1) {
-				JDBCUtil.close(stmt, con);
-				return true;
-			} else {
-				JDBCUtil.close(stmt, con);
-				return false;
-			}
-
+			stmt = con.prepareStatement(this.deleteSQL);
+			stmt.setInt(1, comment_code);
+			retval = stmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("user insert error : " + e);
+			System.out.println("CommentDAO.doDelete() error : " + e.getMessage());
+		} finally {
 			JDBCUtil.close(stmt, con);
-			return false;
 		}
+		
+		return retval == 1;
 	}
 }

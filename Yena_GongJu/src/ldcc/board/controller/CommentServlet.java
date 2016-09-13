@@ -2,15 +2,12 @@ package ldcc.board.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -49,20 +46,13 @@ public class CommentServlet extends HttpServlet {
 		case "write":
 			this.doWriteComment(request, response, multi);
 			break;
+		case "modify":
+			this.doModifyComment(request, response, multi);
+			break;
 		case "delete":
 			this.doDeleteComment(request, response);
 			break;
 		}
-
-		/*
-		 * if("comment_list".equals(action)){ doComment_list(request,response);
-		 * } else if("comment_modify".equals(action)){
-		 * doComment_modify(request,response); } else
-		 * if("comment_delete".equals(action)){
-		 * doComment_delete(request,response); } else
-		 * if("comment_write".equals(action)){
-		 * doComment_write(request,response); }
-		 */
 	}
 
 	/**
@@ -121,6 +111,53 @@ public class CommentServlet extends HttpServlet {
 		out.close();
 	}
 
+	private void doModifyComment(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
+			throws IOException {
+		// 로그인 세션 확인
+		if (!this.doCheckSession(request, response)) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+
+		// 만일 현재 유저와 댓글 유저가 일치하지 않으면 수정을 못하도록 함
+		int commentCode = Integer.parseInt(multi.getParameter("comment_code"));
+		Comment comment = new CommentDAO().doGet(commentCode);
+		User user = (User) request.getSession().getAttribute("user");
+		if (!(user.getUser_accept() == 3 || user.getUser_id().equals(comment.getUser_id()))) {
+			// 관리자 또는 주인이 아닌 경우 alert 출력
+			response.setContentType("text/html;charset=euc-kr");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('자신의 댓글만 수정할 수 있습니다.');");
+			out.println("history.back()");
+			out.println("</script>");
+			out.close();
+			return;
+		}
+
+		// 댓글 수정
+		comment.setComment_content(multi.getParameter("comment_input_" + commentCode));
+		new CommentDAO().doUpdate(comment);
+
+		// 게시판 파트 텝 반환
+		int tabCode = 0;
+		if (request.getParameter("tab_code") != null) {
+			tabCode = Integer.parseInt(request.getParameter("tab_code"));
+		}
+
+		// 게시물 코드 반환
+		int postCode = Integer.parseInt(request.getParameter("post_code"));
+
+		response.setContentType("text/html;charset=euc-kr");
+		PrintWriter out = response.getWriter();
+		out.println("<script>");
+		out.println("alert('수정되었습니다.');");
+		out.println("location.href=\"post?action=read" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code="
+				+ postCode + "\";");
+		out.println("</script>");
+		out.close();
+	}
+
 	private void doDeleteComment(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 로그인 세션 확인
 		if (!this.doCheckSession(request, response)) {
@@ -160,87 +197,6 @@ public class CommentServlet extends HttpServlet {
 				+ comment.getPost_code() + "\";");
 		out.println("</script>");
 		out.close();
-	}
-
-	private void doComment_list(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		CommentDAO dao = new CommentDAO();
-
-		ArrayList<Comment> list = dao.doList(Integer.parseInt(request.getParameter("post_code")));
-
-		if (list.size() != 0) {
-			System.out.println(list);
-			request.setAttribute("result", list);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-			dispatcher.forward(request, response);
-		} else {
-			System.out.println("아직 댓글이 없습니다.");
-		}
-
-	}
-
-	private void doComment_modify(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		CommentDAO dao = new CommentDAO();
-		Comment comment = new Comment();
-		String result = "fail";
-
-		if (request.getParameter("comment_content") != null && request.getParameter("comment_code") != null) {
-			comment.setComment_code(Integer.parseInt(request.getParameter("comment_code")));
-			comment.setComment_content(request.getParameter("comment_content"));
-
-			boolean flag = dao.doUpdate(comment);
-			if (flag) {
-				result = "수정 완료";
-			}
-		} else {
-			System.out.println("형식을 모두 채워주세요");
-		}
-
-		request.setAttribute("result", result);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-		dispatcher.forward(request, response);
-	}
-
-	private void doComment_delete(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		CommentDAO dao = new CommentDAO();
-		String result = "fail";
-
-		boolean flag = dao.doDelete(Integer.parseInt(request.getParameter("comment_code")));
-		if (flag) {
-			result = "삭제 완료";
-		}
-
-		request.setAttribute("result", result);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-		dispatcher.forward(request, response);
-
-	}
-
-	private void doComment_write(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, NumberFormatException {
-		HttpSession session = request.getSession();
-		String result = "fail";
-		CommentDAO dao = new CommentDAO();
-		Comment comment = new Comment();
-
-		if (request.getParameter("comment_content") != null) {
-			comment.setUser_id(((User) session.getAttribute("user")).getUser_id());
-			comment.setPost_code(Integer.parseInt(request.getParameter("post_code")));
-			comment.setComment_content(request.getParameter("comment_content"));
-
-			boolean flag = dao.doInsert(comment);
-			if (flag) {
-				result = comment.getUser_id();
-			}
-		} else {
-			System.out.println("형식을 모두 채워주세요");
-		}
-
-		request.setAttribute("result", result);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-		dispatcher.forward(request, response);
 	}
 
 	private boolean doCheckSession(HttpServletRequest request, HttpServletResponse response) {
