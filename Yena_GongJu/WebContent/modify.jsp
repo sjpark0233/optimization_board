@@ -125,7 +125,7 @@
 				<td>&nbsp;</td>
 				<td align="center">Á¦¸ñ</td>
 				<td><input name="post_title" size="100%" maxlength="100"
-					value=<%=post.getPost_title()%>></td>
+					value="<%=post.getPost_title()%>"></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr height="1" bgcolor="#dddddd">
