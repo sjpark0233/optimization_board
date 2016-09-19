@@ -59,12 +59,23 @@
 		}		
 	}
 	function setEnableModifyComment(commentCode, bool) {
-		document.getElementById("modify_comment_"+commentCode).style.display= bool ? 'none' : 'block';
-		document.getElementById("delete_comment_"+commentCode).style.display= bool ? 'none' : 'block';
-		document.getElementById("comment_label_"+commentCode).style.display= bool ? 'none' : 'block';
-		document.getElementById("comment_input_"+commentCode).style.display= bool ? 'block' : 'none';
-		document.getElementById("modify_comment_ok_"+commentCode).style.display= bool ? 'block' : 'none';
-		document.getElementById("modify_comment_cancel_"+commentCode).style.display= bool ? 'block' : 'none';
+		<%
+		for(Comment comment : commentList) {
+			User user = (User) userObj;
+			if(!(comment.getUser_id().equals(user.getUser_id()) || user.getUser_accept() == 3)) {
+				continue;	
+			}
+			int code = comment.getComment_code();
+			%>			
+			document.getElementById("modify_comment_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'none' : 'block';
+			document.getElementById("delete_comment_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'none' : 'block';
+			document.getElementById("comment_label_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'none' : 'block';
+			document.getElementById("comment_input_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'block' : 'none';
+			document.getElementById("modify_comment_ok_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'block' : 'none';
+			document.getElementById("modify_comment_cancel_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'block' : 'none';
+			<%
+		}
+		%>
 	}
 	
 	 function chkword(obj, maxByte) {
@@ -341,7 +352,7 @@
 							<tr>
 								<td width="0">&nbsp;</td>
 								<td align="center" width=140>
-									<!-- 자신의 이름 -->
+									<%=((User) userObj).getUser_name() %> :
 								</td>
 								<td width=1000>
 								<input type="text" id="comment_conetent" name="comment_content" size="15" style="width:98%;"  onkeyup="chkword(this, 150)">

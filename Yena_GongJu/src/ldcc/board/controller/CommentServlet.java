@@ -150,7 +150,6 @@ public class CommentServlet extends HttpServlet {
 		response.setContentType("text/html;charset=euc-kr");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
-		out.println("alert('수정되었습니다.');");
 		out.println("location.href=\"post?action=read" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code="
 				+ postCode + "\";");
 		out.println("</script>");
