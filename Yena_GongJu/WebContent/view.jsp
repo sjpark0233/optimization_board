@@ -247,7 +247,7 @@
 						<tr>
 							<td width="0">&nbsp;</td>
 							<td align="center" width="140">³»¿ë</td>
-							<td valign="top" width="1000" colspan="2" height="300"><%=post.getPost_content()%></td>
+							<td valign="top" width="1000" colspan="2" height="300"><%=post.getPost_content().replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;") %></td>
 						</tr>
 						<tr height="1" bgcolor="#82B5DF">
 							<td colspan="4" width="407"></td>
