@@ -346,8 +346,10 @@ public class PostServlet extends HttpServlet {
 		post.setPost_content(multi.getParameter("post_content"));
 		post.setPost_type(Integer.parseInt(multi.getParameter("post_type")));
 		if (fileEdited) {
-			new File(request.getRealPath("upload") + File.separator + postDAO.doGet(postCode).getPost_filepath())
-					.delete();
+			String filePath = postDAO.doGet(postCode).getPost_filepath();
+			if (filePath != null && !filePath.equals("")) {
+				new File(request.getRealPath("upload") + File.separator + filePath).delete();
+			}
 			post.setPost_filepath(multi.getFilesystemName((String) multi.getFileNames().nextElement()));
 		}
 		post.setPost_code(postCode);
@@ -405,7 +407,7 @@ public class PostServlet extends HttpServlet {
 		// 게시글 삭제
 		PostDAO postDAO = new PostDAO();
 		String filePath = postDAO.doGet(postCode).getPost_filepath();
-		if (filePath != null && filePath != "") {
+		if (filePath != null && !filePath.equals("")) {
 			new File(request.getRealPath("upload") + File.separator + filePath).delete();
 		}
 		postDAO.doDelete(Integer.parseInt(request.getParameter("post_code")));
