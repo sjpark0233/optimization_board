@@ -235,20 +235,21 @@
 									if (((User) userObj).getUser_accept() == 3
 												|| ((User) userObj).getUser_id().equals(comment.getUser_id())) {
 								%>
-								<td width="50"><button type="button"
+								<td width="50"><input type="button"
 										id="modify_comment_<%=comment.getComment_code()%>"
-										OnClick="setEnableModifyComment(<%=comment.getComment_code()%>, true)">수정</button>
-									<button type="button"
+										OnClick="setEnableModifyComment(<%=comment.getComment_code()%>, true)" class="button_style3" value="수정">
+									<input type="button"
 										id="modify_comment_ok_<%=comment.getComment_code()%>"
 										OnClick="checkModifyComment(<%=comment.getComment_code()%>)"
-										style="display: none;">확인</button></td>
-								<td width="50"><button type="button"
+										style="display: none;" class="button_style3" value="확인"></td>
+								<td width="50"><input type="button"
 										id="delete_comment_<%=comment.getComment_code()%>"
-										OnClick="location.href='comment?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&comment_code=<%=comment.getComment_code()%>'">삭제</button>
-									<button type="button"
+										OnClick="location.href='comment?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&comment_code=<%=comment.getComment_code()%>'" class="button_style3" value="삭제">
+										
+									<input type="button"
 										id="modify_comment_cancel_<%=comment.getComment_code()%>"
 										OnClick="setEnableModifyComment(<%=comment.getComment_code()%>, false)"
-										style="display: none;">취소</button></td>
+										style="display: none;" class="button_style3" value="취소"></td>
 								<%
 									} else {
 								%>
@@ -290,8 +291,7 @@
 								</td>
 								<td width=1000>: <textarea cols=100% name=comment_content
 										rows="1"></textarea></td>
-								<td><button type="button" OnClick="checkComment()">댓글
-										달기</button></td>
+								<td><input type="button" OnClick="checkComment()" class="button_style3" value="댓글 달기"></td>
 								<td width="0">&nbsp;</td>
 							</tr>
 							<tr height="1">
