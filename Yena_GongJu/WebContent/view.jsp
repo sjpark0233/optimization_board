@@ -66,6 +66,38 @@
 		document.getElementById("modify_comment_ok_"+commentCode).style.display= bool ? 'block' : 'none';
 		document.getElementById("modify_comment_cancel_"+commentCode).style.display= bool ? 'block' : 'none';
 	}
+	
+	 function chkword(obj, maxByte) {
+		 
+	        var strValue = obj.value;
+	        var strLen = strValue.length;
+	        var totalByte = 0;
+	        var len = 0;
+	        var oneChar = "";
+	        var str2 = "";
+	 
+	        for (var i = 0; i < strLen; i++) {
+	            oneChar = strValue.charAt(i);
+	            if (escape(oneChar).length > 4) {
+	                totalByte += 2;
+	            } else {
+	                totalByte++;
+	            }
+	 
+	            // 입력한 문자 길이보다 넘치면 잘라내기 위해 저장
+	            if (totalByte <= maxByte) {
+	                len = i + 1;
+	            }
+	        }
+	 
+	        // 넘어가는 글자는 자른다.
+	        if (totalByte > maxByte) {
+	            alert(maxByte + "자를 초과할 수 없습니다.");
+	            str2 = strValue.substr(0, len);
+	            obj.value = str2;
+	            chkword(obj, 4000);
+	        }
+	    }
 </script>
 
 </head>
@@ -232,15 +264,27 @@
 							%>
 							<tr height="30">
 								<td width="0">&nbsp;</td>
-								<td align="center" width=10%><%=commentUser%></td>
-								<td width="900"><input size=140 maxlength=300
+								<td align="center" width=10%><%=commentUser%> :</td>
+								<td width="900"><input type="text" maxlength=150
 									id="comment_input_<%=comment.getComment_code()%>"
 									name="comment_input_<%=comment.getComment_code()%>" type="text"
-									style="display: none;"
+									style="display: none; width: 98%; "
 									value="<%=comment.getComment_content()%>"><label
-									id="comment_label_<%=comment.getComment_code()%>">: <%=comment.getComment_content()%>
-										<font style="font-size: 50%;">(<%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(comment.getComment_date())%>)
-									</font></label></td>
+									id="comment_label_<%=comment.getComment_code()%>" > 
+									
+									<% if(comment.getComment_content().length()>75){%>
+										<%=comment.getComment_content().substring(0,75)%><br>
+										<%=comment.getComment_content().substring(75)%><%
+									}
+									else
+									{
+										%><%=comment.getComment_content()%><%
+									}%>
+									
+									<font style="font-size: 50%;">(<%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(comment.getComment_date())%>)
+									</font>
+									</label>
+									</td>
 								<%
 									if (((User) userObj).getUser_accept() == 3
 												|| ((User) userObj).getUser_id().equals(comment.getUser_id())) {
@@ -299,8 +343,9 @@
 								<td align="center" width=140>
 									<!-- 자신의 이름 -->
 								</td>
-								<td width=1000>: <textarea cols=100% name=comment_content
-										rows="1"></textarea></td>
+								<td width=1000>
+								<input type="text" id="comment_conetent" name="comment_content" size="15" style="width:98%;"  onkeyup="chkword(this, 150)">
+								</td>
 								<td><input type="button" OnClick="checkComment()" class="button_style3" value="댓글 달기"></td>
 								<td width="0">&nbsp;</td>
 							</tr>

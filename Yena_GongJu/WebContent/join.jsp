@@ -278,7 +278,7 @@
 				<tr>
 					<td width="200">&nbsp;아이디</td>
 					<td width="450">&nbsp;&nbsp;<input type="text" id="user_id"
-						name="user_id" autofocus required> &nbsp;&nbsp;&nbsp;<input
+						name="user_id" autofocus required style="width:40%;"> &nbsp;&nbsp;&nbsp;<input
 						type="button" value="아이디 중복확인" onClick="idCheck()" size="15" class="button_style2"
 						maxlength="12">
 
@@ -287,28 +287,28 @@
 				</tr>
 				<tr>
 					<td>&nbsp;비밀번호</td>
-					<td>&nbsp;&nbsp;<input type="password" id="user_pw"
+					<td>&nbsp;&nbsp;<input type="password" id="user_pw" style="width:40%;"
 						name="user_pw" size="15" maxlength="12">
 					</td>
 				</tr>
 
 				<tr>
 					<td>&nbsp;비밀번호 중복확인</td>
-					<td>&nbsp;&nbsp;<input type="password" id="user_pw2"
+					<td>&nbsp;&nbsp;<input type="password" id="user_pw2" style="width:40%;"
 						name="user_pw2" size="15" maxlength="12">
 					</td>
 				</tr>
 
 				<tr>
 					<td>&nbsp;이름</td>
-					<td>&nbsp;&nbsp;<input type="text" id="user_name"
+					<td>&nbsp;&nbsp;<input type="text" id="user_name" style="width:40%;"
 						name="user_name" size="15" maxlength="12">
 					</td>
 				</tr>
 
 				<tr>
 					<td>&nbsp;소속</td>
-					<td>&nbsp;&nbsp;<input type="text" id="team_name"
+					<td>&nbsp;&nbsp;<input type="text" id="team_name" style="width:40%;"
 						name="team_name" size="15" maxlength="12"> 팀
 					</td>
 				</tr>
@@ -330,7 +330,7 @@
 
 				<tr>
 					<td>&nbsp;E-Mail</td>
-					<td>&nbsp;&nbsp;<input type="text" id="user_email"
+					<td>&nbsp;&nbsp;<input type="text" id="user_email" style="width:50%;"
 						name="user_email">
 					</td>
 				</tr>
