@@ -21,20 +21,20 @@ public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 543951347059854446L;
 
 	public UserServlet() {
-        super();
-     }
+		super();
+	}
 
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request,response);
 	}
 
-	
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		String action = request.getParameter("action");
 		System.out.println(action);
-		
+
 		if("login".equals(action)){
 			doLogin(request,response);
 		}
@@ -68,15 +68,15 @@ public class UserServlet extends HttpServlet {
 		else if("user_check".equals(action)){
 			doUser_check(request,response);
 		}
-			
+
 	}
 
-	
+
 	private void doJoin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		String resultJson;
-		
+
 		if(request.getParameter("user_id")!=null&&request.getParameter("user_pw")!=null&&request.getParameter("user_name")!=null&&request.getParameter("user_phone")!=null&&request.getParameter("user_email")!=null&&request.getParameter("team_name")!=null)
 		{
 			user.setUser_id(request.getParameter("user_id"));
@@ -86,7 +86,7 @@ public class UserServlet extends HttpServlet {
 			user.setUser_name(request.getParameter("user_name"));
 			user.setUser_phone(request.getParameter("user_phone"));
 			user.setUser_email(request.getParameter("user_email"));
-			
+
 			boolean flag = dao.doInsert(user);
 			if(flag){
 				resultJson = "{ \"success\" : 1}";
@@ -101,13 +101,13 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	
+
 	private void doLogout(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		System.out.println("로그아웃 중..");
 		HttpSession session = request.getSession();
 		session.invalidate();
 		response.sendRedirect("post?action=list");
-		
+
 	}
 
 
@@ -116,11 +116,12 @@ public class UserServlet extends HttpServlet {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		String resultJson;
-		
+
 		user.setUser_id(request.getParameter("user_id"));
 		user.setUser_pw(request.getParameter("user_pw"));
-			
+
 		dao.doLogin(user);
+
 		if(user.getUser_name()!=null&&user.getUser_accept()!=0){
 			session.setAttribute("user",user);
 			System.out.println("user connect : "+user.getUser_id());
@@ -134,14 +135,14 @@ public class UserServlet extends HttpServlet {
 			response.getWriter().print(resultJson);
 		}
 	}
-	
-	
+
+
 	private void doUser_withdraw(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		String resultJson;
-		
+
 		System.out.println(((User)session.getAttribute("user")));
 		System.out.println(request.getParameter("user_pw"));
 		if(request.getParameter("user_pw")!=null&&((User)session.getAttribute("user")).getUser_id()!=null)
@@ -173,12 +174,12 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	
+
 	private void doUser_info(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		User user = new User();
-		
+
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
 			System.out.println("세션없음");
@@ -193,13 +194,13 @@ public class UserServlet extends HttpServlet {
 		else{
 			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
 			user.setUser_pw(((User)session.getAttribute("user")).getUser_pw());
-			
+
 			dao.doInfo(user);
 			if(user.getUser_name()!=null){
 
 				System.out.println(user.getUser_id());
 				System.out.println(user.getUser_pw());
-				
+
 				request.setAttribute("result", user);
 				RequestDispatcher dispatcher = request.getRequestDispatcher("userInfo.jsp");
 				dispatcher.forward(request, response);
@@ -209,14 +210,14 @@ public class UserServlet extends HttpServlet {
 				System.out.println("회원 정보 조회에 실패했습니다.");
 			}
 		}
-		
+
 	}
 
 	private void doUser_info2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		User user = new User();
-		
+
 
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
@@ -232,7 +233,7 @@ public class UserServlet extends HttpServlet {
 		else{
 			user.setUser_id(((User)session.getAttribute("user")).getUser_id());
 			user.setUser_pw(((User)session.getAttribute("user")).getUser_pw());
-			
+
 			dao.doInfo(user);
 			if(user.getUser_name()!=null){
 				request.setAttribute("result", user);
@@ -244,19 +245,19 @@ public class UserServlet extends HttpServlet {
 				System.out.println("회원 정보 조회에 실패했습니다.");
 			}
 		}
-		
+
 	}
-	
+
 	private void doUser_info_modify(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		String resultJson;
 		String user_pw0 = request.getParameter("user_pw0");
-		
+
 
 		System.out.println("A"+((User)session.getAttribute("user")).getUser_accept());
-		
+
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
 			System.out.println("세션없음!");
@@ -278,7 +279,7 @@ public class UserServlet extends HttpServlet {
 			user.setUser_phone(request.getParameter("user_phone"));
 			user.setUser_email(request.getParameter("user_email"));
 			user.setUser_accept(((User)session.getAttribute("user")).getUser_accept());
-			
+
 			boolean flag = dao.doUpdate(user,user_pw0);
 			if(flag){
 				session.setAttribute("user",user);
@@ -301,7 +302,7 @@ public class UserServlet extends HttpServlet {
 			user.setUser_phone(request.getParameter("user_phone"));
 			user.setUser_email(request.getParameter("user_email"));
 			user.setUser_accept(((User)session.getAttribute("user")).getUser_accept());
-			
+
 			boolean flag = dao.doUpdate(user,user_pw0);
 			if(flag){
 				session.setAttribute("user",user);
@@ -321,14 +322,14 @@ public class UserServlet extends HttpServlet {
 			resultJson = null;
 			response.getWriter().print(resultJson);
 		}
-		
+
 	}
 
-	
+
 	private void doUser_list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
-		
+
 		boolean check = false;
 		check = (((User)session.getAttribute("user"))!=null);
 		if(check)
@@ -345,11 +346,11 @@ public class UserServlet extends HttpServlet {
 			out.println("</script>");
 			out.close();
 		}
-		
-		
+
+
 		if(check)
 		{
-			 ArrayList<User> list= dao.doList();
+			ArrayList<User> list= dao.doList();
 			if(list.size()!=0){
 				System.out.println(list);
 				request.setAttribute("result", list);
@@ -402,7 +403,7 @@ public class UserServlet extends HttpServlet {
 			out.println("</script>");
 			out.close();
 		}
-		
+
 		if(check)
 		{
 			boolean flag = dao.doAccept(request.getParameter("user_id"),1);
@@ -438,11 +439,11 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	
+
 	private void doTeam_accept(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		HttpSession session = request.getSession();
 		UserDAO dao = new UserDAO();
-		
+
 		boolean check = false;
 		check = (((User)session.getAttribute("user"))!=null);
 		if(check)
@@ -459,7 +460,7 @@ public class UserServlet extends HttpServlet {
 			out.println("</script>");
 			out.close();
 		}
-		
+
 		if(check)
 		{
 			boolean flag = dao.doAccept(request.getParameter("user_id"),2);
@@ -504,12 +505,12 @@ public class UserServlet extends HttpServlet {
 		UserDAO dao = new UserDAO();
 		User user = new User();
 		String resultJson;
-		
+
 		user.setUser_id(request.getParameter("user_id"));
-		
+
 		System.out.println(user.getUser_id());
 		boolean flag = dao.doCheck(user);
-		
+
 		if(!flag){
 			resultJson = "{ \"success\" : 1}";
 			response.getWriter().print(resultJson);
@@ -520,5 +521,5 @@ public class UserServlet extends HttpServlet {
 			response.getWriter().print(resultJson);
 		}
 	}
-	
+
 }

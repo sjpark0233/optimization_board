@@ -16,7 +16,7 @@ public class CommentDAO {
 	private final String insertSQL = "insert into COMMENT(POST_CODE, USER_ID, COMMENT_DATE, COMMENT_CONTENT) values(?,?,?,?)";
 	private final String updateSQL = "update COMMENT set COMMENT_CONTENT = ? where COMMENT_CODE = ?";
 	private final String deleteSQL = "delete from COMMENT where COMMENT_CODE = ?";
-	
+
 	public Comment doGet(int comment_code) {
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -128,7 +128,7 @@ public class CommentDAO {
 		} finally {
 			JDBCUtil.close(stmt, con);
 		}
-		
+
 		return retval == 1;
 	}
 
@@ -147,7 +147,7 @@ public class CommentDAO {
 		} finally {
 			JDBCUtil.close(stmt, con);
 		}
-		
+
 		return retval == 1;
 	}
 }

@@ -31,7 +31,7 @@
 <html>
 
 <head>
-<link rel="stylesheet" href="main.css" type="text/css"/>
+<link rel="stylesheet" href="main.css" type="text/css" />
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>게시판 Main</title>
 </head>
@@ -42,15 +42,23 @@
 	<div align=right>
 		<br> <font class="font2"> <%
  	if (loggedIn) {
- %><input type="button" value="LogOut" onClick="location.href='user?action=logout'" class="button_style"> <%
- 	if (((User) userObj).getUser_accept() == 3) {
- %> | <input type="button" value="회원관리" onClick="location.href='user?action=user_list'" class="button_style"><%
- 	} else {
- %> |  <input type="button" value="회원정보" onClick="location.href='user?action=user_info'" class="button_style"><%
- 	}
- 	} else {
- %><input type="button" value="LogIn" onClick="location.href='login.jsp'" class="button_style">&nbsp| 
-		<input type="button" value="회원가입" onClick="location.href='join.jsp'" class="button_style"> <%
+ %><input type="button" value="LogOut"
+			onClick="location.href='user?action=logout'" class="button_style">
+			<%
+				if (((User) userObj).getUser_accept() == 3) {
+			%> | <input type="button" value="회원관리"
+			onClick="location.href='user?action=user_list'" class="button_style">
+			<%
+				} else {
+			%> | <input type="button" value="회원정보"
+			onClick="location.href='user?action=user_info'" class="button_style">
+			<%
+				}
+				} else {
+			%><input type="button" value="LogIn"
+			onClick="location.href='login.jsp'" class="button_style">&nbsp|
+			<input type="button" value="회원가입" onClick="location.href='join.jsp'"
+			class="button_style"> <%
  	}
  %>
 		</font>
@@ -104,12 +112,12 @@
 			<tr height="10" align="center">
 			</tr>
 			<%
-				for (int i = 0 ; i < noticeList.size() ; i++) {
+				for (int i = 0; i < noticeList.size(); i++) {
 					Post notice = noticeList.get(i);
 					String noticeUser = noticeUserList.get(i);
 			%>
 			<tr height="5" style="text-align: center;" bgcolor="F3F7FD"></tr>
-			<tr style="text-align: center;background-color:#F3F7FD;">
+			<tr style="text-align: center; background-color: #F3F7FD;">
 				<td width="5"></td>
 				<td width="103">공지</td>
 				<td width="349" align="center"><a
@@ -124,7 +132,7 @@
 				}
 			%>
 			<%
-				for (int i = 0 ; i < postList.size() ; i++) {
+				for (int i = 0; i < postList.size(); i++) {
 					Post post = postList.get(i);
 					String postUser = postUserList.get(i);
 			%>
@@ -188,8 +196,9 @@
 						}
 					%>
 				</td>
-				<td width="20%" align="right"><input type=button value="글쓰기" class="button_style2"
-					onClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">&nbsp;&nbsp;</td>
+				<td width="20%" align="right">
+					<input type=button value="글쓰기" class="button_style2"	onClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">&nbsp;&nbsp;
+				</td>
 			</tr>
 		</table>
 	</div>

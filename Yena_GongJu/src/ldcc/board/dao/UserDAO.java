@@ -16,8 +16,8 @@ public class UserDAO {
 	private String select_allSQL = "select user_id, team_name, user_name, user_phone, user_email, user_accept from User";
 	private String find_updateSQL = "update User set user_accept = ? where user_id = ?";
 	private String checkSQL = "select * from User where user_id =? ";
-	
- 	public void doLogin(User user)
+
+	public void doLogin(User user)
 	{
 		Connection con =null;
 		PreparedStatement stmt = null;
@@ -44,7 +44,7 @@ public class UserDAO {
 	{
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
+
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(insertSQL);
@@ -57,7 +57,7 @@ public class UserDAO {
 			stmt.setString(7, user.getUser_email());
 
 			int cnt = stmt.executeUpdate();
-			
+
 			System.out.println(cnt ==1 ? "insert success" : "fail");
 			if(cnt ==1)
 			{
@@ -69,7 +69,7 @@ public class UserDAO {
 				JDBCUtil.close(stmt, con);
 				return false;
 			}
-			
+
 		}catch(SQLException e){
 			System.out.println("user insert error : " + e);
 			JDBCUtil.close(stmt, con);
@@ -81,14 +81,14 @@ public class UserDAO {
 	{
 		Connection con =null;
 		PreparedStatement stmt = null;
-		
+
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(dropSQL);
 			stmt.setString(1,user.getUser_id());
 			stmt.setString(2,user.getUser_pw());
 			int cnt = stmt.executeUpdate();
-			
+
 			System.out.println(cnt ==1 ? "insert success" : "fail");
 			if(cnt == 1){
 				JDBCUtil.close(stmt,con);
@@ -137,7 +137,7 @@ public class UserDAO {
 	{
 		Connection con = null;
 		PreparedStatement stmt = null;	
-		
+
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(updateSQL);
@@ -157,7 +157,7 @@ public class UserDAO {
 			stmt.setString(7, user_pw0);
 
 			int cnt = stmt.executeUpdate();
-			
+
 			System.out.println(cnt ==1 ? "insert success" : "fail");
 			if(cnt ==1)
 			{
@@ -169,7 +169,7 @@ public class UserDAO {
 				JDBCUtil.close(stmt, con);
 				return false;
 			}
-			
+
 		}catch(SQLException e){
 			System.out.println("user insert error : " + e);
 			JDBCUtil.close(stmt, con);
@@ -187,7 +187,7 @@ public class UserDAO {
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(select_allSQL);
 			rst = stmt.executeQuery();
-			
+
 			while(rst.next()==true){
 				User user = new User();
 				user.setUser_id(rst.getString(1));
@@ -196,11 +196,11 @@ public class UserDAO {
 				user.setUser_phone(rst.getString(4));
 				user.setUser_email(rst.getString(5));
 				user.setUser_accept(Integer.parseInt(rst.getString(6)));
-				
+
 				list.add(user);
 			}
 			return list;
-			
+
 		}catch(SQLException e){
 			System.out.println("check error : "+e);
 			return null;
@@ -213,14 +213,14 @@ public class UserDAO {
 	{
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
+
 		try{
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(find_updateSQL);
 			stmt.setString(1, Integer.toString(accept_num));
 			stmt.setString(2, user_id);
 			int cnt = stmt.executeUpdate();
-			
+
 			System.out.println(cnt ==1 ? "insert success" : "fail");
 			if(cnt ==1)
 			{
@@ -232,7 +232,7 @@ public class UserDAO {
 				JDBCUtil.close(stmt, con);
 				return false;
 			}
-			
+
 		}catch(SQLException e){
 			System.out.println("user insert error : " + e);
 			JDBCUtil.close(stmt, con);
