@@ -408,7 +408,6 @@ public class PostServlet extends HttpServlet {
 		response.setContentType("text/html;charset=euc-kr");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
-		out.println("alert('삭제되었습니다.');");
 		out.println("location.href=\"post?action=list" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "\";");
 		out.println("</script>");
 		out.close();

@@ -48,6 +48,16 @@
 		document.getElementById("comment_code").value = commentCode;
 		document.modifyform.submit();
 	}
+	function checkDeleteComment(tabCode, commentCode) {
+		if(confirm("삭제하시겠습니까?")) {
+			location.href="comment?action=delete" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&comment_code=" + commentCode;
+		}
+	}
+	function checkDeletePost(tabCode, postCode) {
+		if(confirm("삭제하시겠습니까?")) {
+			location.href="post?action=delete" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code=" + postCode;
+		}		
+	}
 	function setEnableModifyComment(commentCode, bool) {
 		document.getElementById("modify_comment_"+commentCode).style.display= bool ? 'none' : 'block';
 		document.getElementById("delete_comment_"+commentCode).style.display= bool ? 'none' : 'block';
@@ -244,7 +254,7 @@
 										style="display: none;" class="button_style3" value="확인"></td>
 								<td width="50"><input type="button"
 										id="delete_comment_<%=comment.getComment_code()%>"
-										OnClick="location.href='comment?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&comment_code=<%=comment.getComment_code()%>'" class="button_style3" value="삭제">
+										OnClick="checkDeleteComment(<%=tabCode %>, <%=comment.getComment_code()%>)" class="button_style3" value="삭제">
 										
 									<input type="button"
 										id="modify_comment_cancel_<%=comment.getComment_code()%>"
@@ -318,7 +328,7 @@
 								<input type=button value="수정" class="button_style2"
 								OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
 								<input type=button value="삭제" class="button_style2"
-								OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+								OnClick="checkDeletePost(<%=tabCode%>, <%=post.getPost_code()%>)">
 							<td width="0">&nbsp;</td>
 						</tr>
 					</table>
