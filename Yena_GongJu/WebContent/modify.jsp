@@ -53,38 +53,37 @@
 
 		form.submit();
 	}
-	
-	 function chkword(obj, maxByte) {
+	function chkword(obj, maxByte) {
 		 
-	        var strValue = obj.value;
-	        var strLen = strValue.length;
-	        var totalByte = 0;
-	        var len = 0;
-	        var oneChar = "";
-	        var str2 = "";
-	 
-	        for (var i = 0; i < strLen; i++) {
-	            oneChar = strValue.charAt(i);
-	            if (escape(oneChar).length > 4) {
-	                totalByte += 2;
-	            } else {
-	                totalByte++;
-	            }
-	 
-	            // 입력한 문자 길이보다 넘치면 잘라내기 위해 저장
-	            if (totalByte <= maxByte) {
-	                len = i + 1;
-	            }
-	        }
-	 
-	        // 넘어가는 글자는 자른다.
-	        if (totalByte > maxByte) {
-	            alert(maxByte + "자를 초과할 수 없습니다.");
-	            str2 = strValue.substr(0, len);
-	            obj.value = str2;
-	            chkword(obj, 4000);
-	        }
-	    }
+        var strValue = obj.value;
+        var strLen = strValue.length;
+        var totalByte = 0;
+        var len = 0;
+        var oneChar = "";
+        var str2 = "";
+ 
+        for (var i = 0; i < strLen; i++) {
+            oneChar = strValue.charAt(i);
+            if (escape(oneChar).length > 4) {
+                totalByte += 2;
+            } else {
+                totalByte++;
+            }
+ 
+            // 입력한 문자 길이보다 넘치면 잘라내기 위해 저장
+            if (totalByte <= maxByte) {
+                len = i + 1;
+            }
+        }
+ 
+        // 넘어가는 글자는 자른다.
+        if (totalByte > maxByte) {
+            alert(maxByte + "자를 초과할 수 없습니다.");
+            str2 = strValue.substr(0, len);
+            obj.value = str2;
+            chkword(obj, 4000);
+        }
+    }
 </script>
 
 </head>
@@ -138,89 +137,6 @@
 	</div>
 
 	<div class="font3">
-<<<<<<< HEAD
-		<table align="center">
-			<form name=modifyform method=post
-				action="post?action=modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"
-				enctype="multipart/form-data">
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">분류</td>
-				<td><select name="board_code" size="1">
-						<option value=1 <%if (post.getBoard_code() == 1) {%>
-							selected="selected" <%}%>>Windows</option>
-						<option value=2 <%if (post.getBoard_code() == 2) {%>
-							selected="selected" <%}%>>MS SQL</option>
-						<option value=3 <%if (post.getBoard_code() == 3) {%>
-							selected="selected" <%}%>>Oracle</option>
-						<option value=4 <%if (post.getBoard_code() == 4) {%>
-							selected="selected" <%}%>>Network</option>
-						<option value=5 <%if (post.getBoard_code() == 5) {%>
-							selected="selected" <%}%>>SAP</option>
-				</select>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">제목</td>
-				<td><input name="post_title" size="100%" maxlength="100"
-					value="<%=post.getPost_title()%>" onkeyup="chkword(this, 80)"></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">게시물타입</td>
-				<td><input type="radio" name="post_type" value=0
-					<%if (post.getPost_type() == 0) {%> checked="checked" <%}%>>공지
-					<input type="radio" name="post_type" value=1
-					<%if (post.getPost_type() == 1) {%> checked="checked" <%}%>>일반
-				</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">파일업로드</td>
-				<td><input type="file" name="post_filepath"
-					onChange="fileOnChange()"> <input type=button value="Reset"
-					onClick="fileReset()"><input type="hidden"
-					name="file_edited" value="false"></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td align="center">내용</td>
-				<br>
-				<td><textarea name="post_content" cols="100%" rows="20%" onkeyup="chkword(this, 3000)"><%=post.getPost_content()%></textarea></td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr height="1" bgcolor="#dddddd">
-				<td colspan="4"></td>
-			</tr>
-			<tr height="1" bgcolor="#82B5DF">
-				<td colspan="4"></td>
-			</tr>
-			<tr align="center">
-				<td>&nbsp;</td>
-				<td colspan="2"><input type=button value="수정" class="button_style2"
-					onClick="modifyCheck()"> <input type=button value="취소" class="button_style2"
-					onClick="jsp:history.back(-1)">
-				<td>&nbsp;</td>
-			</tr>
-			</form>
-		</table>
-=======
 		<form name=modifyform method=post
 			action="post?action=modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"
 			enctype="multipart/form-data">
@@ -293,7 +209,7 @@
 				<tr>
 					<td>&nbsp;</td>
 					<td align="center">내용</td>
-					<td><textarea name="post_content" cols="100%" rows="20%"><%=post.getPost_content()%></textarea></td>
+					<td><textarea name="post_content" cols="100%" rows="20%" onkeyup="chkword(this, 3000)"><%=post.getPost_content()%></textarea></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr height="1" bgcolor="#dddddd">
@@ -312,7 +228,6 @@
 				</tr>
 			</table>
 		</form>
->>>>>>> refs/remotes/origin/seongjun
 		</td>
 		</tr>
 		</table>
