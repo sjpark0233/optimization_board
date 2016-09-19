@@ -49,6 +49,38 @@
 
 		form.submit();
 	}
+	
+	 function chkword(obj, maxByte) {
+		 
+	        var strValue = obj.value;
+	        var strLen = strValue.length;
+	        var totalByte = 0;
+	        var len = 0;
+	        var oneChar = "";
+	        var str2 = "";
+	 
+	        for (var i = 0; i < strLen; i++) {
+	            oneChar = strValue.charAt(i);
+	            if (escape(oneChar).length > 4) {
+	                totalByte += 2;
+	            } else {
+	                totalByte++;
+	            }
+	 
+	            // 입력한 문자 길이보다 넘치면 잘라내기 위해 저장
+	            if (totalByte <= maxByte) {
+	                len = i + 1;
+	            }
+	        }
+	 
+	        // 넘어가는 글자는 자른다.
+	        if (totalByte > maxByte) {
+	            alert(maxByte + "자를 초과할 수 없습니다.");
+	            str2 = strValue.substr(0, len);
+	            obj.value = str2;
+	            chkword(obj, 4000);
+	        }
+	    }
 </script>
 
 </head>
@@ -125,7 +157,7 @@
 				<td>&nbsp;</td>
 				<td align="center">제목</td>
 				<td><input name="post_title" size="100%" maxlength="100"
-					value="<%=post.getPost_title()%>"></td>
+					value="<%=post.getPost_title()%>" onkeyup="chkword(this, 80)"></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr height="1" bgcolor="#dddddd">
@@ -160,7 +192,7 @@
 				<td>&nbsp;</td>
 				<td align="center">내용</td>
 				<br>
-				<td><textarea name="post_content" cols="100%" rows="20%"><%=post.getPost_content()%></textarea></td>
+				<td><textarea name="post_content" cols="100%" rows="20%" onkeyup="chkword(this, 3000)"><%=post.getPost_content()%></textarea></td>
 				<td>&nbsp;</td>
 			</tr>
 			<tr height="1" bgcolor="#dddddd">

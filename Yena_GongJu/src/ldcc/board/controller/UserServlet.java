@@ -254,6 +254,9 @@ public class UserServlet extends HttpServlet {
 		String resultJson;
 		String user_pw0 = request.getParameter("user_pw0");
 		
+
+		System.out.println("A"+((User)session.getAttribute("user")).getUser_accept());
+		
 		if(((User)session.getAttribute("user")).getUser_id() == null || ((User)session.getAttribute("user")).getUser_pw() == null)
 		{
 			System.out.println("세션없음!");
@@ -274,6 +277,7 @@ public class UserServlet extends HttpServlet {
 			user.setUser_name(request.getParameter("user_name"));
 			user.setUser_phone(request.getParameter("user_phone"));
 			user.setUser_email(request.getParameter("user_email"));
+			user.setUser_accept(((User)session.getAttribute("user")).getUser_accept());
 			
 			boolean flag = dao.doUpdate(user,user_pw0);
 			if(flag){
@@ -296,6 +300,7 @@ public class UserServlet extends HttpServlet {
 			user.setUser_name(request.getParameter("user_name"));
 			user.setUser_phone(request.getParameter("user_phone"));
 			user.setUser_email(request.getParameter("user_email"));
+			user.setUser_accept(((User)session.getAttribute("user")).getUser_accept());
 			
 			boolean flag = dao.doUpdate(user,user_pw0);
 			if(flag){
