@@ -83,10 +83,10 @@ function loginCheck(){
 			<table align="center" border="3" width="400" height="150"
 				border="solid" bordercolor="#333333">
 				<tr>
-					<td>&nbsp;<label>아이디 : </label> <input type="text"
-						id="user_id" name="user_id" size="15" maxlength="12"> <br>
+					<td>&nbsp;<label>&nbsp&nbsp 아이디 : </label> <input type="text"
+						id="user_id" name="user_id" size="15" maxlength="12" style="width:60%;"> <br>
 					<br> &nbsp;<label>비밀번호 : </label> <input type="password"
-						id="user_pw" name="user_pw" size="15" maxlength="12">
+						id="user_pw" name="user_pw" size="15" maxlength="12" style="width:60%;">
 					</td>
 				</tr>
 			</table>
