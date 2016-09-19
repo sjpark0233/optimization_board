@@ -57,7 +57,7 @@ public class PostServlet extends HttpServlet {
 
 		MultipartRequest multi = null;
 		try {
-			multi = new MultipartRequest(request, request.getRealPath("upload"), 5 * 1024 * 1024, "euc-kr",
+			multi = new MultipartRequest(request, request.getRealPath("upload"), 5 * 1024 * 1024, "utf-8",
 					new DefaultFileRenamePolicy());
 		} catch (IOException e) {
 		}
