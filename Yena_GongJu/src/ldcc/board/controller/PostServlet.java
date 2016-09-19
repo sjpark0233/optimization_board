@@ -1,5 +1,6 @@
 package ldcc.board.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -326,6 +327,7 @@ public class PostServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
+	@SuppressWarnings("deprecation")
 	private void doModifyPost(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
 			throws ServletException, IOException {
 		// 로그인 세션 확인
@@ -337,16 +339,21 @@ public class PostServlet extends HttpServlet {
 		// 게시글 수정하기
 		boolean fileEdited = Boolean.parseBoolean(multi.getParameter("file_edited"));
 		Post post = new Post();
+		PostDAO postDAO = new PostDAO();
+		int postCode = Integer.parseInt(multi.getParameter("post_code"));
 		post.setBoard_code(Integer.parseInt(multi.getParameter("board_code")));
 		post.setPost_title(multi.getParameter("post_title"));
 		post.setPost_content(multi.getParameter("post_content"));
 		post.setPost_type(Integer.parseInt(multi.getParameter("post_type")));
 		if (fileEdited) {
+			String filePath = postDAO.doGet(postCode).getPost_filepath();
+			if (filePath != null && !filePath.equals("")) {
+				new File(request.getRealPath("upload") + File.separator + filePath).delete();
+			}
 			post.setPost_filepath(multi.getFilesystemName((String) multi.getFileNames().nextElement()));
-			// 기존 파일 지우기 (incomplete)
 		}
-		post.setPost_code(Integer.parseInt(multi.getParameter("post_code")));
-		new PostDAO().doUpdate(post, fileEdited);
+		post.setPost_code(postCode);
+		postDAO.doUpdate(post, fileEdited);
 
 		// 게시판 파트 텝 반환
 		int tabCode = 0;
@@ -373,6 +380,7 @@ public class PostServlet extends HttpServlet {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
+	@SuppressWarnings("deprecation")
 	private void doDeletePost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// 로그인 세션 확인
@@ -397,7 +405,12 @@ public class PostServlet extends HttpServlet {
 		}
 
 		// 게시글 삭제
-		new PostDAO().doDelete(Integer.parseInt(request.getParameter("post_code")));
+		PostDAO postDAO = new PostDAO();
+		String filePath = postDAO.doGet(postCode).getPost_filepath();
+		if (filePath != null && !filePath.equals("")) {
+			new File(request.getRealPath("upload") + File.separator + filePath).delete();
+		}
+		postDAO.doDelete(Integer.parseInt(request.getParameter("post_code")));
 
 		// 게시판 텝 번호 반환
 		int tabCode = 0;
@@ -408,7 +421,6 @@ public class PostServlet extends HttpServlet {
 		response.setContentType("text/html;charset=euc-kr");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
-		out.println("alert('삭제되었습니다.');");
 		out.println("location.href=\"post?action=list" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "\";");
 		out.println("</script>");
 		out.close();

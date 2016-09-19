@@ -48,13 +48,34 @@
 		document.getElementById("comment_code").value = commentCode;
 		document.modifyform.submit();
 	}
+	function checkDeleteComment(tabCode, commentCode) {
+		if(confirm("삭제하시겠습니까?")) {
+			location.href="comment?action=delete" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&comment_code=" + commentCode;
+		}
+	}
+	function checkDeletePost(tabCode, postCode) {
+		if(confirm("삭제하시겠습니까?")) {
+			location.href="post?action=delete" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code=" + postCode;
+		}		
+	}
 	function setEnableModifyComment(commentCode, bool) {
-		document.getElementById("modify_comment_"+commentCode).style.display= bool ? 'none' : 'block';
-		document.getElementById("delete_comment_"+commentCode).style.display= bool ? 'none' : 'block';
-		document.getElementById("comment_label_"+commentCode).style.display= bool ? 'none' : 'block';
-		document.getElementById("comment_input_"+commentCode).style.display= bool ? 'block' : 'none';
-		document.getElementById("modify_comment_ok_"+commentCode).style.display= bool ? 'block' : 'none';
-		document.getElementById("modify_comment_cancel_"+commentCode).style.display= bool ? 'block' : 'none';
+		<%
+		for(Comment comment : commentList) {
+			User user = (User) userObj;
+			if(!(comment.getUser_id().equals(user.getUser_id()) || user.getUser_accept() == 3)) {
+				continue;	
+			}
+			int code = comment.getComment_code();
+			%>			
+			document.getElementById("modify_comment_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'none' : 'block';
+			document.getElementById("delete_comment_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'none' : 'block';
+			document.getElementById("comment_label_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'none' : 'block';
+			document.getElementById("comment_input_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'block' : 'none';
+			document.getElementById("modify_comment_ok_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'block' : 'none';
+			document.getElementById("modify_comment_cancel_"+<%=code%>).style.display= bool && <%=code%>==commentCode ? 'block' : 'none';
+			<%
+		}
+		%>
 	}
 	
 	 function chkword(obj, maxByte) {
@@ -226,7 +247,7 @@
 						<tr>
 							<td width="0">&nbsp;</td>
 							<td align="center" width="140">내용</td>
-							<td valign="top" width="1000" colspan="2" height="300"><%=post.getPost_content()%></td>
+							<td valign="top" width="1000" colspan="2" height="300"><%=post.getPost_content().replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;") %></td>
 						</tr>
 						<tr height="1" bgcolor="#82B5DF">
 							<td colspan="4" width="407"></td>
@@ -288,7 +309,7 @@
 										style="display: none;" class="button_style3" value="확인"></td>
 								<td width="50"><input type="button"
 										id="delete_comment_<%=comment.getComment_code()%>"
-										OnClick="location.href='comment?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&comment_code=<%=comment.getComment_code()%>'" class="button_style3" value="삭제">
+										OnClick="checkDeleteComment(<%=tabCode %>, <%=comment.getComment_code()%>)" class="button_style3" value="삭제">
 										
 									<input type="button"
 										id="modify_comment_cancel_<%=comment.getComment_code()%>"
@@ -331,7 +352,7 @@
 							<tr>
 								<td width="0">&nbsp;</td>
 								<td align="center" width=140>
-									<!-- 자신의 이름 -->
+									<%=((User) userObj).getUser_name() %> :
 								</td>
 								<td width=1000>
 								<input type="text" id="comment_conetent" name="comment_content" size="15" style="width:98%;"  onkeyup="chkword(this, 150)">
@@ -363,7 +384,7 @@
 								<input type=button value="수정" class="button_style2"
 								OnClick="location.href='post?action=show_modify<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
 								<input type=button value="삭제" class="button_style2"
-								OnClick="location.href='post?action=delete<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>'">
+								OnClick="checkDeletePost(<%=tabCode%>, <%=post.getPost_code()%>)">
 							<td width="0">&nbsp;</td>
 						</tr>
 					</table>

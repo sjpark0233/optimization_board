@@ -74,19 +74,6 @@ public class CommentServlet extends HttpServlet {
 			return;
 		}
 
-		// 사용자 댓글달기 권한 검사 (user_accept == 2 or 3)
-		int userAccept = ((User) request.getSession().getAttribute("user")).getUser_accept();
-		if (!(userAccept == 2 || userAccept == 3)) {
-			response.setContentType("text/html;charset=euc-kr");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('댓글달기 권한이 없습니다.');");
-			out.println("history.back()");
-			out.println("</script>");
-			out.close();
-			return;
-		}
-
 		// 새 댓글 올리기
 		Comment comment = new Comment();
 		int postCode = Integer.parseInt(request.getParameter("post_code"));
@@ -150,7 +137,6 @@ public class CommentServlet extends HttpServlet {
 		response.setContentType("text/html;charset=euc-kr");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
-		out.println("alert('수정되었습니다.');");
 		out.println("location.href=\"post?action=read" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code="
 				+ postCode + "\";");
 		out.println("</script>");
@@ -191,7 +177,6 @@ public class CommentServlet extends HttpServlet {
 		response.setContentType("text/html;charset=euc-kr");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
-		out.println("alert('삭제되었습니다.');");
 		out.println("location.href=\"post?action=read" + (tabCode != 0 ? "&tab_code=" + tabCode : "") + "&post_code="
 				+ comment.getPost_code() + "\";");
 		out.println("</script>");
