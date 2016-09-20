@@ -124,11 +124,10 @@
 	</div>
 
 	<div class="font3">
-		<table align="center">
-			<form name=writeform method=post
+		<form name=writeform method=post
 				action="post?action=write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>"
 				enctype="multipart/form-data">
-				<br>
+			<table align="center">
 				<tr>
 					<td>&nbsp;</td>
 					<td align="center">ºÐ·ù</td>
@@ -194,8 +193,8 @@
 						OnClick="jsp:history.back(-1)">
 					<td>&nbsp;</td>
 				</tr>
-			</form>
-		</table>
+			</table>
+		</form>
 
 
 
