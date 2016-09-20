@@ -278,9 +278,9 @@
 								<td align="center" width=10%><%=commentUser%> :</td>
 								<td width="900"><input type="text" maxlength=150
 									id="comment_input_<%=comment.getComment_code()%>"
-									name="comment_input_<%=comment.getComment_code()%>" type="text"
+									name="comment_input_<%=comment.getComment_code()%>"
 									style="display: none; width: 98%; "
-									value="<%=comment.getComment_content()%>"><label
+									value="<%=comment.getComment_content()%>" onkeydown="javascript:if(event.keyCode==13){checkModifyComment(<%=comment.getComment_code()%>);}"><label
 									id="comment_label_<%=comment.getComment_code()%>" > 
 									
 									<% if(comment.getComment_content().length()>75){%>
