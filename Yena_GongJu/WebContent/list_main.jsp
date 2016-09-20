@@ -182,7 +182,7 @@
  	} else {
  %> <a
 					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%>">[<%=i%>]
-				</a>&nbsp; <%
+				</a> <%
  	}
  %> <%
  	}
