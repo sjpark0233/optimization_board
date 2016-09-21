@@ -11,8 +11,8 @@ import java.util.List;
 import ldcc.board.vo.Comment;
 
 public class CommentDAO {
-	private final String getSQL = "select * from COMMENT where COMMENT_CODE=?";
-	private final String getListSQL = "select C.*, U.USER_NAME from COMMENT C, User U where C.USER_ID=U.USER_ID and POST_CODE=? order by COMMENT_CODE asc";
+	private final String getSQL = "select C.*, U.USER_NAME from COMMENT C, USER U where C.USER_ID=U.USER_ID and COMMENT_CODE=?";
+	private final String getListSQL = "select C.*, U.USER_NAME from COMMENT C, USER U where C.USER_ID=U.USER_ID and POST_CODE=? order by COMMENT_CODE asc";
 	private final String insertSQL = "insert into COMMENT(POST_CODE, USER_ID, COMMENT_DATE, COMMENT_CONTENT) values(?,?,?,?)";
 	private final String updateSQL = "update COMMENT set COMMENT_CONTENT = ? where COMMENT_CODE = ?";
 	private final String deleteSQL = "delete from COMMENT where COMMENT_CODE = ?";
@@ -36,6 +36,7 @@ public class CommentDAO {
 				comment.setUser_id(rst.getString(3));
 				comment.setComment_date(rst.getTimestamp(4));
 				comment.setComment_content(rst.getString(5));
+				comment.setUser_name(rst.getString(6));
 			}
 		} catch (SQLException e) {
 			System.out.println("CommentDAO.doGet() error : " + e.getMessage());
@@ -52,7 +53,7 @@ public class CommentDAO {
 	 * @param commentUserList
 	 * @return
 	 */
-	public List<Comment> doGetList(int post_code, List<String> commentUserList) {
+	public List<Comment> doGetList(int post_code) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rst = null;
@@ -71,7 +72,7 @@ public class CommentDAO {
 				comment.setUser_id(rst.getString(3));
 				comment.setComment_date(rst.getTimestamp(4));
 				comment.setComment_content(rst.getString(5));
-				commentUserList.add(rst.getString(6));
+				comment.setUser_name(rst.getString(6));
 				commentList.add(comment);
 			}
 		} catch (SQLException e) {

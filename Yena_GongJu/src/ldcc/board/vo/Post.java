@@ -12,6 +12,7 @@ public class Post {
 	private String post_filepath;
 	private int post_type;
 	private int post_view;
+	private String user_name; // table¿¡ ¾ø´Â column
 
 	public int getPost_code() {
 		return post_code;
@@ -83,5 +84,13 @@ public class Post {
 
 	public void setPost_view(int post_view) {
 		this.post_view = post_view;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
 }

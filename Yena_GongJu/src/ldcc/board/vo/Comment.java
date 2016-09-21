@@ -8,6 +8,7 @@ public class Comment {
 	private String user_id;
 	private Timestamp comment_date;
 	private String comment_content;
+	private String user_name; // table¿¡ ¾ø´Â column
 
 	public int getComment_code() {
 		return comment_code;
@@ -47,5 +48,13 @@ public class Comment {
 
 	public void setComment_content(String comment_content) {
 		this.comment_content = comment_content;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
 }

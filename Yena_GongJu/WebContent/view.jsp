@@ -18,7 +18,6 @@
 	String boardName = (String) request.getAttribute("board_name"); // 지금 보고있는 게시물 파트명
 
 	List<Comment> commentList = (List<Comment>) request.getAttribute("comment_list"); // 댓글 리스트 객체
-	List<String> commentUserList = (List<String>) request.getAttribute("comment_user_list"); // 댓글 작성자 리스트 객체
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -269,13 +268,11 @@
 								<td colspan="6"></td>
 							</tr>
 							<%
-								for (int i = 0; i < commentList.size(); i++) {
-									Comment comment = commentList.get(i);
-									String commentUser = commentUserList.get(i);
+								for (Comment comment : commentList) {
 							%>
 							<tr height="30">
 								<td width="0">&nbsp;</td>
-								<td align="center" width=10%><%=commentUser%> :</td>
+								<td align="center" width=10%><%=comment.getUser_name()%> :</td>
 								<td width="900"><input type="text" maxlength=150
 									id="comment_input_<%=comment.getComment_code()%>"
 									name="comment_input_<%=comment.getComment_code()%>"

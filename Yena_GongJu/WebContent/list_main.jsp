@@ -16,16 +16,23 @@
 
 	// 게시물 리스트 객체
 	List<Post> noticeList = (List<Post>) request.getAttribute("notice_list");
-	List<String> noticeUserList = (List<String>) request.getAttribute("notice_user_list");
 	List<Post> postList = (List<Post>) request.getAttribute("post_list");
-	List<String> postUserList = (List<String>) request.getAttribute("post_user_list");
 
 	// 하단의 게시물 페이지 표시를 위한 변수
-	int listAllCount = ((Integer) request.getAttribute("list_all_count")).intValue();
 	int nowPage = ((Integer) request.getAttribute("page")).intValue();
 	int maxPage = ((Integer) request.getAttribute("max_page")).intValue();
 	int startPage = ((Integer) request.getAttribute("start_page")).intValue();
 	int endPage = ((Integer) request.getAttribute("end_page")).intValue();
+
+	// 검색 결과인 경우를 위한 변수
+	int searchType = 0;
+	if (request.getAttribute("search") != null) {
+		searchType = ((Integer) request.getAttribute("search")).intValue();
+	}
+	String searchKeyword = "";
+	if (request.getAttribute("keyword") != null) {
+		searchKeyword = (String) request.getAttribute("keyword");
+	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -34,6 +41,24 @@
 <link rel="stylesheet" href="main.css" type="text/css" />
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
 <title>게시판 Main</title>
+<script language="javascript">
+	function checkSearch(tabCode) {
+		var type = document.getElementById("search_type");
+		var keyword = document.getElementById("search_keyword");
+
+		if (!keyword.value) {
+			alert("검색 내용을 적어주세요.");
+			keyword.focus();
+			return;
+		}
+
+		location.href = "post?action=list"
+				+
+(tabCode != 0 ? "&tab_code=" + tabCode : "")
+	+ "&search="
+				+ type.value + "&keyword=" + keyword.value;
+	}
+</script>
 </head>
 
 <body>
@@ -112,9 +137,7 @@
 			<tr height="10" align="center">
 			</tr>
 			<%
-				for (int i = 0; i < noticeList.size(); i++) {
-					Post notice = noticeList.get(i);
-					String noticeUser = noticeUserList.get(i);
+				for (Post notice : noticeList) {
 			%>
 			<tr height="5" style="text-align: center;" bgcolor="F3F7FD"></tr>
 			<tr style="text-align: center; background-color: #F3F7FD;">
@@ -122,7 +145,7 @@
 				<td width="103">공지</td>
 				<td width="349" align="center"><a
 					href="post?action=read<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=notice.getPost_code()%>"><%=notice.getPost_title()%></a></td>
-				<td width="73"><%=noticeUser%></td>
+				<td width="73"><%=notice.getUser_name()%></td>
 				<td width="164"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(notice.getPost_date())%></td>
 				<td width="58"><%=notice.getPost_view()%></td>
 				<td width="7"></td>
@@ -132,9 +155,7 @@
 				}
 			%>
 			<%
-				for (int i = 0; i < postList.size(); i++) {
-					Post post = postList.get(i);
-					String postUser = postUserList.get(i);
+				for (Post post : postList) {
 			%>
 			<tr height="5" align="center"></tr>
 			<tr style="text-align: center;">
@@ -142,7 +163,7 @@
 				<td width="103"><%=post.getPost_code()%></td>
 				<td width="349" align="center"><a
 					href="post?action=read<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&post_code=<%=post.getPost_code()%>"><%=post.getPost_title()%></a></td>
-				<td width="73"><%=postUser%></td>
+				<td width="73"><%=post.getUser_name()%></td>
 				<td width="164"><%=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(post.getPost_date())%></td>
 				<td width="58"><%=post.getPost_view()%></td>
 				<td width="7"></td>
@@ -172,7 +193,7 @@
 					%> [이전]&nbsp; <%
  	} else {
  %> <a
-					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage - 1%>">[이전]</a>&nbsp;
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage - 1%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + searchKeyword : ""%>">[이전]</a>&nbsp;
 					<%
 						}
 					%> <%
@@ -181,7 +202,7 @@
  %> [<%=i%>] <%
  	} else {
  %> <a
-					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%>">[<%=i%>]
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + searchKeyword : ""%>">[<%=i%>]
 				</a> <%
  	}
  %> <%
@@ -191,14 +212,30 @@
  %> [다음] <%
  	} else {
  %> <a
-					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage + 1%>">[다음]</a>&nbsp;
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage + 1%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + searchKeyword : ""%>">[다음]</a>&nbsp;
 					<%
 						}
 					%>
 				</td>
-				<td width="20%" align="right">
-					<input type=button value="글쓰기" class="button_style2"	onClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">&nbsp;&nbsp;
+				<td width="20%" align="right"><input type=button value="글쓰기"
+					class="button_style2"
+					onClick="location.href='post?action=show_write<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>'">&nbsp;&nbsp;
 				</td>
+			</tr>
+			<tr align="center">
+				<td colspan=3><select id="search_type" name="search_type">
+						<option value=1 <%if (searchType == 1) {%> selected="selected"
+							<%}%>>번호</option>
+						<option value=2 <%if (searchType == 2) {%> selected="selected"
+							<%}%>>작성자</option>
+						<option value=3 <%if (searchType == 3) {%> selected="selected"
+							<%}%>>제목</option>
+						<option value=4 <%if (searchType == 4) {%> selected="selected"
+							<%}%>>내용</option>
+				</select>&nbsp; <input id="search_keyword" name="search_keyword" type=text
+					size=40
+					onkeydown="javascript:if(event.keyCode==13){ checkSearch(<%=tabCode%>); }" value=<%=searchKeyword %>>&nbsp;
+					<input type=button value="검색" onClick="checkSearch(<%=tabCode%>)"></td>
 			</tr>
 		</table>
 	</div>

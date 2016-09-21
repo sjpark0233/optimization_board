@@ -3,7 +3,6 @@ package ldcc.board.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -64,7 +63,7 @@ public class PostServlet extends HttpServlet {
 
 		switch (multi != null ? multi.getParameter("action") : request.getParameter("action")) {
 		case "list":
-			this.doShowList(request, response);
+			this.doShowList(request, response, multi);
 			break;
 		case "read":
 			this.doReadPost(request, response);
@@ -89,17 +88,17 @@ public class PostServlet extends HttpServlet {
 
 	/**
 	 * 게시물 목록보기 <br>
-	 * ex1) URI : {@code "./post?action=list"} <br>
+	 * ex1) URI : {@code "./post?action=list"}<br>
 	 * ex2) URI : {@code "./post?action=list&page=5"}<br>
 	 * ex3) URI : {@code "./post?action=list&tab_code=1"}<br>
-	 * ex4) URI : {@code "./post?action=list&tab_code=1&page=5"}
+	 * ex4) URI : {@code "./post?action=list&tab_code=1&page=5"}<br>
 	 * 
 	 * @param request
 	 * @param response
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	private void doShowList(HttpServletRequest request, HttpServletResponse response)
+	private void doShowList(HttpServletRequest request, HttpServletResponse response, MultipartRequest multi)
 			throws ServletException, IOException {
 		// 게시판의 현재 페이지
 		int page = 1;
@@ -116,22 +115,57 @@ public class PostServlet extends HttpServlet {
 
 		// 공지 게시물 리스트 객체 반환
 		PostDAO postDAO = new PostDAO();
-		List<String> noticeUserList = new ArrayList<String>();
-		List<Post> noticeList = tabCode == 0 ? postDAO.doGetNoticeList(noticeUserList)
-				: postDAO.doGetNoticeList(tabCode, noticeUserList);
+		List<Post> noticeList = tabCode == 0 ? postDAO.doGetNoticeList() : postDAO.doGetNoticeList(tabCode);
 		request.setAttribute("notice_list", noticeList);
-		request.setAttribute("notice_user_list", noticeUserList);
 
 		// 일반 게시물 리스트 객체 반환
-		List<String> postUserList = new ArrayList<String>();
-		List<Post> postList = tabCode == 0 ? postDAO.doGetList(page, postUserList)
-				: postDAO.doGetList(tabCode, page, postUserList);
-		request.setAttribute("post_list", postList);
-		request.setAttribute("post_user_list", postUserList);
+		int searchType = 0;
+		int listCount = 0;
+		if (request.getParameter("search") != null) {
+			searchType = Integer.parseInt(request.getParameter("search"));
+			request.setAttribute("search", searchType);
+			request.setAttribute("keyword", request.getParameter("keyword"));
+		}
+		switch (searchType) {
+		case 1:
+			int postCode = 0;
+			try {
+				postCode = Integer.parseInt(request.getParameter("keyword"));
+			} catch (NumberFormatException e) {
+			}
+			request.setAttribute("post_list",
+					tabCode == 0 ? postDAO.doSearchByCode(postCode) : postDAO.doSearchByCode(tabCode, postCode));
+			listCount = tabCode == 0 ? postDAO.doSearchByCodeCount(postCode)
+					: postDAO.doSearchByCodeCount(tabCode, postCode);
+			break;
+		case 2:
+			String user = request.getParameter("keyword");
+			request.setAttribute("post_list",
+					tabCode == 0 ? postDAO.doSearchByUser(page, user) : postDAO.doSearchByUser(tabCode, page, user));
+			listCount = tabCode == 0 ? postDAO.doSearchByUserCount(user) : postDAO.doSearchByUserCount(tabCode, user);
+			break;
+		case 3:
+			String title = request.getParameter("keyword");
+			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByTitle(page, title)
+					: postDAO.doSearchByTitle(tabCode, page, title));
+			listCount = tabCode == 0 ? postDAO.doSearchByTitleCount(title)
+					: postDAO.doSearchByUserCount(tabCode, title);
+			break;
+		case 4:
+			String content = request.getParameter("keyword");
+			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByContent(page, content)
+					: postDAO.doSearchByContent(tabCode, page, content));
+			listCount = tabCode == 0 ? postDAO.doSearchByContentCount(content)
+					: postDAO.doSearchByContentCount(tabCode, content);
+			break;
+		default:
+			request.setAttribute("post_list",
+					tabCode == 0 ? postDAO.doGetList(page) : postDAO.doGetList(tabCode, page));
+			listCount = tabCode == 0 ? postDAO.doGetListCount() : postDAO.doGetListCount(tabCode);
+		}
 
 		// 페이지 관련 변수
-		int listAllCount = tabCode == 0 ? postDAO.doGetListAllCount() : postDAO.doGetListAllCount(tabCode);
-		int maxPage = (int) ((double) listAllCount / 10 + 0.95);
+		int maxPage = (int) ((double) listCount / 10 + 0.95);
 		int startPage = (((int) ((double) page / 10 + 0.9)) - 1) * 10 + 1;
 		int endPage = startPage + 10 - 1;
 		if (endPage > maxPage) {
@@ -142,7 +176,7 @@ public class PostServlet extends HttpServlet {
 		request.setAttribute("max_page", maxPage);
 		request.setAttribute("start_page", startPage);
 		request.setAttribute("end_page", endPage);
-		request.setAttribute("list_all_count", listAllCount);
+		request.setAttribute("list_count", listCount);
 
 		request.getRequestDispatcher("list_main.jsp").forward(request, response);
 	}
@@ -178,11 +212,8 @@ public class PostServlet extends HttpServlet {
 		}
 
 		// 대상 게시물의 댓글 리스트 반환
-		List<String> commentUserList = new ArrayList<String>();
-		List<Comment> commentList = new CommentDAO().doGetList(Integer.parseInt(request.getParameter("post_code")),
-				commentUserList);
+		List<Comment> commentList = new CommentDAO().doGetList(Integer.parseInt(request.getParameter("post_code")));
 		request.setAttribute("comment_list", commentList);
-		request.setAttribute("comment_user_list", commentUserList);
 
 		request.getRequestDispatcher("view.jsp").forward(request, response);
 	}
