@@ -262,7 +262,7 @@
 			<table border="3">
 				<tr>
 					<td width="200">&nbsp;아이디</td>
-					<td width="450">&nbsp;&nbsp; <input type="text" id="user_id" name="user_id" autofocus required style="width: 40%;">&nbsp;&nbsp;&nbsp;
+					<td width="450">&nbsp; <input type="text" id="user_id" name="user_id" autofocus required style="width: 40%;">&nbsp;&nbsp;&nbsp;
 						<input type="button" value="아이디 중복확인" onClick="idCheck()" size="15" class="button_style2" maxlength="12">
 
 
