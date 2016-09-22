@@ -150,7 +150,7 @@ public class PostServlet extends HttpServlet {
 			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByTitle(page, keyword)
 					: postDAO.doSearchByTitle(tabCode, page, keyword));
 			listCount = tabCode == 0 ? postDAO.doSearchByTitleCount(keyword)
-					: postDAO.doSearchByUserCount(tabCode, keyword);
+					: postDAO.doSearchByTitleCount(tabCode, keyword);
 			break;
 		case 4:
 			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByContent(page, keyword)
