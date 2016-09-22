@@ -3,6 +3,7 @@ package ldcc.board.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -120,11 +121,13 @@ public class PostServlet extends HttpServlet {
 
 		// 일반 게시물 리스트 객체 반환
 		int searchType = 0;
+		String keyword = "";
 		int listCount = 0;
 		if (request.getParameter("search") != null) {
 			searchType = Integer.parseInt(request.getParameter("search"));
+			keyword = URLDecoder.decode(request.getParameter("keyword"), "euc-kr");
 			request.setAttribute("search", searchType);
-			request.setAttribute("keyword", request.getParameter("keyword"));
+			request.setAttribute("keyword", keyword);
 		}
 		switch (searchType) {
 		case 1:
@@ -139,24 +142,21 @@ public class PostServlet extends HttpServlet {
 					: postDAO.doSearchByCodeCount(tabCode, postCode);
 			break;
 		case 2:
-			String user = request.getParameter("keyword");
 			request.setAttribute("post_list",
-					tabCode == 0 ? postDAO.doSearchByUser(page, user) : postDAO.doSearchByUser(tabCode, page, user));
-			listCount = tabCode == 0 ? postDAO.doSearchByUserCount(user) : postDAO.doSearchByUserCount(tabCode, user);
+					tabCode == 0 ? postDAO.doSearchByUser(page, keyword) : postDAO.doSearchByUser(tabCode, page, keyword));
+			listCount = tabCode == 0 ? postDAO.doSearchByUserCount(keyword) : postDAO.doSearchByUserCount(tabCode, keyword);
 			break;
 		case 3:
-			String title = request.getParameter("keyword");
-			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByTitle(page, title)
-					: postDAO.doSearchByTitle(tabCode, page, title));
-			listCount = tabCode == 0 ? postDAO.doSearchByTitleCount(title)
-					: postDAO.doSearchByUserCount(tabCode, title);
+			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByTitle(page, keyword)
+					: postDAO.doSearchByTitle(tabCode, page, keyword));
+			listCount = tabCode == 0 ? postDAO.doSearchByTitleCount(keyword)
+					: postDAO.doSearchByUserCount(tabCode, keyword);
 			break;
 		case 4:
-			String content = request.getParameter("keyword");
-			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByContent(page, content)
-					: postDAO.doSearchByContent(tabCode, page, content));
-			listCount = tabCode == 0 ? postDAO.doSearchByContentCount(content)
-					: postDAO.doSearchByContentCount(tabCode, content);
+			request.setAttribute("post_list", tabCode == 0 ? postDAO.doSearchByContent(page, keyword)
+					: postDAO.doSearchByContent(tabCode, page, keyword));
+			listCount = tabCode == 0 ? postDAO.doSearchByContentCount(keyword)
+					: postDAO.doSearchByContentCount(tabCode, keyword);
 			break;
 		default:
 			request.setAttribute("post_list",

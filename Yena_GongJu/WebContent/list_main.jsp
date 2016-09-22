@@ -2,6 +2,7 @@
 	pageEncoding="EUC-KR"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.text.*"%>
+<%@ page import="java.net.*" %>
 <%@ page import="ldcc.board.vo.*"%>
 <%
 	// 로그인 여부
@@ -52,11 +53,12 @@
 			return;
 		}
 
+		var keywordStr = encodeURI(keyword.value, 'euc-kr');
 		location.href = "post?action=list"
 				+
 (tabCode != 0 ? "&tab_code=" + tabCode : "")
 	+ "&search="
-				+ type.value + "&keyword=" + keyword.value;
+				+ type.value + "&keyword=" + keywordStr;
 	}
 </script>
 </head>
@@ -193,7 +195,7 @@
 					%> [이전]&nbsp; <%
  	} else {
  %> <a
-					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage - 1%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + searchKeyword : ""%>">[이전]</a>&nbsp;
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage - 1%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + URLEncoder.encode(searchKeyword, "utf-8") : ""%>">[이전]</a>&nbsp;
 					<%
 						}
 					%> <%
@@ -202,7 +204,7 @@
  %> [<%=i%>] <%
  	} else {
  %> <a
-					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + searchKeyword : ""%>">[<%=i%>]
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=i%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + URLEncoder.encode(searchKeyword, "utf-8") : ""%>">[<%=i%>]
 				</a> <%
  	}
  %> <%
@@ -212,7 +214,7 @@
  %> [다음] <%
  	} else {
  %> <a
-					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage + 1%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + searchKeyword : ""%>">[다음]</a>&nbsp;
+					href="post?action=list<%=tabCode != 0 ? "&tab_code=" + tabCode : ""%>&page=<%=nowPage + 1%><%=searchType != 0 ? "&search=" + searchType + "&keyword=" + URLEncoder.encode(searchKeyword, "utf-8") : ""%>">[다음]</a>&nbsp;
 					<%
 						}
 					%>
