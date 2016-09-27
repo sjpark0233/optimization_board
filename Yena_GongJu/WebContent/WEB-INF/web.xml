@@ -41,4 +41,12 @@
 		<servlet-name>post</servlet-name>
 		<url-pattern>/post</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>file</servlet-name>
+		<servlet-class>ldcc.board.controller.FileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>file</servlet-name>
+		<url-pattern>/file</url-pattern>
+	</servlet-mapping>
 </web-app>

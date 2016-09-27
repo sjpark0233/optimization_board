@@ -33,6 +33,13 @@
 	}
 
 	function fileEdited() {
+		/*
+		var filepath = document.writeform.post_filepath;
+		if (filepath.files[0].size > 5 * 1024 * 1024) {
+			alert("파일 용량은 5 Megabytes를 초과할 수 없습니다.");
+			filepath.reset;
+			return;
+		}*/
 		document.modifyform.file_edited.value = "true";
 	}
 
