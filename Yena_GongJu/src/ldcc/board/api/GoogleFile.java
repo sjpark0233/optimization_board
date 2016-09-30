@@ -4,10 +4,11 @@ import com.google.api.services.drive.model.File;
 
 public class GoogleFile {
 	private String id;
-	private String name;
+	private String title;
 	private String parentId;
 	private boolean isFile;
-	private long size;
+	private long fileSize;
+	private String webContentLink;
 
 	public String getId() {
 		return id;
@@ -17,12 +18,12 @@ public class GoogleFile {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String name) {
+		this.title = name;
 	}
 
 	public String getParentId() {
@@ -41,21 +42,30 @@ public class GoogleFile {
 		this.isFile = isFile;
 	}
 
-	public long getSize() {
-		return size;
+	public long getFileSize() {
+		return fileSize;
 	}
 
-	public void setSize(long size) {
-		this.size = size;
+	public void setFileSize(long size) {
+		this.fileSize = size;
 	}
 
-	public static GoogleFile parse(File file) {
+	public String getWebContentLink() {
+		return webContentLink;
+	}
+
+	public void setWebContentLink(String webContentLink) {
+		this.webContentLink = webContentLink;
+	}
+
+	public static GoogleFile parse(File file) {		
 		GoogleFile googleFile = new GoogleFile();
 		googleFile.setId(file.getId());
-		googleFile.setName(file.getName());
-		googleFile.setParentId(file.getParents() != null ? file.getParents().get(0) : null);
+		googleFile.setTitle(file.getTitle());
+		googleFile.setParentId(file.getParents() != null && file.getParents().size() > 0 ? file.getParents().get(0).getId() : null);
 		googleFile.setFile(!file.getMimeType().equals("application/vnd.google-apps.folder"));
-		googleFile.setSize(googleFile.isFile() ? file.getSize() : 0L);
+		googleFile.setFileSize(googleFile.isFile() ? file.getFileSize() : 0L);
+		googleFile.setWebContentLink(file.getWebContentLink() != null ? file.getWebContentLink() : null);
 		return googleFile;
 	}
 }

@@ -20,10 +20,9 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.Drive.Files;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.About;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-
-import ldcc.board.DriveQuickstart;
 
 public class GoogleDrive {
 	/** Application name. */
@@ -48,7 +47,7 @@ public class GoogleDrive {
 	 * If modifying these scopes, delete your previously saved credentials at
 	 * ~/.credentials/drive-java-quickstart
 	 */
-	private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_METADATA_READONLY);
+	private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_READONLY);
 
 	static {
 		try {
@@ -68,7 +67,7 @@ public class GoogleDrive {
 	 */
 	private Credential authorize() throws IOException {
 		// Load client secrets.
-		InputStream in = DriveQuickstart.class.getResourceAsStream("client_secret.json"); // ÀÌ°Å
+		InputStream in = GoogleDrive.class.getResourceAsStream("client_secret.json");
 		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
 		// Build flow and trigger user authorization request.
@@ -87,11 +86,11 @@ public class GoogleDrive {
 	private static List<GoogleFile> getListAll() throws IOException {
 		Drive service = new GoogleDrive().getDriveService();
 		List<GoogleFile> googleFileList = new ArrayList<GoogleFile>();
-		Files.List request = service.files().list().setFields("files(id, name, parents, size, spaces, mimeType)");
+		Files.List request = service.files().list();
 		do {
 			try {
 				FileList files = request.execute();
-				for (File file : request.execute().getFiles()) {
+				for (File file : request.execute().getItems()) {
 					googleFileList.add(GoogleFile.parse(file));
 				}
 				request.setPageToken(files.getNextPageToken());
@@ -105,18 +104,10 @@ public class GoogleDrive {
 	}
 
 	private static String getRootId() throws IOException {
-		List<GoogleFile> googleFileList = getListAll();
-		String rootId = null;
+		Drive service = new GoogleDrive().getDriveService();
+		About about = service.about().get().execute();
 
-		for (GoogleFile googleFile : googleFileList) {
-			if (new GoogleDrive().getDriveService().files().get(googleFile.getParentId()).setFields("parents").execute()
-					.getParents() == null) {
-				rootId = googleFile.getParentId();
-				break;
-			}
-		}
-
-		return rootId;
+		return about.getRootFolderId();
 	}
 
 	public static List<GoogleFile> getFileList(String parentId) throws IOException {
@@ -136,12 +127,6 @@ public class GoogleDrive {
 	}
 
 	public static GoogleFile getFile(String id) throws IOException {
-		for (GoogleFile googleFile : getListAll()) {
-			if (googleFile.getId().equals(id)) {
-				return googleFile;
-			}
-		}
-
-		return null;
+		return GoogleFile.parse(new GoogleDrive().getDriveService().files().get(id).execute());
 	}
 }

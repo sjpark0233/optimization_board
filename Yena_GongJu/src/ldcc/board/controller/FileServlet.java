@@ -1,7 +1,6 @@
 package ldcc.board.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ldcc.board.api.GoogleDrive;
-import ldcc.board.api.GoogleFile;
+import ldcc.board.dao.FileEntryDAO;
+import ldcc.board.vo.FileEntry;
 
 @WebServlet("/FileServlet")
 public class FileServlet extends HttpServlet {
@@ -41,7 +40,6 @@ public class FileServlet extends HttpServlet {
 			this.doList(request, response);
 			break;
 		case "download":
-			this.doDownLoad(request, response);
 			break;
 		case "upload":
 			break;
@@ -55,6 +53,39 @@ public class FileServlet extends HttpServlet {
 	}
 
 	private void doList(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		FileEntryDAO fileEntryDAO = new FileEntryDAO();
+		
+		// 현재 폴더 코드 구하기
+		int dirCode = 0;
+		if (request.getAttribute("dir_code") != null) {
+			dirCode = Integer.parseInt(request.getParameter("dir_code"));
+			request.setAttribute("dir_code", dirCode);
+			
+			// 현재 폴더의 부모 코드 구하기. 0은 루트를 의미
+			int parentCode = fileEntryDAO.doGetParentCode(dirCode);
+			request.setAttribute("parent_code", parentCode);
+		}
+		
+		// 파일 목록 구하기
+		List<FileEntry> fileEntryList = fileEntryDAO.getFileListByParent(dirCode);
+		request.setAttribute("file_entry_list", fileEntryList);
+		
+		// 해당 폴더의 총 파일 수와 용량 구하기
+		int totalCount = 0;
+		long totalSize = 0L;
+		for (FileEntry fileEntry : fileEntryList) {
+			totalCount++;
+			totalSize += fileEntry.getFile_entry_size();
+		}
+		request.setAttribute("total_count", totalCount);
+		request.setAttribute("total_size", totalSize);
+
+		request.getRequestDispatcher("filesystem.jsp").forward(request, response);
+		
+		
+		
+		/* 구글 드라이브 전용. 삭제예정.
 		String dirId = "";
 		if (request.getParameter("dir_id") != null) {
 			dirId = request.getParameter("dir_id");
@@ -81,15 +112,12 @@ public class FileServlet extends HttpServlet {
 		long totalSize = 0L;
 		for (GoogleFile file : googleFileList) {
 			totalCount++;
-			totalSize += file.getSize();
+			totalSize += file.getFileSize();
 		}
 		request.setAttribute("total_count", totalCount);
 		request.setAttribute("total_size", totalSize);
 
 		request.getRequestDispatcher("filesystem.jsp").forward(request, response);
-	}
-
-	private void doDownLoad(HttpServletRequest request, HttpServletResponse response) {
-
+		*/
 	}
 }
