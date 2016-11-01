@@ -41,5 +41,6 @@
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.39-bin.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/transaction-api-1.1-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre1.8.0_111/lib/ext/mysql-connector-java-5.1.40-bin.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

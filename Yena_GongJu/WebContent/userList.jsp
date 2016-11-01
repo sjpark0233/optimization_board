@@ -41,8 +41,8 @@ function team_accept(){
 	</div>
 
 	<div>
-		<font class="font1"> 최적화팀 게시판 </font> <br>
-		<br>
+	<input type="button" value="최적화팀 게시판" onClick="location.href='user?action=showCalendar'" id="main_button">
+			<br>
 	</div>
 
 	<!-- 탭 -->

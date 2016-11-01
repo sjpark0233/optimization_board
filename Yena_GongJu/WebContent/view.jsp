@@ -139,8 +139,8 @@
 	</div>
 
 	<div>
-		<font class="font1"> 최적화팀 게시판 </font> <br> <br>
-	</div>
+	<input type="button" value="최적화팀 게시판" onClick="location.href='user?action=showCalendar'" id="main_button">
+		</div>
 
 	<div id="tabsF">
 		<ul>

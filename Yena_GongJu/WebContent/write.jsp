@@ -86,10 +86,70 @@
 		-->
 	}
 </script>
+<script language="javascript">
+var clientId = '666549714055-v7mucvmk1pdauag4gcs87fch0hpd09tr.apps.googleusercontent.com';
+var apiKey = 'AIzaSyD107wCYZeUaKFi1chEE9d1X3uHDFtQI-M';
+var scopes = 'https://www.googleapis.com/auth/calendar';
 
+	function handleClientLoad() {
+	  gapi.client.setApiKey(apiKey);
+	  window.setTimeout(checkAuth,1);
+	  checkAuth();
+	}
+
+	function checkAuth() {
+	  gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true},
+	      handleAuthResult);
+	}
+
+	function handleAuthResult(authResult) {
+	  var authorizeButton = document.getElementById('authorize-button');
+	  if (authResult) {
+		  loadCalendarApi();
+	  } else {
+	    authorizeButton.style.visibility = '';
+	    authorizeButton.onclick = handleAuthClick;
+	   }
+	}
+
+	function handleAuthClick(event) {
+	  gapi.auth.authorize(
+	      {client_id: clientId, scope: scopes, immediate: false},
+	      handleAuthResult);
+	  return false;
+	}
+	
+	function loadCalendarApi(){
+		gapi.client.load('calendar','v3', makeApiCall);
+	}
+	
+	function makeApiCall() {
+		var resource = {
+				  "summary": "Appointment",
+				  "location": "Somewhere",
+				  "start": {
+				    "dateTime": "2016-12-16T10:00:00.000-07:00"
+				  },
+				  "end": {
+				    "dateTime": "2016-12-16T10:25:00.000-07:00"
+				  }
+				};
+
+		var request = gapi.client.calendar.events.insert({
+			  'calendarId': 'u9rjd2p8l2hbmc5lnd24015um0@group.calendar.google.com',
+			  'resource': resource
+			});
+			request.execute(function(resp) {
+			  console.log(resp);
+			});
+		}
+	
+</script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
 
 </head>
 <body>
+ <a href='#' id='authorize-button' onclick='handleAuthClick(event)'>Login</a>
 	<div align=right>
 		<br> <font class="font2">
 			<%
@@ -112,8 +172,8 @@
 	</div>
 
 	<div>
-		<font class="font1"> 최적화팀 게시판 </font> <br> <br>
-	</div>
+	<input type="button" value="최적화팀 게시판" onClick="location.href='user?action=showCalendar'" id="main_button">
+		</div>
 
 	<div id="tabsF">
 		<ul>

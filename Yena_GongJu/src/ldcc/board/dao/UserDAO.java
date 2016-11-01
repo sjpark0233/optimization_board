@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import ldcc.board.vo.User;
 
 public class UserDAO {
@@ -28,9 +30,8 @@ public class UserDAO {
 			stmt.setString(1,user.getUser_id());
 			stmt.setString(2, user.getUser_pw());
 			rst = stmt.executeQuery();
-
 			if(rst.next()){
-				user.setUser_accept(Integer.parseInt(rst.getString(3)));
+				user.setUser_accept(rst.getInt(3));
 				user.setUser_name(rst.getString(5));
 			}
 		}catch(SQLException e){
@@ -116,11 +117,12 @@ public class UserDAO {
 			con = JDBCUtil.getConnection();
 			stmt = con.prepareStatement(selectSQL);
 			stmt.setString(1,user.getUser_id());
-			stmt.setString(2, user.getUser_pw());
+			stmt.setString(2,user.getUser_pw());
 			rst = stmt.executeQuery();
 
 			if(rst.next()){
 				user.setUser_id(rst.getString(1));
+				user.setUser_accept(rst.getInt(3));
 				user.setTeam_name(rst.getString(4));
 				user.setUser_name(rst.getString(5));
 				user.setUser_phone(rst.getString(6));

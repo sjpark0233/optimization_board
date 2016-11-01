@@ -26,7 +26,12 @@ function loginCheck(){
 				var str3 = document.getElementById('login');
 				str3.submit();
 				alert("로그인 되었습니다.");
-				location.replace("post?action=list");
+				if(data.success==1){
+					location.replace("user?action=showCalendar");
+				}
+				else{
+					location.replace("post?action=list");
+				}
 			}
 			else
 			{

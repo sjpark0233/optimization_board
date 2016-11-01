@@ -187,3 +187,24 @@ input.button_style3:hover {
 	text-decoration: none;
 	color: gray;
 }
+
+#calendar{
+	padding: 50px 50px 50px 50px;
+	width: 100%;
+	height:100%;
+	
+}
+
+#main_button{
+	background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    
+	font: bold 30px Verdana, sans-serif;
+	color: #000;
+	margin: 0px;
+	padding: 5px 20px 15px 20px;
+}
